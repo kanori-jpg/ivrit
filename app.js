@@ -185,19 +185,25 @@ function speak(text) {
     // Une vraie voix signalée comme fausse laisse la place à la voix de synthèse
     const humain = HUMAN[key] && !(S.sonsAvis[key] === 'faux' && SOUNDS[key]);
     const file = humain ? 'humain/' + HUMAN[key].fichier : SOUNDS[key] && `${SOUNDS[key]}?v=2`;
+    // La voix de l'appareil
+    function synthese(alerter) {
+      if (!('speechSynthesis' in window)) { if (alerter) toast('La synthèse vocale n\u2019est pas disponible sur ce navigateur.'); return done(); }
+      loadVoices();
+      if (alerter && !heVoice && !warned) { warned = true; toast('Pas de voix hébraïque trouvée : ouvre le site dans Microsoft Edge ou ajoute la voix « Hébreu » dans Windows.'); }
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'he-IL'; if (heVoice) u.voice = heVoice; u.rate = 0.8;
+      u.onend = done; u.onerror = done;
+      speechSynthesis.speak(u);
+    }
     if (file) {
       player = new Audio('audio/' + file);
-      player.onended = done; player.onerror = done;
-      player.play().catch(done); // lecture bloquée sans geste de l'utilisateur : on continue
+      player.onended = done;
+      // Hors connexion, un son pas encore gardé sur l'appareil : on prend la voix de l'appareil
+      player.onerror = () => (navigator.onLine ? done() : synthese(false));
+      player.play().catch((err) => { if (navigator.onLine || (err && err.name === 'NotAllowedError')) done(); }); // lecture bloquée sans geste de l'utilisateur : on continue
       return;
     }
-    if (!('speechSynthesis' in window)) { toast('La synthèse vocale n\u2019est pas disponible sur ce navigateur.'); return done(); }
-    loadVoices();
-    if (!heVoice && !warned) { warned = true; toast('Pas de voix hébraïque trouvée : ouvre le site dans Microsoft Edge ou ajoute la voix « Hébreu » dans Windows.'); }
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'he-IL'; if (heVoice) u.voice = heVoice; u.rate = 0.8;
-    u.onend = done; u.onerror = done;
-    speechSynthesis.speak(u);
+    synthese(true);
   });
 }
 document.addEventListener('click', (e) => { const b = e.target.closest('[data-say]'); if (b) { e.stopPropagation(); speak(b.dataset.say); } }, true);
