@@ -2816,3 +2816,71 @@ body.jade .ac { --muted: #506c64; }
 .nv-paliers > div { display: flex; flex-direction: column; align-items: center; min-width: 90px; padding: 10px; border-radius: 14px; background: var(--blue-soft); }
 .nv-paliers > div.ok { background: color-mix(in srgb, #3fae7a 18%, var(--card)); }
 .nv-paliers small { color: var(--muted); }
+
+/* ===== Feuilleton, lettres de Noa, nombres en vrai ===== */
+.fe-hero { position: relative; overflow: hidden; padding: 22px 24px; border-radius: 24px; color: #fff; background: radial-gradient(420px 200px at 90% 0, rgba(255, 200, 120, .35), transparent 70%), linear-gradient(135deg, #2b2266, #6a3a8a 60%, #c4733a); box-shadow: var(--shadow); margin-bottom: 16px; }
+.lt-hero { background: radial-gradient(420px 200px at 90% 0, rgba(255, 230, 200, .4), transparent 70%), linear-gradient(135deg, #8a3a5a, #c46a7a 60%, #e8a86a); }
+.fe-hero h2 { margin: 2px 0 6px; font-family: 'Playfair Display', serif; font-style: italic; color: #fff; }
+.fe-hero p { margin: 0; color: #f6f0ff; max-width: 640px; }
+.fe-hero-he { position: absolute; right: 18px; top: 8px; font-family: 'Frank Ruhl Libre', serif; font-size: 2.6rem; opacity: .22; }
+.fe-persos { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.fe-persos span { display: inline-flex; align-items: baseline; gap: 6px; padding: 5px 10px; border-radius: 999px; background: rgba(255, 255, 255, .16); font-size: .9rem; }
+.fe-persos small { opacity: .85; }
+.fe-episodes { display: flex; flex-direction: column; gap: 10px; }
+.fe-ep { display: flex; align-items: center; gap: 14px; color: var(--ink); text-decoration: none; }
+.fe-ep.lock { opacity: .62; }
+.fe-ep.neuf { border: 2px solid color-mix(in srgb, var(--gold) 60%, transparent); }
+.fe-num { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--blue-soft); font-weight: 800; }
+.fe-txt { display: flex; flex-direction: column; min-width: 0; }
+.fe-txt small { color: var(--muted); }
+.fe-etat { margin-left: auto; white-space: nowrap; font-weight: 600; font-size: .9rem; }
+.fe-lieu { color: var(--muted); margin: 0 0 10px; }
+.fe-fil { display: flex; flex-direction: column; gap: 12px; max-width: 760px; margin: 0 auto 14px; }
+.fe-bulle { align-self: flex-start; max-width: 88%; padding: 12px 16px; border-radius: 18px 18px 18px 4px; background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); animation: bulleEntre .25s ease-out; }
+.fe-bulle.moi { align-self: flex-end; border-radius: 18px 18px 4px 18px; background: color-mix(in srgb, var(--pink) 14%, var(--card)); }
+.fe-qui { display: block; font-size: .8rem; font-weight: 700; color: var(--muted); margin-bottom: 2px; }
+.fe-he { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.fe-he .mots-clic { font-family: 'Frank Ruhl Libre', serif; font-size: 1.45rem; line-height: 1.5; text-align: right; }
+.fe-tr { display: block; color: var(--muted); }
+.fe-voir { font-size: .85rem; }
+.fe-fr { font-style: italic; color: var(--muted); margin-top: 4px; }
+.fe-bulle .bulle-mot { display: flex; margin: 8px 0 2px; }
+.fe-choix { max-width: 760px; margin: 0 auto; }
+.fe-suspense { max-width: 760px; margin: 10px auto 0; text-align: center; background: radial-gradient(360px 160px at 50% 0, color-mix(in srgb, var(--gold) 22%, transparent), transparent 70%), var(--card); }
+.fe-asuivre { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; margin: 0 0 6px; }
+.fe-mots { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 12px 0; }
+.fe-mots > div { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.hb-entrees { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.hb-entree { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; }
+.hb-entree > span:first-child { font-size: 1.8rem; }
+.hb-entree span:nth-child(2) { display: flex; flex-direction: column; }
+.hb-entree small { color: var(--muted); }
+.hb-entree i { margin-left: auto; font-style: normal; font-size: 1.4rem; color: var(--muted); }
+.hb-neuf { border-color: color-mix(in srgb, var(--pink) 45%, transparent); background: color-mix(in srgb, var(--pink) 12%, var(--card)); }
+.lt-papier { max-width: 680px; margin: 0 auto 12px; padding: 22px 26px; border-radius: 8px; background: #fffaf0; color: #3a2e28; box-shadow: 0 10px 30px rgba(40, 20, 10, .18); border: 1px solid #ecdcc4; background-image: repeating-linear-gradient(transparent 0 33px, rgba(120, 90, 60, .12) 33px 34px); }
+.lt-papier.moi { background-color: #f3f6ff; border-color: #d4dcf2; }
+.lt-papier .say, .lt-papier .mot-clic { color: #3a2e28; }
+.lt-date { text-align: left; color: #7a6a5a; font-size: .85rem; margin: 0 0 8px; }
+.lt-phrase { margin: 0 0 6px; text-align: right; }
+.lt-phrase .mots-clic { font-family: 'Frank Ruhl Libre', serif; font-size: 1.4rem; line-height: 1.6; }
+.lt-fr { display: block; text-align: left; font-style: italic; color: #6a5a4a; }
+.lt-fr[hidden], .fe-fr[hidden] { display: none; }
+.lt-papier .bulle-mot { display: flex; margin: 6px 0; color: var(--ink); }
+.lt-outils { justify-content: center; flex-wrap: wrap; }
+.lt-question { max-width: 680px; margin: 0 auto 12px; }
+.lt-options { display: flex; flex-direction: column; gap: 8px; }
+.lt-opt { display: flex; flex-direction: column; align-items: flex-end; text-align: right; }
+.lt-opt .he { font-size: 1.25rem; }
+.lt-opt small { color: var(--muted); }
+.lt-opt.on { border-color: var(--pink); background: color-mix(in srgb, var(--pink) 14%, var(--card)); }
+.nb-carte { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.nb-ecoute { font-size: 1.4rem; padding: 14px 26px; }
+.nb-form { display: flex; gap: 8px; width: 100%; max-width: 360px; }
+.nb-saisie { flex: 1; min-width: 0; font-size: 1.4rem; text-align: center; padding: 10px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); color: var(--ink); }
+.nb-bilan { padding: 12px 16px; border-radius: 14px; background: var(--blue-soft); }
+.nb-bilan.ok { background: color-mix(in srgb, #3fae7a 16%, var(--card)); }
+.nb-bilan.ko { background: color-mix(in srgb, #e0605a 14%, var(--card)); }
+.nb-he { display: flex; justify-content: center; align-items: center; gap: 8px; margin: 6px 0 2px; }
+.nb-he .he { font-family: 'Frank Ruhl Libre', serif; font-size: 1.4rem; }
+.nb-astuce { width: 100%; text-align: left; }
+.nb-astuce summary { cursor: pointer; color: var(--muted); }
