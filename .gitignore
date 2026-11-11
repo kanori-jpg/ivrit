@@ -1,0 +1,11 @@
+# Seul le site est publié : pas les sauvegardes, les outils, les maquettes ni le serveur local
+sauvegarde*/
+outils/
+maquettes/
+maquettes*.html
+serveur.py
+Lancer Ivrit.bat
+ivrit.ico
+VERIFICATION.md
+audio/signalements.json
+__pycache__/

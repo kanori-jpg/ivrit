@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ivrit ! — L'hébreu, un mot après l'autre</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Poppins:wght@400;500;600;700&family=Frank+Ruhl+Libre:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=123">
+</head>
+<body>
+  <div id="sky-night" aria-hidden="true"></div>
+  <div class="shell">
+    <aside class="side rail">
+      <div class="rail-ruban">
+        <a href="#/" class="brand rail-logo" title="Accueil"><span class="logo" lang="he">א</span><i class="rail-lune" aria-hidden="true"></i></a>
+        <button class="nav-fl" id="navHaut" type="button" aria-label="Monter dans le menu" title="Monter dans le menu" hidden>▲</button>
+        <nav class="nav" id="nav" aria-label="Menu principal"></nav>
+        <button class="nav-fl" id="navBas" type="button" aria-label="Descendre dans le menu" title="Descendre dans le menu" hidden>▼</button>
+        <div class="rail-bas">
+          <button class="rail-palette" id="railPalette" type="button" aria-label="Changer de thème" aria-expanded="false" aria-controls="railThemes">🎨</button>
+          <a href="#/progres" class="rail-moi" id="railMoi" aria-label="Mes progrès"></a>
+        </div>
+      </div>
+      <div class="rail-themes" id="railThemes" hidden></div>
+      <button class="moon" id="moon" title="Changer de mode" hidden><span id="moonI">🌙</span><em id="moonT">Mode nuit</em></button>
+    </aside>
+    <div class="rail-bulle" id="railBulle" role="tooltip" hidden></div>
+    <div class="content">
+      <header class="top">
+        <div class="stats">
+          <span id="hStreak" title="Jours d'affilée">🔥 0</span>
+          <span id="hXp" title="Points d'expérience">⭐ 0</span>
+          <span id="hSh" title="Shekels">₪ 0</span>
+          <span id="hLvl" title="Niveau">Niv. 1</span>
+        </div>
+        <button class="save-top" id="hAide" title="Aides à la lecture : voyelles et translittération"><span lang="he">אָ</span> <em>Aides</em></button>
+        <button class="save-top" id="hSave" title="Sauvegarder ma progression dans un fichier">💾 <em>Sauvegarder</em></button>
+        <div class="aide-pop" id="aidePop" hidden>
+          <b>Aides à la lecture</b>
+          <label><input type="checkbox" id="aideV"> Voyelles (nikoud)</label>
+          <label><input type="checkbox" id="aideT"> Translittération</label>
+          <label><input type="checkbox" id="aideP"> Retirer les voyelles des mots que je maîtrise</label>
+          <p>Un mot reconnu 3 fois de suite dans les cartes perd ses voyelles : survole-le pour les revoir. Décoche-les pour t’en passer peu à peu. Tu peux les réafficher ici à tout moment. L’alphabet, la grammaire et les quiz de lettres et de syllabes gardent toujours leurs voyelles.</p>
+        </div>
+      </header>
+      <main id="app"></main>
+    </div>
+  </div>
+  <div id="toast" role="status"></div>
+  <script src="audio/sons.js?v=41"></script>
+  <script src="audio/humain/sons.js?v=10"></script>
+  <script src="audio/a_ecouter.js?v=1"></script>
+  <script src="audio/refaits.js?v=1"></script>
+  <script src="data.js?v=13"></script>
+  <script src="contenu.js?v=17"></script>
+  <script src="histoires_vie.js?v=7"></script>
+  <script src="conjugaison.js?v=3"></script>
+  <script src="vallee.js?v=1"></script>
+  <script src="chapitres.js?v=4"></script>
+  <script src="scenes_art.js?v=3"></script>
+  <script src="scenes_styles.js?v=11"></script>
+  <script src="scenes_art2.js?v=4"></script>
+  <script src="scenes_art3.js?v=2"></script>
+  <script src="scenes_art4.js?v=1"></script>
+  <script src="cursive.js?v=1"></script>
+  <script src="grammaire.js?v=18"></script>
+  <script src="grammaire_plan.js?v=9"></script>
+  <script src="app.js?v=52"></script>
+  <script src="chambre_art.js?v=13"></script>
+  <script src="chambre.js?v=7"></script>
+  <script src="villes.js?v=1"></script>
+  <script src="cartes_vie.js?v=4"></script>
+  <script src="villes2.js?v=2"></script>
+  <script src="villes3.js?v=1"></script>
+  <script src="presse.js?v=3"></script>
+  <script src="presse_page.js?v=2"></script>
+  <script src="racines.js?v=1"></script>
+  <script src="dictionnaire.js?v=2"></script>
+  <script src="maquette_accueil.js?v=7"></script>
+  <script src="gloses_histoires.js?v=3"></script>
+  <script src="mots_cliquables.js?v=2"></script>
+  <script src="calendrier.js?v=4"></script>
+  <script src="expressions.js?v=2"></script>
+  <script src="roles.js?v=11"></script>
+  <script src="outils.js?v=64"></script>
+  <script src="controle.js?v=3"></script>
+  <script src="signaler_son.js?v=2"></script>
+  <script src="voyage.js?v=5"></script>
+  <script src="bilan.js?v=3"></script>
+  <script src="options_pratique.js?v=1"></script>
+  <script src="theme_etoiles.js?v=13"></script>
+</body>
+</html>
