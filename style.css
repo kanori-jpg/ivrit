@@ -2743,3 +2743,8 @@ body.jade .ac { --muted: #506c64; }
   #app .ac-jours > span, #app .ch-onglets > button, #app .pg-date > span, #app .auj > span, .rail-niveau { font-size: 12.5px !important; }
   #app .acc-tache-txt small { white-space: normal; overflow: visible; text-overflow: clip; }
 }
+
+/* ===== Synchronisation entre appareils ===== */
+.sync-etapes { margin: 0 0 10px; padding-left: 22px; display: flex; flex-direction: column; gap: 4px; }
+.sync-etapes a { color: var(--blue); font-weight: 600; }
+.sync-jeton { flex: 1 1 220px; min-width: 0; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; }

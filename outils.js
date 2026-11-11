@@ -1375,6 +1375,11 @@ function lireSauvegarde(texte) {
     const memeType = m === null ? (v === null || typeof v === 'string') : Array.isArray(m) ? Array.isArray(v) : v !== null && typeof v === typeof m && !Array.isArray(v);
     if (memeType) propre[k] = v;
   });
+  // Les données ajoutées au site depuis (voyage, jeux de rôle, bilans, options…) sont gardées telles quelles
+  Object.keys(brut.progression).forEach((k) => {
+    const v = brut.progression[k];
+    if (!(k in modele) && /^[A-Za-z][A-Za-z0-9]*$/.test(k) && v !== undefined && typeof v !== 'function') propre[k] = v;
+  });
   if (typeof propre.xp !== 'number' || propre.xp < 0 || !isFinite(propre.xp)) throw new Error('Cette sauvegarde est incomplète : elle ne contient pas d’XP valides.');
   return { progression: propre, date: brut.date };
 }
