@@ -2769,3 +2769,50 @@ body.jade .ac { --muted: #506c64; }
 .rs-puce small { color: var(--muted); }
 .pf-resiste { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding: 10px 14px; border-radius: 14px; background: color-mix(in srgb, var(--gold) 14%, var(--card)); color: var(--ink); text-decoration: none; font-weight: 600; }
 .pf-resiste span { color: var(--muted); font-size: 1.3rem; }
+
+/* ===== Reconstruire des phrases ===== */
+.rc-niveaux { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.rc-niveau { display: flex; flex-direction: column; gap: 4px; color: var(--ink); text-decoration: none; font-size: 1.1rem; }
+.rc-niveau small { color: var(--muted); font-size: .9rem; }
+.rc-carte { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.rc-consigne { margin: 0; color: var(--muted); font-size: .9rem; }
+.rc-fr { margin: 0; font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.35rem; }
+.rc-reponse { min-height: 62px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px; border-radius: 16px; border: 2px dashed color-mix(in srgb, var(--muted) 40%, transparent); }
+.rc-reponse.ok { border-style: solid; border-color: #3fae7a; background: color-mix(in srgb, #3fae7a 10%, transparent); }
+.rc-reponse.ko { border-style: solid; border-color: #e0605a; }
+.rc-vide { color: var(--muted); font-size: .9rem; direction: ltr; }
+.rc-tuiles { display: flex; flex-wrap: wrap; gap: 8px; min-height: 52px; }
+.rc-tuile { font-family: 'Frank Ruhl Libre', serif; font-size: 1.45rem; line-height: 1.2; padding: 8px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--card); color: var(--ink); box-shadow: var(--shadow); cursor: pointer; transition: transform .12s; }
+.rc-tuile:hover:not(:disabled) { transform: translateY(-2px); }
+.rc-tuile.posee { background: var(--blue-soft); }
+.rc-tuile.bien { background: color-mix(in srgb, #3fae7a 22%, var(--card)); }
+.rc-tuile.mal { background: color-mix(in srgb, #e0605a 22%, var(--card)); }
+.rc-boutons { justify-content: center; flex-wrap: wrap; }
+.rc-bilan { text-align: center; }
+.rc-solution { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 6px; }
+.rc-solution .he { font-size: 1.6rem; }
+
+/* ===== Test de niveau ===== */
+.nv-badge { flex: none; display: inline-grid; place-items: center; min-width: 56px; height: 56px; padding: 0 8px; border-radius: 16px; background: linear-gradient(135deg, var(--pink), var(--gold)); color: #fff; font-weight: 800; font-size: 1.2rem; }
+.nv-badge.petit { min-width: 44px; height: 32px; border-radius: 10px; font-size: .95rem; }
+.nv-badge.grand { min-width: 120px; height: 96px; margin: 10px auto; font-size: 2.6rem; border-radius: 26px; }
+.nv-entree, .nv-dernier { display: flex; align-items: center; gap: 14px; color: var(--ink); text-decoration: none; margin: 14px 0; }
+.nv-entree span:nth-child(2), .nv-dernier > div { display: flex; flex-direction: column; }
+.nv-entree small, .nv-dernier small { color: var(--muted); }
+.nv-entree i { margin-left: auto; font-style: normal; font-size: 1.4rem; color: var(--muted); }
+.nv-histo { display: flex; flex-direction: column; gap: 8px; }
+.nv-histo > div { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.nv-histo small { color: var(--muted); margin-left: auto; }
+.nv-barre { height: 8px; border-radius: 99px; background: color-mix(in srgb, var(--muted) 20%, transparent); overflow: hidden; margin: 0 0 14px; }
+.nv-barre i { display: block; height: 100%; background: linear-gradient(90deg, var(--pink), var(--gold)); transition: width .3s; }
+.nv-carte { max-width: 720px; margin: 0 auto; text-align: center; }
+.nv-he .he { font-family: 'Frank Ruhl Libre', serif; font-size: 2.6rem; }
+.nv-fr { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.6rem; }
+.nv-phrase .he { font-family: 'Frank Ruhl Libre', serif; font-size: 1.7rem; line-height: 1.5; }
+.nv-q { font-size: 1.15rem; }
+.nv-opts { margin-top: 14px; }
+.nv-opts .opt .he { font-size: 1.3rem; }
+.nv-paliers { display: flex; justify-content: center; gap: 12px; margin: 14px 0; flex-wrap: wrap; }
+.nv-paliers > div { display: flex; flex-direction: column; align-items: center; min-width: 90px; padding: 10px; border-radius: 14px; background: var(--blue-soft); }
+.nv-paliers > div.ok { background: color-mix(in srgb, #3fae7a 18%, var(--card)); }
+.nv-paliers small { color: var(--muted); }
