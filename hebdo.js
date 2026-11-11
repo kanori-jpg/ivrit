@@ -32,15 +32,16 @@
     if (!ep) {
       app.innerHTML = `<section class="fe-hero">
           <span class="he fe-hero-he" lang="he" dir="rtl">הַמִּכְתָּב</span>
-          <h2>📺 La lettre cachée</h2>
-          <p>Un feuilleton en ${FEUILLETON.length} épisodes. En déménageant des meubles, Shira et toi trouvez une lettre de 1962, jamais ouverte… Un nouvel épisode chaque semaine.</p>
+          <h2>📺 Le feuilleton</h2>
+          <p>Une enquête en deux saisons, un nouvel épisode chaque semaine. Saison 1, « La lettre cachée » : en déménageant des meubles, Shira et toi trouvez une lettre de 1962, jamais ouverte… Saison 2, « La carte du marin » : les secrets que Yossef a cachés le long de la côte.</p>
           <div class="fe-persos">${Object.values(FEUILLETON_PERSOS).slice(0, 4).map((p) => `<span title="${esc(p.desc)}">${p.em} <b>${esc(p.nom)}</b><small>${esc(p.desc)}</small></span>`).join('')}</div>
         </section>
-        <div class="fe-episodes">${FEUILLETON.map((e) => {
+        <div class="fe-episodes">${FEUILLETON.map((e, k) => {
           const vu = st.vus[e.num], ok = dispoF(e.num);
+          const titreSaison = !k || (FEUILLETON[k - 1].saison || 1) !== (e.saison || 1) ? `<h3 class="fe-saison">Saison ${e.saison || 1} · ${(e.saison || 1) === 2 ? 'La carte du marin' : 'La lettre cachée'}</h3>` : '';
           const etat = vu ? '✓ Vu' : ok ? '▶ Regarder' : st.vus[e.num - 1] ? `🔒 ${dans(sortieF(e.num))}` : `🔒 après l’épisode ${e.num - 1}`;
           const corps = `<span class="fe-num">${e.num}</span><span class="fe-txt"><b>${e.em} ${esc(e.titre)}</b><small>${ok || vu ? esc(e.lieu) : 'À venir…'}</small></span><span class="fe-etat">${etat}</span>`;
-          return ok || vu ? `<a class="card fe-ep${vu ? ' vu' : ' neuf'}" href="#/feuilleton/${e.num}">${corps}</a>` : `<div class="card fe-ep lock">${corps}</div>`;
+          return titreSaison + (ok || vu ? `<a class="card fe-ep${vu ? ' vu' : ' neuf'}" href="#/feuilleton/${e.num}">${corps}</a>` : `<div class="card fe-ep lock">${corps}</div>`);
         }).join('')}</div>`;
       return;
     }
@@ -90,8 +91,9 @@
       const premiere = !st.vus[ep.num];
       if (premiere) { st.vus[ep.num] = auj(); addXP(20); save(); }
       const suivant = FEUILLETON.find((e) => e.num === ep.num + 1);
+      const finSaison = !suivant || (suivant.saison || 1) !== (ep.saison || 1);
       $('#feFin').innerHTML = `<section class="card fe-suspense">
-        <p class="fe-asuivre">${suivant ? 'À suivre…' : 'Fin de la saison 1'}</p>
+        <p class="fe-asuivre">${finSaison ? `Fin de la saison ${ep.saison || 1}` : 'À suivre…'}</p>
         <p>${esc(ep.suspense)}</p>
         <div class="fe-mots"><b>Les mots de l’épisode</b><div>${ep.mots.map(([he, , fr]) => `<span class="rs-puce">${HE(he)}<small>${esc(fr)}</small>${sayBtn(he)}</span>`).join('')}</div>
         <button class="btn ghost" id="feMots">⭐ Ajouter ces mots à Mes mots</button></div>
@@ -240,7 +242,7 @@
   routes[''] = (...args) => {
     accueilAvant(...args);
     const ep = nouvelEpisode(), lt = nouvelleLettre();
-    const bandeaux = [ep ? `<a class="ac-fete hb-neuf" href="#/feuilleton/${ep.num}"><span>📺</span><span><b>${ep.num === 1 && !S.feuilleton ? 'Nouveau : un feuilleton !' : `Nouvel épisode : ${esc(ep.titre)}`}</b> <small>La lettre cachée · épisode ${ep.num}</small></span><i>›</i></a>` : '',
+    const bandeaux = [ep ? `<a class="ac-fete hb-neuf" href="#/feuilleton/${ep.num}"><span>📺</span><span><b>${ep.num === 1 && !S.feuilleton ? 'Nouveau : un feuilleton !' : `Nouvel épisode : ${esc(ep.titre)}`}</b> <small>${ep.saison === 2 ? 'La carte du marin' : 'La lettre cachée'} · épisode ${ep.num}</small></span><i>›</i></a>` : '',
       lt ? `<a class="ac-fete hb-neuf" href="#/lettres/${lt.num}"><span>💌</span><span><b>${lt.num === 1 && !S.lettres ? 'Noa t’écrit !' : 'Nouvelle lettre de Noa'}</b> <small>${esc(lt.titre)}</small></span><i>›</i></a>` : ''].join('');
     const ciel = $('.ac-ciel');
     if (bandeaux && ciel) ciel.insertAdjacentHTML('afterend', bandeaux);
@@ -252,7 +254,7 @@
     if (args[0]) return;
     const h2 = $('#app > h2');
     if (h2) h2.insertAdjacentHTML('beforebegin', `<div class="hb-entrees">
-      <a class="card hb-entree" href="#/feuilleton"><span>📺</span><span><b>Le feuilleton : La lettre cachée</b><small>${nouvelEpisode() ? '▶ un épisode t’attend' : `${Object.keys((S.feuilleton || {}).vus || {}).length}/${FEUILLETON.length} épisodes vus`}</small></span><i>›</i></a>
+      <a class="card hb-entree" href="#/feuilleton"><span>📺</span><span><b>Le feuilleton</b><small>${nouvelEpisode() ? '▶ un épisode t’attend' : `${Object.keys((S.feuilleton || {}).vus || {}).length}/${FEUILLETON.length} épisodes vus`}</small></span><i>›</i></a>
       <a class="card hb-entree" href="#/lettres"><span>💌</span><span><b>Les lettres de Noa</b><small>${nouvelleLettre() ? 'une lettre t’attend' : `${Object.keys((S.lettres || {}).rep || {}).length}/${LETTRES_NOA.length} lettres`}</small></span><i>›</i></a></div>`);
   };
   // Salle de jeux : les nombres en vrai

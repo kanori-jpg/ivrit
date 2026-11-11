@@ -33,6 +33,7 @@
         // Feuilleton et lettres : la date de départ la plus ancienne, et tout ce qui a été vu ou répondu des deux côtés
         case 'feuilleton': case 'lettres': { const cle = k === 'feuilleton' ? 'vus' : 'rep'; if (b.debut && (!a.debut || b.debut < a.debut)) a.debut = b.debut; a[cle] = { ...(b[cle] || {}), ...(a[cle] || {}) }; return; }
         case 'chiffres': Object.entries(b || {}).forEach(([c, n]) => { a[c] = Math.max(a[c] || 0, n || 0); }); return;
+        case 'quizIsrael': a.best = Math.max(a.best || 0, b.best || 0); a.parties = Math.max(a.parties || 0, b.parties || 0); return;
         case 'rates': Object.entries(b || {}).forEach(([w, rb]) => { const ra = a[w]; if (!ra || (rb.n || 0) > (ra.n || 0)) a[w] = rb; }); return;
         case 'xp': case 'written': case 'perfect': r[k] = Math.max(a || 0, b || 0); return;
         case 'best': case 'stats': Object.entries(b || {}).forEach(([kk, x]) => { if (typeof x === 'number') a[kk] = Math.max(a[kk] || 0, x); }); return;

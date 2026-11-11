@@ -2884,3 +2884,70 @@ body.jade .ac { --muted: #506c64; }
 .nb-he .he { font-family: 'Frank Ruhl Libre', serif; font-size: 1.4rem; }
 .nb-astuce { width: 100%; text-align: left; }
 .nb-astuce summary { cursor: pointer; color: var(--muted); }
+
+/* ===== Carte d'Israël, recettes de Savta, quiz d'Israël ===== */
+.fe-saison { margin: 14px 0 4px; font-family: 'Playfair Display', serif; font-style: italic; }
+.ci-cadre { display: grid; grid-template-columns: minmax(240px, 380px) 1fr; gap: 16px; align-items: start; }
+.ci-carte { width: 100%; height: auto; border-radius: 22px; box-shadow: var(--shadow); background: #cfe2f2; }
+.ci-terre { fill: #f2e2c4; stroke: #c9a878; stroke-width: 2; }
+.ci-eau { fill: #6aa8d8; }
+.ci-mer { font-family: 'Frank Ruhl Libre', serif; font-size: 13px; fill: #2e5a88; opacity: .7; }
+.ci-lieu { cursor: pointer; }
+.ci-lieu circle { fill: #9a8a7a; stroke: #fff; stroke-width: 2; transition: r .2s; }
+.ci-lieu.vu circle { fill: #e8a83a; }
+.ci-lieu .ci-halo { fill: none; stroke: #e8a83a; stroke-width: 2; opacity: .5; animation: ciHalo 2.4s ease-in-out infinite; }
+@keyframes ciHalo { 50% { opacity: .1; } }
+.ci-lieu.choisi circle { fill: #d0456a; }
+.ci-lieu text { font-size: 11px; font-weight: 700; fill: #3a2e28; paint-order: stroke; stroke: #fff8ec; stroke-width: 3px; }
+.ci-lieu:focus { outline: none; }
+.ci-lieu:focus circle, .ci-lieu:hover circle { stroke: #d0456a; }
+.ci-info { position: sticky; top: 12px; }
+.ci-he .he { font-family: 'Frank Ruhl Libre', serif; font-size: 2.2rem; }
+.ci-info h3 { margin: 4px 0 6px; }
+.ci-info h3 small { color: #3fae7a; font-size: .8rem; }
+.ci-liens { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.ci-liens a { padding: 8px 12px; border-radius: 12px; background: var(--blue-soft); color: var(--ink); text-decoration: none; }
+.ci-liens a.fait { background: color-mix(in srgb, #3fae7a 16%, var(--card)); }
+@media (max-width: 760px) { .ci-cadre { grid-template-columns: 1fr; } .ci-carte { max-width: 340px; margin: 0 auto; display: block; } .ci-info { position: static; } }
+.re-hero { background: radial-gradient(420px 200px at 90% 0, rgba(255, 230, 160, .4), transparent 70%), linear-gradient(135deg, #b0503a, #d08a3a 60%, #e8c06a); }
+.qi-hero { background: radial-gradient(420px 200px at 90% 0, rgba(200, 230, 255, .4), transparent 70%), linear-gradient(135deg, #1f4a8a, #2f6ab0 60%, #6aa8d8); }
+.re-grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.re-carte { display: flex; flex-direction: column; gap: 4px; color: var(--ink); text-decoration: none; border-top: 5px solid var(--c); }
+.re-em { font-size: 2rem; }
+.re-carte .he { font-family: 'Frank Ruhl Libre', serif; font-size: 1.4rem; }
+.re-carte small { color: var(--muted); }
+.re-tete { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 22px; border-radius: 22px; color: #fff; background: linear-gradient(135deg, var(--c), color-mix(in srgb, var(--c) 55%, #2b2266)); box-shadow: var(--shadow); margin-bottom: 12px; flex-wrap: wrap; }
+.re-tete h2 { margin: 0; color: #fff; font-family: 'Playfair Display', serif; font-style: italic; }
+.re-tete p { margin: 2px 0 0; color: #fff3e6; }
+.re-he { font-family: 'Frank Ruhl Libre', serif; font-size: 1.8rem; }
+.re-dessins { display: flex; gap: 4px; }
+.re-dessin { width: 70px; height: 70px; background: rgba(255, 255, 255, .85); border-radius: 18px; }
+.re-intro { text-align: center; margin: 0 0 12px; }
+.re-intro .mots-clic, .re-sod .mots-clic { font-family: 'Frank Ruhl Libre', serif; font-size: 1.3rem; }
+.re-intro small, .re-sod small { display: block; color: var(--muted); }
+.re-intro .bulle-mot, .re-etapes .bulle-mot, .re-sod .bulle-mot, .re-pas .bulle-mot { display: flex; margin: 6px auto; }
+.re-cols { display: grid; grid-template-columns: minmax(220px, 1fr) 2fr; gap: 14px; align-items: start; }
+@media (max-width: 760px) { .re-cols { grid-template-columns: 1fr; } }
+.re-ingr { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.re-ingr li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.re-ingr .he { font-family: 'Frank Ruhl Libre', serif; font-size: 1.25rem; }
+.re-ingr small { width: 100%; color: var(--muted); padding-left: 26px; }
+.re-ingr input:checked + .he { text-decoration: line-through; opacity: .6; }
+.re-etapes { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 12px; }
+.re-et-he { text-align: right; }
+.re-et-he .mots-clic { font-family: 'Frank Ruhl Libre', serif; font-size: 1.3rem; line-height: 1.6; }
+.re-etapes small.tr { display: block; color: var(--muted); }
+.re-fr { display: block; font-style: italic; color: var(--muted); }
+.re-fr[hidden] { display: none; }
+.re-sod { margin: 14px 0 0; padding: 10px 14px; border-radius: 14px; background: color-mix(in srgb, var(--gold) 14%, var(--card)); text-align: center; }
+.re-pas { max-width: 640px; margin: 0 auto 14px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.re-num { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--gold)); color: #fff; font-weight: 800; font-size: 1.4rem; }
+.re-pas-he .mots-clic { font-family: 'Frank Ruhl Libre', serif; font-size: 2rem; line-height: 1.5; }
+.re-pas-fr { margin: 0; font-style: italic; color: var(--muted); font-size: 1.1rem; }
+.qi-cat { font-size: 2rem; }
+.qi-q .mots-clic { font-family: 'Frank Ruhl Libre', serif; font-size: 1.6rem; line-height: 1.5; }
+.qi-fr { color: var(--muted); font-style: italic; margin: 4px 0 0; }
+.qi-fr[hidden] { display: none; }
+.qi-carte .bulle-mot { display: flex; margin: 6px auto; }
+.qi-trad { display: block; color: var(--muted); font-size: .85rem; }
+.qi-info { margin: 12px 0 0; padding: 10px 14px; border-radius: 14px; background: var(--blue-soft); text-align: left; }
