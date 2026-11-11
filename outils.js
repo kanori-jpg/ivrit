@@ -1212,6 +1212,7 @@ function seance() {
         if (!w._retry) { reconnus++; xp += 3; }
         file.shift(); cartesFaites++;
       } else {
+        if (!w._retry) noterRate(w.he);
         S.cards[w.he] = { box: 0, due: dayKey() };
         w._retry = true; file.push(file.shift());
       }

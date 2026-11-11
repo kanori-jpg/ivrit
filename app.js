@@ -27,9 +27,9 @@ S.best = Object.assign(defaults().best, S.best);
 S.stats = Object.assign(defaults().stats, S.stats);
 const save = () => localStorage.setItem(KEY, JSON.stringify(S));
 // Orthographes corrigées après vérification : la progression déjà acquise suit le mot
-const MOTS_CORRIGES = [['מָה נִשְׁמָע?', 'מַה נִּשְׁמָע?'], ['מַה נִּשְׁמַע?', 'מַה נִּשְׁמָע?'], ['מָה קוֹרֶה מָחָר?', 'מַה קּוֹרֶה מָחָר?'], ['סַבְתָּא', 'סָבְתָא'], ['פָּנָס', 'פַּנָּס'], ['פְּסִיפָס', 'פְּסֵיפָס'], ['תֻּרְמוֹס', 'צִבְעוֹנִי'], ['תֻּרְמוּס', 'צִבְעוֹנִי']];
+const MOTS_CORRIGES = [['מָסָךְ', 'מָסַךְ'], ['מָה נִשְׁמָע?', 'מַה נִּשְׁמָע?'], ['מַה נִּשְׁמַע?', 'מַה נִּשְׁמָע?'], ['מָה קוֹרֶה מָחָר?', 'מַה קּוֹרֶה מָחָר?'], ['סַבְתָּא', 'סָבְתָא'], ['פָּנָס', 'פַּנָּס'], ['פְּסִיפָס', 'פְּסֵיפָס'], ['תֻּרְמוֹס', 'צִבְעוֹנִי'], ['תֻּרְמוּס', 'צִבְעוֹנִי']];
 MOTS_CORRIGES.forEach(([ancien, nouveau]) => {
-  [S.cards, S.erreurs].forEach((liste) => Object.keys(liste).forEach((k) => {
+  [S.cards, S.erreurs, S.rates || {}].forEach((liste) => Object.keys(liste).forEach((k) => {
     if (k.normalize('NFC') === ancien.normalize('NFC')) { const n = nouveau.normalize('NFC'); if (k === n) return; if (!liste[n]) liste[n] = liste[k]; delete liste[k]; }
   }));
   S.found = S.found.map((k) => (k.normalize('NFC') === ancien.normalize('NFC') ? nouveau.normalize('NFC') : k));
@@ -444,7 +444,9 @@ const INTERVALS = [0, 1, 3, 7, 14, 30];
 Object.values(S.cards).forEach((c) => { if (c && c.box > INTERVALS.length - 1) c.box = INTERVALS.length - 1; });
 const cardOf = (w) => S.cards[w.he] || { box: 0, due: null };
 // Un mot raté repart à zéro dans les cartes et doit être réussi deux fois pour sortir de « Mes erreurs »
-const noterErreur = (he) => { S.erreurs[he] = 2; S.cards[he] = { box: 0, due: dayKey() }; };
+// Chaque raté est compté sur la durée (« Les mots qui résistent »)
+const noterRate = (he) => { const k = he.normalize('NFC'); if (!S.rates) S.rates = {}; const r = S.rates[k] || { n: 0 }; r.n++; r.d = dayKey(); S.rates[k] = r; };
+const noterErreur = (he) => { noterRate(he); S.erreurs[he] = 2; S.cards[he] = { box: 0, due: dayKey() }; };
 const noterReussite = (he) => { if (S.erreurs[he]) { S.erreurs[he]--; if (!S.erreurs[he]) delete S.erreurs[he]; } };
 const motsEnErreur = () => WORDS.filter((w, i) => S.erreurs[w.he] && WORDS.findIndex((x) => x.he === w.he) === i);
 const isDue = (w) => { if (w.theme === 'dehors' && !S.found.includes(w.he.normalize('NFC'))) return false; const c = cardOf(w); return !c.due || c.due <= dayKey(); };
@@ -543,6 +545,7 @@ function cartes(theme) {
         if (!w._retry) known++;
         queue.shift(); doneCount++;
       } else {
+        if (!w._retry) noterRate(w.he);
         S.cards[w.he] = { box: 0, due: dayKey() };
         w._retry = true; queue.push(queue.shift());
       }
@@ -595,10 +598,10 @@ function buildQuiz(mode, theme) {
     const all = syllables();
     return pick(all, N).map((s) => ({ prompt: `<div class="he" lang="he">${s.he}</div><p class="sub">Comment se lit cette syllabe ?</p>`, answer: s.ans, opts: options(s.ans, all.map((x) => x.ans)), say: s.he }));
   }
-  const pool = mode === 'erreurs' ? motsEnErreur() : themeWords(theme);
+  const pool = mode === 'erreurs' ? motsEnErreur() : mode === 'resistent' && typeof motsQuiResistent === 'function' ? motsQuiResistent().map((x) => x.w) : themeWords(theme);
   const wide = pool.length >= 6 ? pool : WORDS;
   return pick(pool, Math.min(N, pool.length)).map((w) => {
-    const genre = mode === 'erreurs' ? pick(['mots', 'inverse', 'ecoute'], 1)[0] : mode;
+    const genre = mode === 'erreurs' || mode === 'resistent' ? pick(['mots', 'inverse', 'ecoute'], 1)[0] : mode;
     if (genre === 'inverse') return { w, prompt: `<div class="fr">${esc(w.fr)}</div><p class="sub">Comment dit-on en hébreu ?</p>`, answer: w.he, opts: options(w.he, wide.map((x) => x.he)), he: true, say: w.he };
     if (genre === 'ecoute') return { w, prompt: `<button class="btn gold" data-say="${esc(w.he)}" style="font-size:2rem">🔊</button><p class="sub">Écoute et choisis la traduction</p>`, answer: w.fr, opts: options(w.fr, wide.map((x) => x.fr)), say: w.he, autoplay: true, after: w.he };
     return { w, prompt: `<div>${HE(w.he)}</div><div>${sayBtn(w.he)}</div><p class="sub">Que signifie ce mot ?</p>`, answer: w.fr, opts: options(w.fr, wide.map((x) => x.fr)), say: w.he };
@@ -649,8 +652,9 @@ function quiz(mode, theme = 'tout') {
   }
   const qs = buildQuiz(mode, theme);
   if (mode === 'erreurs' && !qs.length) { location.hash = '#/erreurs'; return; }
+  if (mode === 'resistent' && !qs.length) { location.hash = '#/resistent'; return; }
   let k = 0, score = 0, combo = 0, xp = 0;
-  const modeInfo = mode === 'erreurs' ? { em: '🎯', name: 'Mes erreurs' } : QUIZ_MODES.find((m) => m.id === mode) || QUIZ_MODES[2];
+  const modeInfo = mode === 'erreurs' ? { em: '🎯', name: 'Mes erreurs' } : mode === 'resistent' ? { em: '🧱', name: 'Les mots qui résistent' } : QUIZ_MODES.find((m) => m.id === mode) || QUIZ_MODES[2];
   const show = () => {
     if (k >= qs.length) return finish();
     const q = qs[k];
@@ -684,8 +688,8 @@ function quiz(mode, theme = 'tout') {
     addXP(xp);
     const em = score === qs.length ? '🏆' : score >= qs.length * 0.7 ? '🎉' : score >= qs.length / 2 ? '👍' : '💪';
     app.innerHTML = `<div class="card center result"><div class="em">${em}</div><h2>${score === qs.length ? 'Sans faute !' : 'Quiz terminé'}</h2><p class="score">${score} / ${qs.length}</p><p class="sub">+${xp} XP</p>
-    <div class="row" style="justify-content:center"><a class="btn gold" href="#/quiz/${mode}/${theme}" id="again">${mode === 'erreurs' ? 'Voir mes erreurs' : 'Rejouer'}</a><a class="btn ghost" href="#/quiz">Changer de quiz</a></div></div>`;
-    $('#again').onclick = (e) => { e.preventDefault(); if (mode === 'erreurs') location.hash = '#/erreurs'; else quiz(mode, theme); };
+    <div class="row" style="justify-content:center"><a class="btn gold" href="#/quiz/${mode}/${theme}" id="again">${mode === 'erreurs' ? 'Voir mes erreurs' : mode === 'resistent' ? 'Revoir ces mots' : 'Rejouer'}</a><a class="btn ghost" href="#/quiz">Changer de quiz</a></div></div>`;
+    $('#again').onclick = (e) => { e.preventDefault(); if (mode === 'erreurs') location.hash = '#/erreurs'; else if (mode === 'resistent') location.hash = '#/resistent'; else quiz(mode, theme); };
   };
   show();
 }

@@ -654,7 +654,7 @@ const THEMES = [
     ['אֹזְנִיּוֹת', 'ozniyot', 'écouteurs'],
     ['שִׁיר', 'shir', 'chanson'],
     ['קוֹלְנוֹעַ', 'kolnoa', 'cinéma'],
-    ['מָסָךְ', 'masakh', 'écran'],
+    ['מָסַךְ', 'masakh', 'écran'],
     ['פּוֹפְּקוֹרְן', 'popkorn', 'pop-corn'],
     ['סֶרֶט', 'seret', 'film'],
     ['מַשְׁקֶה', 'mashké', 'boisson'],

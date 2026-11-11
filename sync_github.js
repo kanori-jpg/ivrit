@@ -30,6 +30,7 @@
           Object.entries(b || {}).forEach(([w, cb]) => { const ca = a[w]; if (!ca || (cb.box || 0) > (ca.box || 0) || ((cb.box || 0) === (ca.box || 0) && (cb.due || '') > (ca.due || ''))) a[w] = cb; });
           return;
         case 'days': Object.entries(b || {}).forEach(([d, x]) => { a[d] = Math.max(a[d] || 0, x || 0); }); return;
+        case 'rates': Object.entries(b || {}).forEach(([w, rb]) => { const ra = a[w]; if (!ra || (rb.n || 0) > (ra.n || 0)) a[w] = rb; }); return;
         case 'xp': case 'written': case 'perfect': r[k] = Math.max(a || 0, b || 0); return;
         case 'best': case 'stats': Object.entries(b || {}).forEach(([kk, x]) => { if (typeof x === 'number') a[kk] = Math.max(a[kk] || 0, x); }); return;
         case 'lastDay': case 'seance': case 'lastExport': if ((b || '') > (a || '')) r[k] = b; return;

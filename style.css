@@ -2748,3 +2748,24 @@ body.jade .ac { --muted: #506c64; }
 .sync-etapes { margin: 0 0 10px; padding-left: 22px; display: flex; flex-direction: column; gap: 4px; }
 .sync-etapes a { color: var(--blue); font-weight: 600; }
 .sync-jeton { flex: 1 1 220px; min-width: 0; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; }
+
+/* ===== Les mots qui résistent ===== */
+.rs-liste { display: flex; flex-direction: column; gap: 14px; }
+.rs-mot { display: flex; flex-direction: column; gap: 12px; }
+.rs-tete { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rs-he .he { font-family: 'Frank Ruhl Libre', serif; font-size: 2.1rem; line-height: 1.2; }
+.rs-sens { display: flex; flex-direction: column; }
+.rs-sens small { color: var(--muted); }
+.rs-badge { margin-left: auto; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--pink) 16%, var(--card)); color: var(--ink); font-size: .85rem; font-weight: 700; white-space: nowrap; }
+.rs-bloc h4 { margin: 0 0 6px; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.rs-bloc h4 .he { font-size: 1rem; text-transform: none; letter-spacing: 0; }
+.rs-phrase { padding: 8px 12px; border-radius: 12px; background: var(--blue-soft); margin-bottom: 6px; }
+.rs-ph-he { display: flex; align-items: center; justify-content: flex-end; gap: 8px; }
+.rs-ph-he .he { font-size: 1.25rem; text-align: right; }
+.rs-phrase small { display: block; color: var(--muted); margin-top: 2px; }
+.rs-puces { display: flex; flex-wrap: wrap; gap: 8px; }
+.rs-puce { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 12px; background: var(--blue-soft); }
+.rs-puce .he { font-size: 1.15rem; }
+.rs-puce small { color: var(--muted); }
+.pf-resiste { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding: 10px 14px; border-radius: 14px; background: color-mix(in srgb, var(--gold) 14%, var(--card)); color: var(--ink); text-decoration: none; font-weight: 600; }
+.pf-resiste span { color: var(--muted); font-size: 1.3rem; }
