@@ -3127,3 +3127,14 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .fv-balancier { animation: fvPlante 1s ease-in-out infinite alternate; transform-box: view-box; transform-origin: 650px 134px; }
 .fv-sablier { animation: fvSablier 6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes fvSablier { 0%, 80% { transform: rotate(0); } 100% { transform: rotate(180deg); } }
+
+/* Feuilleton vidéo : épisodes 9 à 11 */
+.fv-fanion { animation: fvFanion 1.4s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: top center; }
+@keyframes fvFanion { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
+.fv-ballons { animation: fvTangue 3s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center bottom; }
+.fv-note { animation: fvNote 3.9s ease-in-out infinite; opacity: 0; }
+@keyframes fvNote { 0% { opacity: 0; transform: translate(0, 10px); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(14px, -40px); } }
+.fv-phare { animation: fvBrille 1.6s ease-in-out infinite alternate; }
+.fv-mouille { animation: fvBrille 2s ease-in-out infinite alternate; }
+.fv-aiguille-b { animation: fvBoussole 3s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+@keyframes fvBoussole { from { transform: rotate(-25deg); } to { transform: rotate(20deg); } }

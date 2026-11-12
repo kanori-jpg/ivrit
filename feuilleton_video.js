@@ -52,6 +52,27 @@ const FEUILLETON_VIDEO = {
     // La dernière réplique change de décor : le port au coucher du soleil, Yossef et Rivka main dans la main
     suite: { des: 5, decor: 'portSoir', echelle: .95, moi: 300, persos: { shira: { ...FV_SHIRA, x: 150 } } },
   },
+  9: {
+    decor: 'fete', echelle: 1, moi: 625,
+    persos: {
+      yossef: { type: 'pnj', x: 200, peau: '#e8c8a8', cheveux: '#f0f0f0', coiffure: 'degarni', haut: '#f4f1ea', bas: '#3a4560', lunettes: true, yeux: '#4a6a8a' },
+      rivka: { type: 'perso', x: 340, peau: '#f3d6c0', cheveux: '#f4f2f7', coiffure: 'courts', tenue: 'p-robe', tenueSinon: 'p-pull', cou: 'p-echarpe' },
+      shira: { ...FV_SHIRA, x: 480 },
+    },
+    plans: [null, 'cadeau', 'carte-marin', 'carte-marin', null, 'carte-akko'],
+    emo: { yossef: ['ravi', null, 'content', 'content', 'neutre'] },
+  },
+  10: {
+    decor: 'akko', echelle: 1.05, moi: 630,
+    persos: { shimon: { type: 'pnj', x: 215, peau: '#c98e6a', cheveux: '#2c211d', coiffure: 'court', haut: '#3f7ab0', bas: '#3a3f4a', tablier: '#e8b44a', moustache: true, yeux: '#3f5a3a' }, shira: { ...FV_SHIRA, x: 450 } },
+    plans: ['notes', 'photo-amis', 'caisse', null, 'caisse-cle', 'boussole-cesaree'],
+    emo: { shimon: ['ravi', 'surpris', 'content', 'neutre', 'content'] },
+  },
+  11: {
+    decor: 'cesaree', echelle: 1.05, moi: 600, gros: [470, 14],
+    persos: { shira: { ...FV_SHIRA, x: 390 } },
+    plans: [null, 'arches-3', 'boite-metal', 'photo-couple', 'photo-dos', 'cratere'],
+  },
 };
 
 (() => {
@@ -372,6 +393,73 @@ const FEUILLETON_VIDEO = {
         <path d="M-8-70Q0-62 8-70" stroke="#e8c8a8" stroke-width="9" fill="none" stroke-linecap="round"/>
         ${[[-10, -170, 0], [16, -190, 1.2], [-4, -212, 2.4]].map(([x, y, d]) => `<path class="fv-coeur" style="animation-delay:-${d}s" d="M${x} ${y + 6}C${x - 9} ${y} ${x - 7} ${y - 8} ${x - 2} ${y - 7}C${x - 0.5} ${y - 6.5} ${x} ${y - 5} ${x} ${y - 4}C${x} ${y - 5} ${x + 0.5} ${y - 6.5} ${x + 2} ${y - 7}C${x + 7} ${y - 8} ${x + 9} ${y} ${x} ${y + 6}Z" fill="#f48aa8"/>`).join('')}
       </g>`,
+
+    // La fête au café du port : le décor du port, avec des fanions et des ballons
+    fete: () => `${FV_DECORS.port()}
+      <path d="M0 70Q200 110 400 74T800 80" stroke="#6a4a3a" stroke-width="1.500" fill="none"/>
+      ${[...Array(16).keys()].map((k) => { const x = 20 + k * 50, y = 78 + Math.sin(k * .8) * 10; return `<path class="fv-fanion" style="animation-delay:-${(k * .3).toFixed(1)}s" d="M${x - 12} ${y.toFixed(0)}L${x + 12} ${y.toFixed(0)}L${x} ${(y + 24).toFixed(0)}Z" fill="${['#e46a92', '#f2b134', '#3fae7a', '#4f9fcf', '#9b5de5'][k % 5]}"/>`; }).join('')}
+      <g class="fv-ballons">${[[700, 150, '#e46a92'], [732, 136, '#f2b134'], [716, 120, '#4f9fcf']].map(([x, y, c]) => `<path d="M${x} ${y + 26}Q${x - 6} ${y + 60} ${x + 4} ${y + 96}" stroke="#6a5a5a" stroke-width="1.200" fill="none"/><ellipse cx="${x}" cy="${y}" rx="16" ry="20" fill="${c}"/><path d="M${x - 6} ${y - 8}Q${x - 2} ${y - 14} ${x + 4} ${y - 10}" stroke="#fff" stroke-width="3" opacity=".5" fill="none"/>`).join('')}</g>`,
+
+    // Le vieux port d'Akko : les remparts, le phare, le quai et le bateau de Shimon
+    akko: () => {
+      let pierres = '';
+      for (let r = 0; r < 5; r++) for (let c = 0; c < 9; c++) pierres += `<rect x="${c * 52 + (r % 2) * 26 - 26}" y="${150 + r * 18}" width="50" height="16" rx="2" fill="${['#d9b98a', '#d1af7e', '#dcc096'][(r + c) % 3]}"/>`;
+      let dalles = '';
+      for (let r = 0; r < 4; r++) for (let c = 0; c < 18; c++) dalles += `<rect x="${c * 46 + (r % 2) * 23 - 23}" y="${340 + r * 28}" width="44" height="26" rx="2" fill="${['#c9b08a', '#bfa47e', '#cdb592'][(r + c) % 3]}"/>`;
+      return `<defs>
+        <linearGradient id="fvAkCiel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fc0ee"/><stop offset="1" stop-color="#d9eef8"/></linearGradient>
+        <linearGradient id="fvAkMer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3f9cc9"/><stop offset="1" stop-color="#2a6f9e"/></linearGradient>
+      </defs>
+      <rect width="800" height="250" fill="url(#fvAkCiel)"/>
+      <g class="fv-nuages"><ellipse cx="560" cy="60" rx="34" ry="9" fill="#fff"/><ellipse cx="580" cy="53" rx="18" ry="9" fill="#fff"/><ellipse cx="200" cy="44" rx="24" ry="6" fill="#fff" opacity=".9"/></g>
+      <g class="fv-mouettes"><path d="M330 90q6-6 12 0q6-6 12 0M420 70q5-5 10 0q5-5 10 0" stroke="#4a5568" stroke-width="2.200" fill="none" stroke-linecap="round"/></g>
+      <!-- Les remparts de la vieille ville -->
+      <rect x="-30" y="140" width="470" height="100" fill="#d4b483"/>${pierres}
+      ${[...Array(9).keys()].map((k) => `<rect x="${k * 50 - 10}" y="122" width="30" height="22" fill="#d4b483"/>`).join('')}
+      <path d="M120 240V196A22 22 0 0 1 164 196V240Z" fill="#7a5a44"/>
+      <!-- Le phare -->
+      <path d="M690 230L700 120H724L734 230Z" fill="#f4f1ea"/><rect x="700" y="150" width="24" height="12" fill="#c9473f"/><rect x="698" y="190" width="28" height="12" fill="#c9473f"/>
+      <rect x="696" y="104" width="32" height="18" fill="#4a5568"/><path d="M692 104H732L712 88Z" fill="#c9473f"/><circle cx="712" cy="113" r="22" fill="#fff6c8" opacity=".5" class="fv-phare"/>
+      <rect x="440" y="226" width="360" height="14" fill="#d4b483"/>
+      <!-- La mer du port, avec le bateau de Shimon -->
+      <rect y="240" width="800" height="100" fill="url(#fvAkMer)"/>
+      <g class="fv-vague"><path d="M0 262Q40 256 80 262T160 262T240 262T320 262T400 262T480 262T560 262T640 262T720 262T800 262M0 300Q50 294 100 300T200 300T300 300T400 300T500 300T600 300T700 300T800 300" stroke="#cbe6f5" stroke-width="2" fill="none" opacity=".7"/></g>
+      <g class="fv-bateau"><path d="M470 300H700L676 334H494Z" fill="#f4f1ea"/><rect x="470" y="296" width="230" height="8" fill="#3f7ab0"/><path d="M494 318H676" stroke="#3f7ab0" stroke-width="4"/>
+        <rect x="560" y="262" width="60" height="34" rx="3" fill="#f4f1ea" stroke="#3f7ab0" stroke-width="3"/><rect x="570" y="270" width="14" height="12" fill="#8fc0e0"/><rect x="594" y="270" width="14" height="12" fill="#8fc0e0"/><path d="M540 296V200" stroke="#6a5a4a" stroke-width="3"/>
+        <rect x="640" y="282" width="28" height="16" fill="#9a6a3a" stroke="#6a4228" stroke-width="2"/></g>
+      <!-- Le quai et ses marches mouillées -->
+      ${dalles}<path d="M0 340H800" stroke="#9a8060" stroke-width="3"/>
+      ${[0, 1, 2].map((k) => `<rect x="${720 + k * 14}" y="${340 + k * 30}" width="${80 - k * 14}" height="30" fill="#a8916c"/><path d="M${720 + k * 14} ${341 + k * 30}H800" stroke="#e6f4fb" stroke-width="2" opacity=".7" class="fv-mouille"/>`).join('')}
+      <!-- Filets et bouées -->
+      <g transform="translate(40 340)"><ellipse cx="30" cy="-12" rx="40" ry="14" fill="#5a8a6a" opacity=".85"/><path d="M-6-14Q30-30 66-14" stroke="#3f6a4a" stroke-width="2" fill="none"/><circle cx="62" cy="-20" r="9" fill="#f2862e"/></g>
+      <!-- Les notes de la chanson de Shimon -->
+      ${[[255, 200, 0], [275, 170, 1.3], [240, 150, 2.6]].map(([x, y, d]) => `<g class="fv-note" style="animation-delay:-${d}s"><path d="M${x} ${y}V${y - 22}L${x + 12} ${y - 26}V${y - 6}" stroke="#3a4a7a" stroke-width="2.500" fill="none"/><ellipse cx="${x - 4}" cy="${y}" rx="5" ry="4" fill="#3a4a7a"/><ellipse cx="${x + 8}" cy="${y - 5}" rx="5" ry="4" fill="#3a4a7a"/></g>`).join('')}`;
+    },
+
+    // L'aqueduc de Césarée : les arches au bord de la mer, la plage
+    cesaree: () => {
+      const arches = [...Array(8).keys()].map((k) => { const x = 20 + k * 70; return `<path d="M${x} 300V196A27 27 0 0 1 ${x + 54} 196V300H${x + 70}V150H${x - 16}V300Z" fill="${k === 2 ? '#e2c48e' : '#d9b882'}"/>`; }).join('');
+      return `<defs>
+        <linearGradient id="fvCeCiel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fb8ee"/><stop offset="1" stop-color="#d6eef8"/></linearGradient>
+        <linearGradient id="fvCeSable" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2dcae"/><stop offset="1" stop-color="#e2c48e"/></linearGradient>
+        <radialGradient id="fvCeHalo"><stop offset="0" stop-color="#fff4c8" stop-opacity=".9"/><stop offset="1" stop-color="#fff4c8" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="800" height="230" fill="url(#fvCeCiel)"/>
+      <circle cx="720" cy="60" r="46" fill="url(#fvCeHalo)" class="fv-soleil"/><circle cx="720" cy="60" r="18" fill="#fff5cc"/>
+      <g class="fv-nuages"><ellipse cx="300" cy="50" rx="30" ry="8" fill="#fff"/><ellipse cx="318" cy="44" rx="16" ry="8" fill="#fff"/></g>
+      <g class="fv-mouettes"><path d="M600 110q6-6 12 0q6-6 12 0M660 90q5-5 10 0q5-5 10 0" stroke="#4a5568" stroke-width="2.200" fill="none" stroke-linecap="round"/></g>
+      <!-- La mer -->
+      <rect y="200" width="800" height="70" fill="#4fa0cf"/><g class="fv-vague"><path d="M560 230Q600 222 640 230T720 230T800 230M600 252Q640 246 680 252T760 252" stroke="#e6f4fb" stroke-width="3" fill="none"/></g>
+      <!-- Le sable -->
+      <path d="M0 250Q300 236 560 250Q680 258 800 270V450H0Z" fill="url(#fvCeSable)"/>
+      <g class="fv-vague"><path d="M560 252Q640 262 800 272" stroke="#fff" stroke-width="5" fill="none" opacity=".8"/></g>
+      <!-- L'aqueduc -->
+      <rect x="0" y="136" width="580" height="18" fill="#c9a46e"/>${arches}<path d="M0 300H580" stroke="#b8935e" stroke-width="4"/>
+      <g class="fv-brille"><path d="M187 220L190 230L200 233L190 236L187 246L184 236L174 233L184 230Z" fill="#fff6c8"/></g>
+      <!-- Coquillages et une serviette de plage -->
+      <path d="M640 380Q660 366 680 380Q660 388 640 380Z" fill="#f2a6a6"/><circle cx="720" cy="410" r="6" fill="#fff2e0"/>
+      <g transform="translate(700 350) rotate(-8)"><rect x="-50" y="-14" width="100" height="40" rx="4" fill="#4f9fcf"/><path d="M-50-4H50M-50 8H50" stroke="#fff" stroke-width="4"/></g>`;
+    },
   };
   // Ce qui passe devant les personnages (comptoirs, tables)
   const FV_DEVANT = {
@@ -410,6 +498,14 @@ const FEUILLETON_VIDEO = {
       : '<path d="M25 38L90 82L155 38" fill="none" stroke="#b39257" stroke-width="2"/>'}
     <rect x="130" y="44" width="18" height="22" rx="1" fill="#d98a8a" stroke="#fff" stroke-width="2"/>`;
 
+
+  // La carte de Yossef : la côte d'Israël et ses marques (n = la marque mise en avant)
+  const carteMarin = (n) => `<rect x="12" y="8" width="156" height="134" rx="4" fill="#f0e2bd" stroke="#b39257" stroke-width="2"/>
+      <path d="M12 8H70Q64 40 60 70Q56 100 50 142H12Z" fill="#a9d4ee" opacity=".7"/>
+      <path d="M70 8Q64 40 60 70Q56 100 50 142" stroke="#8a6a3a" stroke-width="2.500" fill="none"/>
+      <path d="M78 20Q90 40 84 60Q96 80 110 100Q120 120 118 134" stroke="#8a6a3a" stroke-width="1.500" stroke-dasharray="4 4" fill="none"/>
+      ${[[74, 22, 'עַכּוֹ'], [66, 54, 'קֵיסָרְיָה'], [112, 100, 'מַכְתֵּשׁ'], [118, 132, 'אֵילַת']].map(([x, y, nom], k) => `<path d="M${x - 5} ${y - 5}L${x + 5} ${y + 5}M${x + 5} ${y - 5}L${x - 5} ${y + 5}" stroke="#c9473f" stroke-width="3" stroke-linecap="round"/><text x="${x + 10}" y="${y + 4}" font-family="Frank Ruhl Libre, serif" font-size="10" fill="#5a3a1a">${nom}</text>${k === n ? `<circle cx="${x}" cy="${y}" r="11" fill="none" stroke="#c9473f" stroke-width="2" class="fv-brille"/>` : ''}`).join('')}
+      <g transform="translate(36 116)"><circle r="12" fill="#fffaf0" stroke="#8a6a3a"/><path d="M0-12L3 0L0 12L-3 0Z" fill="#b8483e"/></g>`;
   // Une horloge qui montre une heure précise (le soleil pour le matin)
   const horlogeSvg = (h, m, soleil) => {
     const pt = (deg, r) => [(90 + r * Math.sin(deg * Math.PI / 180)).toFixed(1), (75 - r * Math.cos(deg * Math.PI / 180)).toFixed(1)];
@@ -467,6 +563,43 @@ const FEUILLETON_VIDEO = {
       <rect x="10" y="108" width="160" height="32" fill="#c9a77a"/>
       <g transform="translate(90 106)"><g class="fv-fumee"><path d="M-8-30q-6-8 0-16t0-16M8-30q-6-8 0-16t0-16" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/></g>
         <path d="M-22-26H22L18 0H-18Z" fill="#fffaf2"/><path d="M-20-22H20L19-16H-19Z" fill="#6b4530"/><path d="M22-20Q36-20 32-8Q30-2 19-4" stroke="#fffaf2" stroke-width="5" fill="none"/><ellipse cy="2" rx="32" ry="6" fill="#fffaf2"/></g>`,
+    // Épisode 9
+    cadeau: () => `<rect x="44" y="60" width="92" height="72" rx="4" fill="#4f9fcf"/><rect x="36" y="46" width="108" height="20" rx="4" fill="#5fb0df"/><rect x="82" y="46" width="16" height="86" fill="#f2b134"/>
+      <path d="M90 46Q66 20 58 36Q56 48 90 46Q114 20 122 36Q124 48 90 46Z" fill="#f2b134" stroke="#d9952a" stroke-width="2"/>
+      <g class="fv-brille"><path d="M150 30L153 38L161 41L153 44L150 52L147 44L139 41L147 38Z" fill="#fff6c8"/><path d="M28 100L30 105L35 107L30 109L28 114L26 109L21 107L26 105Z" fill="#fff6c8"/></g>`,
+    'carte-marin': () => carteMarin(-1),
+    'carte-akko': () => carteMarin(0),
+    // Épisode 10
+    notes: () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#e8f2fa"/>${[[50, 100, 0], [92, 76, .6], [134, 104, 1.2]].map(([x, y, d]) => `<g class="fv-note" style="animation-delay:-${d}s"><path d="M${x} ${y}V${y - 40}L${x + 22} ${y - 46}V${y - 10}" stroke="#3a4a7a" stroke-width="4" fill="none"/><ellipse cx="${x - 7}" cy="${y}" rx="9" ry="7" fill="#3a4a7a"/><ellipse cx="${x + 15}" cy="${y - 10}" rx="9" ry="7" fill="#3a4a7a"/></g>`).join('')}`,
+    'photo-amis': () => `<g transform="rotate(-4 90 75)"><rect x="24" y="14" width="132" height="122" fill="#fbf7ee" stroke="#d6cbb4" stroke-width="2"/><rect x="32" y="22" width="116" height="90" fill="#c9bfa8"/><rect x="32" y="80" width="116" height="32" fill="#8a9aa8"/>
+      ${[[70, '#2c211d', '#3a4a6a'], [110, '#4a3a2a', '#e8e0d0']].map(([x, ch, ha]) => `<circle cx="${x}" cy="54" r="10" fill="#e0b090"/><path d="M${x - 10} 50Q${x} 38 ${x + 10} 50Z" fill="${ch}"/><path d="M${x - 14} 112Q${x - 14} 70 ${x} 66Q${x + 14} 70 ${x + 14} 112Z" fill="${ha}"/>`).join('')}
+      <path d="M84 84L96 80" stroke="#e0b090" stroke-width="5" stroke-linecap="round"/><path d="M40 124H140" stroke="#8a90c0" stroke-width="1.600"/></g>`,
+    caisse: () => `<rect x="34" y="50" width="112" height="76" rx="4" fill="#a8744a" stroke="#6a4228" stroke-width="3"/><path d="M34 74H146M34 100H146" stroke="#6a4228" stroke-width="2"/><path d="M40 56L140 120M140 56L40 120" stroke="#8a5a36" stroke-width="2" opacity=".5"/>
+      <rect x="80" y="40" width="20" height="14" rx="3" fill="#c9a04a" stroke="#8a6a2a" stroke-width="2"/><rect x="82" y="80" width="16" height="20" rx="3" fill="#c9a04a" stroke="#8a6a2a" stroke-width="2"/><circle cx="90" cy="88" r="2.500" fill="#4a3a2a"/>
+      <g class="fv-vague"><path d="M14 136Q40 130 66 136T118 136T170 136" stroke="#7fbfe0" stroke-width="3" fill="none"/></g>`,
+    'caisse-cle': () => `<rect x="20" y="58" width="112" height="76" rx="4" fill="#a8744a" stroke="#6a4228" stroke-width="3"/><path d="M20 82H132M20 108H132" stroke="#6a4228" stroke-width="2"/>
+      <rect x="68" y="88" width="16" height="20" rx="3" fill="#c9a04a" stroke="#8a6a2a" stroke-width="2"/><circle cx="76" cy="96" r="2.500" fill="#4a3a2a"/>
+      <g transform="translate(118 72) rotate(-30)" class="fv-tangue"><circle r="11" fill="none" stroke="#e2b54a" stroke-width="5"/><path d="M11 0H36M28 0V7M33 0V5" stroke="#e2b54a" stroke-width="5" stroke-linecap="round"/></g>
+      <g class="fv-brille"><path d="M150 30L153 38L161 41L153 44L150 52L147 44L139 41L147 38Z" fill="#fff6c8"/></g>`,
+    'boussole-cesaree': () => `<g transform="translate(60 72)"><circle r="40" fill="#c9a04a" stroke="#8a6a2a" stroke-width="4"/><circle r="32" fill="#fffaf0"/><g class="fv-aiguille-b"><path d="M0-28L6 0L0 28L-6 0Z" fill="#b8483e"/><path d="M0 0L6 0L0 28L-6 0Z" fill="#4a5568"/></g><circle r="4" fill="#8a6a2a"/></g>
+      <g transform="rotate(6 130 80)"><rect x="98" y="52" width="70" height="56" fill="#fbf6ea" stroke="#d6c8a8"/><text x="133" y="86" text-anchor="middle" font-family="Frank Ruhl Libre, serif" font-size="15" font-weight="700" fill="#3f4f96" direction="rtl">קֵיסָרְיָה</text></g>`,
+    // Épisode 11
+    'arches-3': () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#cfe7f5"/><rect x="10" y="112" width="160" height="28" fill="#f2dcae"/>
+      ${[0, 1, 2].map((k) => { const x = 20 + k * 52; return `<path d="M${x} 112V64A18 18 0 0 1 ${x + 36} 64V112H${x + 48}V38H${x - 8}V112Z" fill="${k === 2 ? '#e8c890' : '#d9b882'}"/><text x="${x + 18}" y="104" text-anchor="middle" font-family="Consolas, monospace" font-size="14" font-weight="700" fill="#5a3a1a">${k + 1}</text>`; }).join('')}
+      <path d="M118 82L128 92M128 82L118 92" stroke="#c9473f" stroke-width="3" stroke-linecap="round"/><circle cx="123" cy="87" r="10" fill="none" stroke="#c9473f" stroke-width="2" class="fv-brille"/>`,
+    'boite-metal': () => `<rect x="36" y="56" width="108" height="64" rx="8" fill="#8a9aa8" stroke="#5a6a78" stroke-width="3"/><rect x="32" y="46" width="116" height="18" rx="6" fill="#9aaab8" stroke="#5a6a78" stroke-width="3"/>
+      <circle cx="58" cy="90" r="6" fill="#a86a3a" opacity=".5"/><circle cx="120" cy="100" r="8" fill="#a86a3a" opacity=".45"/><path d="M80 80Q90 70 100 80" stroke="#c9d3db" stroke-width="3" fill="none"/>
+      <g class="fv-brille"><path d="M150 26L153 34L161 37L153 40L150 48L147 40L139 37L147 34Z" fill="#fff6c8"/></g>`,
+    'photo-couple': () => `<g transform="rotate(-5 90 75)"><rect x="24" y="14" width="132" height="122" fill="#fbf7ee" stroke="#d6cbb4" stroke-width="2"/><rect x="32" y="22" width="116" height="90" fill="#e8b48a"/>
+      <path d="M32 70L60 50L90 66L120 46L148 62V112H32Z" fill="#c9784a"/><path d="M32 90Q90 80 148 92V112H32Z" fill="#a85a3a"/>
+      ${[[78, '#f0c9a8', '#5a3a2c', '#f4f1ea'], [100, '#e8c8a8', '#2c211d', '#3a4a6a']].map(([x, p, ch, ha]) => `<circle cx="${x}" cy="60" r="8" fill="${p}"/><path d="M${x - 8} 57Q${x} 48 ${x + 8} 57Z" fill="${ch}"/><path d="M${x - 11} 108Q${x - 11} 74 ${x} 70Q${x + 11} 74 ${x + 11} 108Z" fill="${ha}"/>`).join('')}
+      <path d="M88 84L92 84" stroke="#f0c9a8" stroke-width="5" stroke-linecap="round"/></g>`,
+    'photo-dos': () => `<g transform="rotate(4 90 75)"><rect x="24" y="14" width="132" height="122" fill="#f4ecd8" stroke="#d6cbb4" stroke-width="2"/>
+      ${[0, 1, 2, 3].map((k) => `<path d="M${40 + (k % 2) * 8} ${44 + k * 18}Q90 ${40 + k * 18} ${140 - (k % 3) * 12} ${44 + k * 18}" stroke="#4a5a9a" stroke-width="2" fill="none"/>`).join('')}
+      <text x="92" y="126" text-anchor="middle" class="fv-main">1962</text></g>`,
+    cratere: () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#f6d8a8"/><circle cx="140" cy="36" r="14" fill="#fff0b0"/>
+      <path d="M10 70Q50 60 90 66T170 64V140H10Z" fill="#d9925a"/><path d="M20 140Q40 86 90 84Q140 86 160 140Z" fill="#b8683e"/><path d="M40 140Q60 100 90 98Q120 100 140 140Z" fill="#a0583a"/>
+      <path d="M60 120L66 112L72 120M100 116L108 106L116 116" stroke="#e8c290" stroke-width="2" fill="none"/>`,
     // Épisode 8
     'lettre-rivka': () => `<g transform="rotate(-4 90 75)"><rect x="24" y="10" width="132" height="130" fill="#fbf6ea" stroke="#d6c8a8"/>
       ${[0, 1, 2, 3, 4, 5].map((k) => `<path d="M${38 + (k % 2) * 6} ${34 + k * 16}Q${70} ${30 + k * 16} ${144 - (k % 3) * 10} ${34 + k * 16}" stroke="#4a5a9a" stroke-width="1.800" fill="none"/>`).join('')}
