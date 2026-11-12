@@ -497,7 +497,9 @@ function cartes(theme) {
     }));
     return;
   }
-  let queue = shuffle(themeWords(theme).filter(isDue)).slice(0, 12);
+  // Les cartes à revoir d'abord, puis les nouveaux mots pour compléter la séance
+  const dus = themeWords(theme).filter(isDue);
+  let queue = [...shuffle(dus.filter((w) => S.cards[w.he])), ...shuffle(dus.filter((w) => !S.cards[w.he]))].slice(0, 12);
   if (!queue.length) {
     app.innerHTML = `<div class="card center result"><div class="em">😌</div><h2>Rien à réviser ici aujourd’hui !</h2><p class="sub">Tes cartes reviendront au bon moment.</p><div class="row" style="justify-content:center"><a class="btn" href="#/cartes">Autres thèmes</a><a class="btn ghost" href="#/quiz">Faire un quiz</a></div></div>`;
     return;
