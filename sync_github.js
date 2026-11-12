@@ -77,8 +77,8 @@
     setItemOrig.call(localStorage, KEY, JSON.stringify(S));
     S.mesMots.filter((m) => !avant.has(NFC(m[0]))).forEach((m) => { if (typeof inscrireMot === 'function') inscrireMot(m); });
     if (typeof header === 'function') header();
-    // On redessine la page, sauf au milieu d'un exercice
-    if (!/^#\/(seance|quiz|memoire|chrono|ecriture|conjexo|controle|roles\/|histoire\/[^/]+\/jouer|cartes\/)/.test(location.hash)) route();
+    // On ne redessine que les pages d'ensemble (accueil, sommaires, progrès) : jamais un exercice, une leçon ou une histoire en cours
+    if (/^(#\/?)?$|^#\/(progres|cartes|dictionnaire|jeux|histoire|grammaire|journal|conjugaison|scenes)\/?$/.test(location.hash) && !(document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName))) route();
   }
 
   let enCours = null;
