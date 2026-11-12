@@ -183,7 +183,7 @@ function speak(text) {
     endSpeech = done;
     const key = text.normalize('NFC');
     // Une vraie voix signalée comme fausse laisse la place à la voix de synthèse
-    const humain = HUMAN[key] && !(S.sonsAvis[key] === 'faux' && SOUNDS[key]);
+    const humain = HUMAN[key] && !((S.sonsAvis[key] === 'faux' || (window.SONS_REFAITS || {})[key]) && SOUNDS[key]); // une vraie voix signalée puis refaite reste écartée
     const file = humain ? 'humain/' + HUMAN[key].fichier : SOUNDS[key] && `${SOUNDS[key]}?v=2`;
     // La voix de l'appareil
     function synthese(alerter) {

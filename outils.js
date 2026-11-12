@@ -1097,7 +1097,7 @@ function pageSons(choix = 'priorite') {
 }
 function sourceSon(he) {
   const k = NFC(he);
-  if (S.sonsAvis[k] === 'faux' && HUMAN[k] && SOUNDS[k]) return 'voix de synthèse (vraie voix écartée)';
+  if ((S.sonsAvis[k] === 'faux' || (window.SONS_REFAITS || {})[k]) && HUMAN[k] && SOUNDS[k]) return 'voix de synthèse (vraie voix écartée)';
   return HUMAN[k] ? 'vraie voix' : SOUNDS[k] ? 'voix de synthèse' : 'voix du navigateur';
 }
 
