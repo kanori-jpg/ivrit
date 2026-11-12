@@ -2977,3 +2977,14 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .gr-ex, .sea-new > div { position: relative; }
 .gr-plus { width: 30px; height: 30px; font-size: 1rem; margin-inline-start: 6px; vertical-align: middle; flex: none; }
 .gr-plus.on { background: color-mix(in srgb, var(--gold) 30%, var(--card)); box-shadow: none; }
+
+/* Dictionnaire : changer une entrée de dictionnaire (⇄) */
+.dico-case { position: relative; }
+.dico-case .dico-mot { width: 100%; padding-right: 44px; }
+.dico-deplacer { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--muted); font-size: .95rem; cursor: pointer; }
+.dico-deplacer:hover { color: #b5485a; border-color: #b5485a; }
+.dico-case:has(.dico-dep) .dico-deplacer { top: 22px; transform: none; }
+.dico-dep { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 10px 4px; font-size: .85rem; color: var(--muted); }
+.dico-dep button { padding: 5px 12px; border-radius: 99px; border: 1px solid #b5485a; background: none; color: var(--ink); font-weight: 700; font-size: .82rem; cursor: pointer; }
+.dico-dep button:hover { background: #b5485a; color: #fff; }
+.dico-dep .dico-dep-annuler { border: 0; text-decoration: underline; color: var(--muted); font-weight: 600; }

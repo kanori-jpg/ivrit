@@ -12,12 +12,23 @@ const DICO_EXPRESSIONS = new Set(['תּוֹדָה רַבָּה', 'בֹּקֶר �
   'יֵשׁ לִי', 'אֵין לִי', 'נִתְרָאֶה שׁוּב מָחָר', 'מַה קּוֹרֶה?', 'מָה הָעִנְיָנִים?', 'מְזֻמָּן בִּלְבַד', 'שָׁנָה טוֹבָה'].map((s) => s.normalize('NFC')));
 const DICO_PRONOMS = /(^|\s)(אֲנִי|אַתָּה|אַתְּ|הוּא|הִיא|אֲנַחְנוּ|אַתֶּם|אַתֶּן|הֵם|הֵן)(\s|$)/;
 const DICO_CATS = [['mot', '📗', 'Mots'], ['expr', '💬', 'Expressions'], ['phrase', '📝', 'Phrases']];
-function dicoCat(w) {
+// Le rangement choisi à la main (bouton ⇄) l'emporte : S.dicoCat[mot] = 'mot' | 'expr' | 'phrase'
+function dicoCatAuto(w) {
   const he = w.he.normalize('NFC').trim();
   if (DICO_EXPRESSIONS.has(he)) return 'expr';
   if (!/\s/.test(he)) return 'mot';
   // Plusieurs mots : une question, une virgule, un pronom sujet ou trois mots et plus, c'est une phrase ; sinon un mot composé
   return /[?!,.]/.test(he) || DICO_PRONOMS.test(he.normalize('NFC')) || he.split(/\s+/).length >= 3 ? 'phrase' : 'mot';
+}
+function dicoCat(w) {
+  const choix = S.dicoCat && S.dicoCat[w.he.normalize('NFC').trim()];
+  return DICO_CATS.some((c) => c[0] === choix) ? choix : dicoCatAuto(w);
+}
+function dicoDeplacer(he, cat) {
+  const k = he.normalize('NFC').trim(), w = WORDS.find((x) => x.he.normalize('NFC').trim() === k);
+  if (!S.dicoCat) S.dicoCat = {};
+  if (w && dicoCatAuto(w) === cat) delete S.dicoCat[k]; else S.dicoCat[k] = cat;
+  save();
 }
 
 function dictionnaire() {
@@ -71,13 +82,28 @@ function dictionnaire() {
     }
     $('#dicoListe').innerHTML = groupes.map((g, i) => `<section class="dico-groupe" id="dicoG${i}">
       <h3 class="dico-lettre${he ? ' he' : ''}"${he ? ' lang="he"' : ''}>${esc(g.l)}<small>${g.mots.length}</small></h3>
-      <div class="dico-mots">${g.mots.map((w) => { const [c, t] = niveau(w); const th = theme(w); return `<button type="button" class="dico-mot" data-say="${esc(w.he)}">
+      <div class="dico-mots">${g.mots.map((w) => { const [c, t] = niveau(w); const th = theme(w); return `<div class="dico-case"><button type="button" class="dico-mot" data-say="${esc(w.he)}">
         <span class="he" lang="he" dir="rtl">${esc(w.he)}</span>
         <span class="dico-fr"><b>${esc(w.fr)}</b><small>${esc(w.tr || '')}${th ? ` · ${th.emoji} ${esc(th.name)}` : ''}</small></span>
-        <span class="dico-niv ${c}" title="${t}"><i></i>${t}</span></button>`; }).join('')}</div></section>`).join('');
+        <span class="dico-niv ${c}" title="${t}"><i></i>${t}</span></button><button type="button" class="dico-deplacer" data-he="${esc(w.he)}" aria-label="Changer de dictionnaire" title="Changer de dictionnaire">⇄</button></div>`; }).join('')}</div></section>`).join('');
   };
   $('#dicoQ').oninput = (e) => { dicoEtat.q = e.target.value; rendre(); };
   $$('[data-cat]').forEach((b) => (b.onclick = () => { dicoEtat.cat = b.dataset.cat; dictionnaire(); }));
+  // ⇄ : ranger l'entrée dans un autre dictionnaire
+  $('#dicoListe').addEventListener('click', (ev) => {
+    const d = ev.target.closest('.dico-deplacer'), v = ev.target.closest('[data-vers]'), a = ev.target.closest('.dico-dep-annuler');
+    if (d) {
+      ev.stopPropagation();
+      $$('.dico-dep').forEach((x) => x.remove());
+      const he = d.dataset.he, ici = cat[0];
+      d.closest('.dico-case').insertAdjacentHTML('beforeend', `<div class="dico-dep"><span>Ranger dans :</span>${DICO_CATS.filter((c) => c[0] !== ici).map(([c, em, nom]) => `<button type="button" data-vers="${c}" data-he="${esc(he)}">${em} ${nom}</button>`).join('')}<button type="button" class="dico-dep-annuler">annuler</button></div>`);
+    } else if (v) {
+      const y = window.scrollY, nom = DICO_CATS.find((c) => c[0] === v.dataset.vers)[2];
+      dicoDeplacer(v.dataset.he, v.dataset.vers);
+      dictionnaire(); window.scrollTo(0, y);
+      toast(`⇄ Rangé dans les ${nom.toLowerCase()}`);
+    } else if (a) a.closest('.dico-dep').remove();
+  });
   $$('[data-tous]').forEach((b) => (b.onclick = () => { dicoEtat.tous = b.dataset.tous === '1'; rendre(); }));
   $$('[data-tri]').forEach((b) => (b.onclick = () => { dicoEtat.tri = b.dataset.tri; rendre(); }));
   $('#dicoSaut').onclick = (e) => {
