@@ -109,10 +109,12 @@ const FEUILLETON_VIDEO = {
     const autreP = persoDe(cfg.persos[autre] || {});
     const autresReps = FEUILLETON.filter((e) => e !== ep).flatMap((e) => e.lignes.filter((l) => l.rep).map((l) => l.rep));
     let fr = !!S.videoFr, lent = false;
+    const etroit = matchMedia('(max-width: 600px)').matches;
 
     app.innerHTML = `<div class="q-head"><a href="#/feuilleton/${ep.num}">← Version à lire</a><span>🎬 Épisode ${ep.num} · ${esc(ep.titre)}</span></div>
-      <div class="fv-scene" id="fvScene">
-        <svg viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${esc(ep.lieu)}">
+      <div class="fv-ecran" id="fvEcran">
+      <div class="fv-scene" id="fvScene" style="aspect-ratio:${etroit ? '560 / 450' : '16 / 9'}">
+        <svg viewBox="${etroit ? '150 0 560 450' : '0 0 800 450'}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${esc(ep.lieu)}">
           ${FV_DECORS[cfg.decor]()}
           <g class="fv-perso" id="fvAutre" transform="translate(255 446) scale(1.2)"><g class="fv-corps">${persoSvg(autreP)}</g></g>
           <g class="fv-perso" id="fvMoi" transform="translate(590 446) scale(1.2)"><g class="fv-corps">${persoSvg(moiP)}</g></g>
@@ -122,6 +124,7 @@ const FEUILLETON_VIDEO = {
         <button type="button" class="fv-debut" id="fvDebut"><span class="fv-clap">🎬</span><small>Épisode ${ep.num}</small><b>${esc(ep.titre)}</b><span class="fv-go">▶ Regarder</span></button>
         <div class="fv-fin" id="fvFin" hidden></div>
       </div>
+      <div class="fv-st" id="fvSous"><p class="fv-aide">Touche ▶ pour lancer l’épisode. Pendant la vidéo, touche un mot des sous-titres pour avoir son sens.</p></div>
       <div class="fv-ctrl">
         <button type="button" id="fvPrec" title="Réplique précédente" aria-label="Réplique précédente">⏮</button>
         <button type="button" id="fvPlay" class="fv-play" title="Pause" aria-label="Pause">⏸</button>
@@ -130,7 +133,7 @@ const FEUILLETON_VIDEO = {
         <span class="fv-prog" id="fvProg"></span>
         <label class="fv-frbtn"><input type="checkbox" id="fvFr" ${fr ? 'checked' : ''}> FR</label>
       </div>
-      <div class="card fv-sous" id="fvSous"><p class="hint center">Touche ▶ pour lancer l’épisode. Tu peux toucher chaque mot des sous-titres pour avoir son sens.</p></div>`;
+      </div>`;
 
     const scene = $('#fvScene'), sous = $('#fvSous');
     const bulle = document.createElement('div'); bulle.className = 'bulle-mot'; bulle.hidden = true;
@@ -139,11 +142,27 @@ const FEUILLETON_VIDEO = {
     const vivant = () => scene.isConnected;
     const dodo = (ms) => new Promise((r) => setTimeout(r, ms));
     const attendrePause = async () => { while (pause && vivant()) await dodo(150); };
-    const parler = async (texte) => {
-      const p = speak(texte);
-      if (lent && player) player.playbackRate = 0.75;
-      await p;
+    const lecteur = new Audio();
+    lecteur.preload = 'auto';
+    const fichierSon = (texte) => {
+      const k = NFC(texte);
+      const humain = HUMAN[k] && !((S.sonsAvis[k] === 'faux' || (window.SONS_REFAITS || {})[k]) && SOUNDS[k]);
+      return humain ? 'humain/' + HUMAN[k].fichier : SOUNDS[k] ? `${SOUNDS[k]}?v=2` : null;
     };
+    // Lit un texte avec le lecteur de la vidéo ; sans fichier son, la voix de l'appareil prend le relais
+    const parler = (texte) => new Promise((res) => {
+      stopAudio();
+      const f = fichierSon(texte);
+      if (!f) { speak(texte).then(res); return; }
+      let fini = false;
+      const done = () => { if (fini) return; fini = true; if (endSpeech === done) endSpeech = null; res(); };
+      endSpeech = done; player = lecteur;
+      lecteur.onended = done; lecteur.onerror = done;
+      lecteur.src = 'audio/' + f;
+      lecteur.playbackRate = lent ? 0.75 : 1;
+      lecteur.play().catch(() => { if (!pause) done(); });
+    });
+    window.addEventListener('hashchange', () => { lecteur.pause(); }, { once: true });
     const anime = (qui) => {
       $('#fvAutre').classList.toggle('fv-parle', qui === 'autre');
       $('#fvMoi').classList.toggle('fv-parle', qui === 'moi');
@@ -172,7 +191,7 @@ const FEUILLETON_VIDEO = {
       pause = v;
       const b = $('#fvPlay'); b.textContent = pause ? '▶' : '⏸'; b.title = pause ? 'Lecture' : 'Pause'; b.setAttribute('aria-label', b.title);
       scene.classList.toggle('fv-en-pause', pause);
-      if (player) { if (pause) player.pause(); else player.play().catch(() => {}); }
+      if (pause) lecteur.pause(); else if (lecteur.src && !lecteur.ended && endSpeech) lecteur.play().catch(() => {});
       if ('speechSynthesis' in window) { if (pause) speechSynthesis.pause(); else speechSynthesis.resume(); }
     };
 
@@ -182,7 +201,7 @@ const FEUILLETON_VIDEO = {
       const l = ep.lignes[k], p = FEUILLETON_PERSOS[l.qui];
       plan(k); anime('autre');
       sousTitre(`${p.em} ${esc(p.nom)}`, l);
-      await attendrePause(); if (t !== jeton || !vivant()) return;
+      if (pause) { await attendrePause(); if (t !== jeton || !vivant()) return; }
       await parler(l.he);
       anime(null);
       await dodo(450); await attendrePause(); if (t !== jeton || !vivant()) return;
@@ -196,6 +215,7 @@ const FEUILLETON_VIDEO = {
       const choix = shuffle([{ ...l.rep, ok: true }, ...pick(autresReps.filter((r) => r.he !== l.rep.he), 2)]);
       sousTitre(`${p.em} ${esc(p.nom)}`, l, `<p class="fv-atoi">À toi ! Que réponds-tu ?</p><div class="fv-choix">${choix.map((c) => `<button type="button" class="opt" data-ok="${c.ok ? 1 : 0}"><span class="he" lang="he" dir="rtl">${esc(c.he)}</span><small class="tr">${esc(c.tr)}</small></button>`).join('')}</div>`);
       scene.classList.add('fv-attend');
+      const z = sous.querySelector('.fv-choix'); if (z && z.getBoundingClientRect().bottom > innerHeight) z.scrollIntoView({ block: 'end', behavior: 'smooth' });
       sous.querySelectorAll('.fv-choix .opt').forEach((b) => (b.onclick = async () => {
         if (b.dataset.ok !== '1') { b.classList.add('ko'); b.disabled = true; toast('Ce n’est pas la bonne réplique : relis ce qu’on te dit.'); return; }
         scene.classList.remove('fv-attend');
@@ -229,7 +249,7 @@ const FEUILLETON_VIDEO = {
     $('#fvPlay').onclick = () => { if ($('#fvDebut')) { $('#fvDebut').click(); return; } mettrePause(!pause); };
     $('#fvPrec').onclick = () => { if ($('#fvDebut')) return; mettrePause(false); $('#fvFin').hidden = true; jouer(Math.max(0, phase === 'ligne' && i > 0 ? i - 1 : i)); };
     $('#fvRe').onclick = () => { if ($('#fvDebut')) return; mettrePause(false); $('#fvFin').hidden = true; if (phase === 'fin') return jouer(n - 1); jouer(i); };
-    $('#fvLent').onclick = (e) => { lent = !lent; e.currentTarget.classList.toggle('on', lent); if (player) player.playbackRate = lent ? 0.75 : 1; toast(lent ? '🐢 Voix plus lente' : 'Voix normale'); };
+    $('#fvLent').onclick = (e) => { lent = !lent; e.currentTarget.classList.toggle('on', lent); lecteur.playbackRate = lent ? 0.75 : 1; toast(lent ? '🐢 Voix plus lente' : 'Voix normale'); };
     $('#fvFr').onchange = (e) => { fr = e.target.checked; S.videoFr = fr; save(); sous.querySelectorAll('.fv-fr').forEach((z) => (z.hidden = !fr)); };
     keyHandler = (ev) => { if (ev.key === ' ' && !/INPUT|BUTTON/.test(document.activeElement.tagName)) { ev.preventDefault(); $('#fvPlay').click(); } };
   }
