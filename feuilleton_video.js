@@ -73,6 +73,22 @@ const FEUILLETON_VIDEO = {
     persos: { shira: { ...FV_SHIRA, x: 390 } },
     plans: [null, 'arches-3', 'boite-metal', 'photo-couple', 'photo-dos', 'cratere'],
   },
+  12: {
+    decor: 'train', echelle: 1.05, moi: 630,
+    persos: { hila: { type: 'perso', x: 215, peau: '#c98e6a', cheveux: '#3a2a20', coiffure: 'queue', tenue: 'p-hoodie', tenueSinon: 'p-ecoliere', tete: 'p-casquette' }, shira: { ...FV_SHIRA, x: 450 } },
+    plans: ['billet', null, 'badge-nature', 'rocher-lettres', 'lune', 'desert'],
+  },
+  13: {
+    decor: 'ramon', echelle: 1.05, moi: 630,
+    persos: { hila: { type: 'perso', x: 260, peau: '#c98e6a', cheveux: '#3a2a20', coiffure: 'queue', tenue: 'p-hoodie', tenueSinon: 'p-ecoliere', tete: 'p-casquette' }, shira: { ...FV_SHIRA, x: 455 } },
+    plans: ['soleil-bas', 'gourde', 'rocher-lettres', 'trou', 'bague', 'bague'],
+    gros: [470, 14],
+  },
+  14: {
+    decor: 'eilat', echelle: 1.05, moi: 630,
+    persos: { nourit: { type: 'perso', x: 220, peau: '#b97b52', cheveux: '#d8d0c0', coiffure: 'queue', tenue: 'p-ecoliere', tenueSinon: 'p-pois', yeux: 'p-solaires' }, shira: { ...FV_SHIRA, x: 450 } },
+    plans: ['masque', 'photo-plongee', 'armoire-cadenas', 'cadenas-1961', 'enveloppes', 'enveloppes'],
+  },
 };
 
 (() => {
@@ -460,6 +476,76 @@ const FEUILLETON_VIDEO = {
       <path d="M640 380Q660 366 680 380Q660 388 640 380Z" fill="#f2a6a6"/><circle cx="720" cy="410" r="6" fill="#fff2e0"/>
       <g transform="translate(700 350) rotate(-8)"><rect x="-50" y="-14" width="100" height="40" rx="4" fill="#4f9fcf"/><path d="M-50-4H50M-50 8H50" stroke="#fff" stroke-width="4"/></g>`;
     },
+
+    // Dans le train pour Be'er Sheva : le paysage défile par la fenêtre
+    train: () => {
+      const collines = (y, c, k) => `<path d="M-400 ${y}${[...Array(14).keys()].map((i) => `Q${-340 + i * 120} ${y - 30 - ((i * k) % 3) * 12} ${-280 + i * 120} ${y}`).join('')}V260H-400Z" fill="${c}"/>`;
+      return `<defs>
+        <linearGradient id="fvTrCiel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ec8ef"/><stop offset="1" stop-color="#fbe2b8"/></linearGradient>
+        <linearGradient id="fvTrMur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6ebf0"/><stop offset="1" stop-color="#cdd6de"/></linearGradient>
+        <clipPath id="fvTrVitres"><rect x="40" y="70" width="200" height="150" rx="16"/><rect x="300" y="70" width="200" height="150" rx="16"/><rect x="560" y="70" width="200" height="150" rx="16"/></clipPath>
+      </defs>
+      <rect width="800" height="450" fill="url(#fvTrMur)"/>
+      <g clip-path="url(#fvTrVitres)"><rect width="800" height="260" fill="url(#fvTrCiel)"/><circle cx="640" cy="110" r="18" fill="#fff5cc"/>
+        <g class="fv-defile">${collines(200, '#e8c48e', 2)}${collines(230, '#d9a868', 1)}<g transform="translate(0 0)">${[...Array(12).keys()].map((i) => `<path d="M${-380 + i * 120} 224V196M${-388 + i * 120} 206Q${-380 + i * 120} 196 ${-372 + i * 120} 206" stroke="#7a9a5a" stroke-width="4" fill="none"/>`).join('')}</g>
+          <path d="M-400 236H1200" stroke="#9a8a7a" stroke-width="3"/>${[...Array(30).keys()].map((i) => `<path d="M${-400 + i * 60} 240V246" stroke="#9a8a7a" stroke-width="2"/>`).join('')}</g></g>
+      ${[40, 300, 560].map((x) => `<rect x="${x}" y="70" width="200" height="150" rx="16" fill="none" stroke="#9aa5ae" stroke-width="8"/><rect x="${x + 10}" y="76" width="70" height="20" rx="6" fill="#fff" opacity=".25"/>`).join('')}
+      <rect y="40" width="800" height="12" fill="#b9c3cb"/><rect x="0" y="30" width="800" height="6" fill="#8a96a0"/>
+      <!-- Les poignées et le porte-bagages -->
+      ${[120, 380, 640].map((x) => `<path d="M${x} 36V54" stroke="#8a96a0" stroke-width="2"/><circle cx="${x}" cy="62" r="8" fill="none" stroke="#e8a83a" stroke-width="3" class="fv-poignee"/>`).join('')}
+      <rect x="300" y="18" width="200" height="14" rx="3" fill="#8a96a0"/><rect x="330" y="2" width="44" height="18" rx="3" fill="#c9673f"/><rect x="390" y="6" width="34" height="14" rx="3" fill="#4f7aa8"/>
+      <!-- Les sièges -->
+      ${[0, 1, 2, 3].map((k) => `<g transform="translate(${30 + k * 200} 250)"><rect width="150" height="90" rx="14" fill="#3f6a9a"/><rect x="8" y="8" width="134" height="60" rx="10" fill="#4f7ab0"/><rect y="84" width="150" height="20" rx="6" fill="#2f5a88"/></g>`).join('')}
+      <rect y="350" width="800" height="100" fill="#8a96a0"/><path d="M0 352H800" stroke="#6a7680" stroke-width="3"/>${[...Array(10).keys()].map((k) => `<path d="M${k * 90} 360L${k * 90 - 40} 450" stroke="#7a868f" stroke-width="2"/>`).join('')}`;
+    },
+
+    // Le cratère Ramon au coucher du soleil, et le rocher gravé
+    ramon: () => `<defs>
+        <linearGradient id="fvRaCiel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3a7a"/><stop offset=".5" stop-color="#d9788a"/><stop offset="1" stop-color="#f6b46a"/></linearGradient>
+        <linearGradient id="fvRaSol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9784a"/><stop offset="1" stop-color="#9a5a3a"/></linearGradient>
+        <radialGradient id="fvRaSoleil"><stop offset="0" stop-color="#fff2b0"/><stop offset=".4" stop-color="#ffb46a" stop-opacity=".7"/><stop offset="1" stop-color="#ff8a5a" stop-opacity="0"/></radialGradient>
+        <clipPath id="fvRaHorizon"><rect width="800" height="200"/></clipPath>
+      </defs>
+      <rect width="800" height="220" fill="url(#fvRaCiel)"/>
+      ${[[90, 40], [180, 26], [330, 54], [520, 30], [610, 60], [720, 22]].map(([x, y], k) => `<circle cx="${x}" cy="${y}" r="1.600" fill="#fff" class="fv-etoile" style="animation-delay:-${k * .5}s"/>`).join('')}
+      <g clip-path="url(#fvRaHorizon)"><circle cx="300" cy="196" r="80" fill="url(#fvRaSoleil)" class="fv-soleil"/><circle cx="300" cy="200" r="28" fill="#ffe08a" class="fv-couchant"/></g>
+      <!-- Les falaises du cratère -->
+      <path d="M0 160L60 150L120 164L200 146L280 170L360 156L460 174L560 150L660 166L740 148L800 160V230H0Z" fill="#a8604a"/>
+      <path d="M0 200Q200 180 400 196T800 190V260H0Z" fill="#b86a4a"/>
+      <path d="M120 230Q260 206 400 214Q560 222 700 236" stroke="#d9925a" stroke-width="3" fill="none" opacity=".6"/>
+      <rect y="250" width="800" height="200" fill="url(#fvRaSol)"/>
+      ${[[620, 330], [700, 380], [80, 420], [520, 410]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="18" ry="7" fill="#8a4a2a" opacity=".5"/><path d="M${x - 12} ${y}Q${x - 6} ${y - 14} ${x + 4} ${y - 10}Q${x + 14} ${y - 6} ${x + 12} ${y}Z" fill="#a8604a"/>`).join('')}
+      <!-- Un bouquetin, au loin -->
+      <g transform="translate(560 170)" class="fv-bouquetin"><path d="M0 0H22V-8H0Z" fill="#6a3a2a"/><path d="M2 0V8M20 0V8" stroke="#6a3a2a" stroke-width="3"/><circle cx="24" cy="-10" r="4" fill="#6a3a2a"/><path d="M24-14Q20-26 30-28" stroke="#6a3a2a" stroke-width="2" fill="none"/></g>
+      <!-- Le rocher gravé -->
+      <g transform="translate(80 350)"><path d="M-70 0Q-80-70-30-96Q20-112 60-84Q90-50 76 0Z" fill="#8a4a32"/><path d="M-60-10Q-66-60-26-84Q10-96 40-80" stroke="#a8604a" stroke-width="6" fill="none" opacity=".6"/>
+        <g class="fv-grave"><text x="-26" y="-40" font-family="Frank Ruhl Libre, serif" font-size="30" font-weight="700" fill="#f6d38a">ר</text><text x="18" y="-40" font-family="Frank Ruhl Libre, serif" font-size="30" font-weight="700" fill="#f6d38a">י</text><path d="M-2-52C-8-56-6-62-2-61C-1-61 0-60 0-59C0-60 1-61 2-61C6-62 8-56 2-52L0-50Z" fill="#f6d38a"/><text x="-4" y="-14" text-anchor="middle" font-family="Consolas, monospace" font-size="13" fill="#f6d38a">1961</text></g></g>`,
+
+    // Eilat : le club de plongée au bord de la mer Rouge
+    eilat: () => `<defs>
+        <linearGradient id="fvEiCiel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fc0f0"/><stop offset="1" stop-color="#d6f0fa"/></linearGradient>
+        <linearGradient id="fvEiMer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2fb8c8"/><stop offset="1" stop-color="#1f8aa8"/></linearGradient>
+        <linearGradient id="fvEiSable" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4dfb4"/><stop offset="1" stop-color="#e6c48e"/></linearGradient>
+        <radialGradient id="fvEiHalo"><stop offset="0" stop-color="#fff4c8" stop-opacity=".9"/><stop offset="1" stop-color="#fff4c8" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="800" height="240" fill="url(#fvEiCiel)"/>
+      <circle cx="680" cy="56" r="48" fill="url(#fvEiHalo)" class="fv-soleil"/><circle cx="680" cy="56" r="20" fill="#fff5cc"/>
+      <!-- Les montagnes rouges d'Eilat, de l'autre côté du golfe -->
+      <path d="M0 170L70 120L130 150L210 96L290 146L360 118L430 156L520 110L600 150L680 124L760 156L800 140V200H0Z" fill="#c9785a"/><path d="M0 186L90 160L180 178L280 156L380 182L480 164L580 184L700 166L800 180V200H0Z" fill="#b8684a"/>
+      <rect y="196" width="800" height="110" fill="url(#fvEiMer)"/>
+      <g class="fv-vague"><path d="M0 220Q40 214 80 220T160 220T240 220T320 220T400 220T480 220T560 220T640 220T720 220T800 220M0 256Q50 250 100 256T200 256T300 256T400 256T500 256T600 256T700 256T800 256" stroke="#bff0f5" stroke-width="2" fill="none" opacity=".8"/></g>
+      <g class="fv-poisson"><path d="M380 270Q396 258 412 270Q396 282 380 270ZM412 270L424 262V278Z" fill="#f2b134"/></g>
+      <g class="fv-bateau"><path d="M600 236H690L680 250H610Z" fill="#fff"/><rect x="630" y="222" width="30" height="14" fill="#fff" stroke="#2f8aa8" stroke-width="2"/><path d="M600 234H690" stroke="#e46a92" stroke-width="3"/></g>
+      <path d="M0 300Q400 286 800 302V450H0Z" fill="url(#fvEiSable)"/>
+      <g class="fv-vague"><path d="M0 302Q400 288 800 304" stroke="#fff" stroke-width="5" fill="none" opacity=".8"/></g>
+      <!-- La cabane du club de plongée -->
+      <rect x="560" y="200" width="230" height="140" fill="#f4ecdc"/><path d="M548 204H802L790 176H560Z" fill="#2f8aa8"/><path d="M560 176H790" stroke="#fff" stroke-width="3" stroke-dasharray="14 10"/>
+      <rect x="590" y="236" width="80" height="60" rx="4" fill="#bfe6f0" stroke="#8a6a4a" stroke-width="4"/><rect x="700" y="236" width="56" height="104" fill="#8a5a36"/><circle cx="746" cy="290" r="3" fill="#e8c27a"/>
+      ${[600, 624, 648].map((x) => `<rect x="${x}" y="300" width="18" height="40" rx="9" fill="${x === 624 ? '#e8b44a' : '#e46a5a'}"/><rect x="${x + 5}" y="294" width="8" height="8" fill="#5a5a6a"/>`).join('')}
+      <!-- Le drapeau de plongée et le palmier -->
+      <path d="M540 340V160" stroke="#8a8a9a" stroke-width="4"/><g class="fv-fanion"><rect x="540" y="160" width="46" height="30" fill="#d64545"/><path d="M540 160L586 190" stroke="#fff" stroke-width="6"/></g>
+      <path d="M60 340Q52 270 70 200" stroke="#8a6a46" stroke-width="10" fill="none"/>
+      <g class="fv-palme"><path d="M70 200Q36 186 14 204M70 200Q50 172 26 168M70 200Q86 168 112 172M70 200Q104 190 122 210M70 200Q66 176 76 156" stroke="#4f9a5c" stroke-width="7" fill="none" stroke-linecap="round"/></g>`,
   };
   // Ce qui passe devant les personnages (comptoirs, tables)
   const FV_DEVANT = {
@@ -563,6 +649,42 @@ const FEUILLETON_VIDEO = {
       <rect x="10" y="108" width="160" height="32" fill="#c9a77a"/>
       <g transform="translate(90 106)"><g class="fv-fumee"><path d="M-8-30q-6-8 0-16t0-16M8-30q-6-8 0-16t0-16" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/></g>
         <path d="M-22-26H22L18 0H-18Z" fill="#fffaf2"/><path d="M-20-22H20L19-16H-19Z" fill="#6b4530"/><path d="M22-20Q36-20 32-8Q30-2 19-4" stroke="#fffaf2" stroke-width="5" fill="none"/><ellipse cy="2" rx="32" ry="6" fill="#fffaf2"/></g>`,
+    // Épisode 12
+    billet: () => `<g transform="rotate(-5 90 75)"><rect x="20" y="36" width="140" height="78" rx="6" fill="#fffdf6" stroke="#d6cdb8" stroke-width="2"/><rect x="20" y="36" width="140" height="20" rx="6" fill="#4f7aa8"/>
+      <text x="90" y="86" text-anchor="middle" font-family="Frank Ruhl Libre, serif" font-size="18" font-weight="700" fill="#2b2230" direction="rtl">בְּאֵר שֶׁבַע</text>
+      <path d="M32 100H76M104 100H148" stroke="#c9c0ac" stroke-width="2"/><path d="M120 46H148" stroke="#fff" stroke-width="3"/><circle cx="20" cy="85" r="7" fill="#cdd6de"/><circle cx="160" cy="85" r="7" fill="#cdd6de"/></g>`,
+    'badge-nature': () => `<path d="M90 14L146 34V80Q146 118 90 138Q34 118 34 80V34Z" fill="#3f7a52" stroke="#2a5a3a" stroke-width="4"/><path d="M90 26L134 42V80Q134 110 90 126Q46 110 46 80V42Z" fill="#5c9c6a"/>
+      <g transform="translate(90 84)"><path d="M-22 10H18V0H-22Z" fill="#f2dcae"/><path d="M-18 10V24M14 10V24" stroke="#f2dcae" stroke-width="4"/><circle cx="22" cy="-6" r="7" fill="#f2dcae"/><path d="M22-12Q14-36 32-40M26-12Q24-30 38-32" stroke="#f2dcae" stroke-width="3" fill="none"/></g>`,
+    'rocher-lettres': () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#f0b07a"/><path d="M14 140Q20 70 70 48Q120 34 152 70Q168 100 166 140Z" fill="#9a5a3a"/>
+      <g class="fv-grave"><text x="62" y="100" font-family="Frank Ruhl Libre, serif" font-size="34" font-weight="700" fill="#f6d38a">ר</text><text x="110" y="100" font-family="Frank Ruhl Libre, serif" font-size="34" font-weight="700" fill="#f6d38a">י</text>
+      <path d="M95 84C88 79 90 72 94 73C95.500 73.300 96 74.500 96 75.500C96 74.500 96.500 73.300 98 73C102 72 104 79 97 84L96 86Z" fill="#f6d38a"/><text x="96" y="126" text-anchor="middle" font-family="Consolas, monospace" font-size="15" fill="#f6d38a">1961</text></g>`,
+    lune: () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#2d2768"/>${[[40, 34], [70, 60], [140, 30], [126, 100], [36, 110], [100, 40]].map(([x, y], k) => `<circle cx="${x}" cy="${y}" r="2" fill="#fff" class="fv-etoile" style="animation-delay:-${k * .4}s"/>`).join('')}
+      <path d="M104 46a30 30 0 1 0 22 52a24 24 0 1 1-22-52z" fill="#f8efc9"/><text x="58" y="100" font-family="Consolas, monospace" font-size="16" font-weight="700" fill="#cfc4e6">z</text><text x="70" y="84" font-family="Consolas, monospace" font-size="20" font-weight="700" fill="#cfc4e6">z</text>`,
+    desert: () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#bfe2f6"/><circle cx="136" cy="40" r="16" fill="#ffe08a"/>
+      <path d="M10 100Q50 70 90 96Q130 72 170 90V140H10Z" fill="#e8c48e"/><path d="M10 120Q60 100 110 118Q140 108 170 116V140H10Z" fill="#d9a868"/>
+      <g transform="translate(46 100)"><path d="M0 0V-26M0-14Q-10-14-10-22M0-18Q8-18 8-26" stroke="#5c8a4a" stroke-width="5" fill="none" stroke-linecap="round"/></g>`,
+    // Épisode 13
+    'soleil-bas': () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#f6b46a"/><circle cx="90" cy="96" r="26" fill="#ffe08a" class="fv-couchant"/><rect x="10" y="96" width="160" height="44" fill="#a8604a"/>
+      <path d="M90 30V48M74 40L80 52M106 40L100 52" stroke="#c9473f" stroke-width="4" stroke-linecap="round"/><path d="M82 52L90 62L98 52" stroke="#c9473f" stroke-width="4" fill="none" stroke-linecap="round"/>`,
+    gourde: () => `<rect x="62" y="24" width="56" height="106" rx="20" fill="#4f9fcf"/><rect x="74" y="12" width="32" height="18" rx="6" fill="#2f5a88"/><rect x="70" y="56" width="40" height="40" rx="8" fill="#e8f4fa" opacity=".6"/>
+      <path d="M78 66q6-8 12 0t12 0" stroke="#4f9fcf" stroke-width="3" fill="none"/><g class="fv-fumee"><path d="M130 50q6 6 0 12" stroke="#7fc0e8" stroke-width="3" fill="none"/></g>`,
+    trou: () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#c9784a"/><path d="M10 10H170V70Q90 50 10 70Z" fill="#9a5a3a"/><ellipse cx="90" cy="96" rx="44" ry="20" fill="#2a1a12"/>
+      <path d="M134 40Q110 70 100 92" stroke="#f0c9a8" stroke-width="18" stroke-linecap="round"/><g class="fv-brille"><path d="M74 96L77 104L85 107L77 110L74 118L71 110L63 107L71 104Z" fill="#fff6c8"/></g>`,
+    bague: () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#4a3a6a"/><g class="fv-brille"><path d="M140 30L143 38L151 41L143 44L140 52L137 44L129 41L137 38Z" fill="#fff6c8"/><path d="M40 110L42 115L47 117L42 119L40 124L38 119L33 117L38 115Z" fill="#fff6c8"/></g>
+      <ellipse cx="90" cy="84" rx="40" ry="36" fill="none" stroke="#d6dde6" stroke-width="10"/><ellipse cx="90" cy="84" rx="40" ry="36" fill="none" stroke="#fff" stroke-width="2" opacity=".7"/>
+      <text x="90" y="92" text-anchor="middle" font-family="Frank Ruhl Libre, serif" font-size="22" font-weight="700" fill="#d6dde6">ר</text>`,
+    // Épisode 14
+    masque: () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#bff0f5"/><g class="fv-tangue"><rect x="36" y="56" width="98" height="48" rx="22" fill="#2f8aa8"/><rect x="44" y="62" width="38" height="36" rx="14" fill="#dff6fa"/><rect x="88" y="62" width="38" height="36" rx="14" fill="#dff6fa"/>
+      <path d="M134 70Q156 60 150 30" stroke="#e8b44a" stroke-width="8" fill="none" stroke-linecap="round"/></g>${[[50, 120], [70, 112], [120, 124]].map(([x, y], k) => `<circle cx="${x}" cy="${y}" r="${4 + k}" fill="none" stroke="#fff" stroke-width="2" class="fv-bulle" style="animation-delay:-${k * .7}s"/>`).join('')}`,
+    'photo-plongee': () => `<g transform="rotate(-4 90 75)"><rect x="24" y="14" width="132" height="122" fill="#fbf7ee" stroke="#d6cbb4" stroke-width="2"/><rect x="32" y="22" width="116" height="90" fill="#3fa8c0"/>
+      <path d="M40 92Q70 80 100 100L140 70" stroke="#2f8aa8" stroke-width="10" fill="none"/>${[[60, 50], [96, 62]].map(([x, y]) => `<g transform="translate(${x} ${y}) rotate(-20)"><ellipse rx="16" ry="7" fill="#2b2230"/><circle cx="16" cy="0" r="7" fill="#e8c8a8"/><rect x="18" y="-5" width="8" height="6" rx="2" fill="#dff6fa"/><path d="M-16 0L-28-6M-16 2L-28 8" stroke="#e8b44a" stroke-width="4"/></g>`).join('')}
+      <circle cx="120" cy="40" r="3" fill="none" stroke="#fff" stroke-width="1.500"/><circle cx="126" cy="32" r="2" fill="none" stroke="#fff" stroke-width="1.500"/></g>`,
+    'armoire-cadenas': () => `<rect x="40" y="12" width="100" height="128" rx="4" fill="#8a5a36" stroke="#5a3a20" stroke-width="3"/><path d="M90 12V140" stroke="#5a3a20" stroke-width="3"/>
+      <circle cx="84" cy="76" r="3" fill="#e8c27a"/><circle cx="96" cy="76" r="3" fill="#e8c27a"/><g transform="translate(90 92)"><path d="M-10-10V-20A10 10 0 0 1 10-20V-10" stroke="#9aa5ae" stroke-width="5" fill="none"/><rect x="-16" y="-12" width="32" height="28" rx="4" fill="#c9a04a"/><circle cy="2" r="4" fill="#5a3a20"/></g>`,
+    'cadenas-1961': () => `<g transform="translate(90 80)"><path d="M-30-24V-46A30 30 0 0 1 30-46V-24" stroke="#9aa5ae" stroke-width="9" fill="none"/><rect x="-50" y="-28" width="100" height="74" rx="10" fill="#c9a04a" stroke="#8a6a2a" stroke-width="3"/>
+      ${[0, 1, 2, 3].map((k) => `<rect x="${-42 + k * 22}" y="-6" width="18" height="30" rx="3" fill="#2b2230"/><text x="${-33 + k * 22}" y="16" text-anchor="middle" font-family="Consolas, monospace" font-size="18" font-weight="700" fill="#f6d38a">${'1961'[k]}</text>`).join('')}</g>
+      <g class="fv-brille"><path d="M150 26L153 34L161 37L153 40L150 48L147 40L139 37L147 34Z" fill="#fff6c8"/></g>`,
+    enveloppes: () => `${[...Array(9).keys()].map((k) => { const x = 20 + (k % 3) * 46 + (k > 5 ? 10 : 0), y = 20 + Math.floor(k / 3) * 38, r = ((k * 37) % 17) - 8; return `<g transform="rotate(${r} ${x + 28} ${y + 18})"><rect x="${x}" y="${y}" width="56" height="36" rx="2" fill="${['#ecd7a6', '#f2e2bc', '#e6cf98'][k % 3]}" stroke="#b39257"/><path d="M${x} ${y}L${x + 28} ${y + 20}L${x + 56} ${y}" stroke="#b39257" fill="none"/><rect x="${x + 42}" y="${y + 4}" width="10" height="12" fill="#d98a8a"/></g>`; }).join('')}`,
     // Épisode 9
     cadeau: () => `<rect x="44" y="60" width="92" height="72" rx="4" fill="#4f9fcf"/><rect x="36" y="46" width="108" height="20" rx="4" fill="#5fb0df"/><rect x="82" y="46" width="16" height="86" fill="#f2b134"/>
       <path d="M90 46Q66 20 58 36Q56 48 90 46Q114 20 122 36Q124 48 90 46Z" fill="#f2b134" stroke="#d9952a" stroke-width="2"/>

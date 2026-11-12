@@ -3138,3 +3138,18 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .fv-mouille { animation: fvBrille 2s ease-in-out infinite alternate; }
 .fv-aiguille-b { animation: fvBoussole 3s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
 @keyframes fvBoussole { from { transform: rotate(-25deg); } to { transform: rotate(20deg); } }
+
+/* Feuilleton vidéo : épisodes 12 à 14 */
+.fv-defile { animation: fvDefile 9s linear infinite; }
+@keyframes fvDefile { from { transform: translateX(0); } to { transform: translateX(-360px); } }
+.fv-poignee { animation: fvPlante 1.2s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: top center; }
+.fv-etoile { animation: fvBrille 1.5s ease-in-out infinite alternate; }
+.fv-couchant { animation: fvCouchant 16s ease-in-out infinite alternate; }
+@keyframes fvCouchant { to { transform: translateY(12px); } }
+.fv-grave { animation: fvGrave 3s ease-in-out infinite alternate; }
+@keyframes fvGrave { from { opacity: .45; } to { opacity: 1; } }
+.fv-bouquetin { animation: fvBouquetin 14s ease-in-out infinite alternate; }
+@keyframes fvBouquetin { from { transform: translate(560px, 170px); } to { transform: translate(610px, 170px); } }
+.fv-poisson { animation: fvPoisson 4s ease-in-out infinite; }
+@keyframes fvPoisson { 0% { transform: translate(-40px, 10px); opacity: 0; } 30% { opacity: 1; } 50% { transform: translate(20px, -20px); } 100% { transform: translate(80px, 10px); opacity: 0; } }
+.fv-bulle { animation: fvNote 2.4s ease-in-out infinite; }
