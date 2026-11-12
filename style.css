@@ -3110,3 +3110,12 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 @keyframes fvVague { to { transform: translateX(-8px); } }
 .fv-fumee { animation: fvFumee 2.4s ease-in-out infinite; }
 @keyframes fvFumee { 0% { opacity: 0; transform: translateY(6px); } 40% { opacity: .9; } 100% { opacity: 0; transform: translateY(-8px); } }
+
+/* Feuilleton vidéo : animations des épisodes 5 à 7 */
+.fv-guirlande { animation: fvBrille 1.6s ease-in-out infinite alternate; }
+.fv-globe { animation: fvPlante 4s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+.fv-ecran-pc { animation: fvLueur 2.5s ease-in-out infinite alternate; }
+.fv-flamme { animation: fvFlamme .5s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center bottom; }
+@keyframes fvFlamme { from { transform: scaleY(.85) rotate(-4deg); } to { transform: scaleY(1.1) rotate(4deg); } }
+.fv-sonne { animation: fvSonne .25s linear infinite alternate; transform-box: fill-box; transform-origin: center; }
+@keyframes fvSonne { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }

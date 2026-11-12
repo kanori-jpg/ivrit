@@ -29,6 +29,22 @@ const FEUILLETON_VIDEO = {
     plans: ['carte-postale', null, 'cartes', 'cafe', 'horloge', null],
     emo: { mokher: [null, 'ravi', 'content', 'neutre', 'desole'] },
   },
+  5: {
+    decor: 'port', echelle: 1.05, moi: 630,
+    persos: { moshe: { type: 'pnj', x: 205, peau: '#e0b090', cheveux: '#eeeeee', coiffure: 'casquette', casquette: '#2f3f6a', haut: '#f2f2f2', bas: '#3a4560', moustache: true, yeux: '#4a6a8a' }, shira: { ...FV_SHIRA, x: 440 } },
+    plans: ['cafe', 'photo-rivka', 'bateau-1962', 'alliance', 'maison-haifa', 'journaux'],
+    emo: { moshe: ['content', 'desole', 'neutre', 'desole', 'content', 'neutre'] },
+  },
+  6: {
+    decor: 'bibliotheque', echelle: 1.05, moi: 635,
+    persos: { dalia: { type: 'perso', x: 210, peau: '#d9a57c', cheveux: '#ece8f2', coiffure: 'carre', tenue: 'p-pull', tenueSinon: 'p-ecoliere', yeux: 'p-lunettes', cou: 'p-echarpe' }, shira: { ...FV_SHIRA, x: 450 } },
+    plans: ['archives', 'ordinateur', 'journal-mariage', 'boulangerie', 'horloge-2', 'horloge-2'],
+  },
+  7: {
+    decor: 'boulangerie', echelle: 1.05, moi: 640,
+    persos: { tamar: { type: 'perso', x: 210, peau: '#f1cfb4', cheveux: '#8a4a2a', coiffure: 'queue', tenue: 'p-pois', tenueSinon: 'p-sport' }, shira: { ...FV_SHIRA, x: 455 } },
+    plans: ['photo-rivka', 'env-nom', null, 'gateau-85', 'telephone', 'horloge-10'],
+  },
 };
 
 (() => {
@@ -194,6 +210,107 @@ const FEUILLETON_VIDEO = {
       <g transform="translate(160 236)"><rect x="-14" y="-16" width="28" height="16" fill="#7a4a2a"/><path d="M4-16L14-44Q30-50 34-36Q24-30 10-16Z" fill="#d9b04a" stroke="#8a6a2a"/></g>
       <g transform="translate(222 236)"><path d="M-10 0Q-16-14-8-26H8Q16-14 10 0Z" fill="#4a7ab0"/><path d="M-6-26V-32H6V-26" fill="#4a7ab0"/></g>`;
     },
+
+    // Le vieux port de Jaffa : la terrasse du café, les bateaux de pêche, les filets
+    port: () => {
+      let planches = '';
+      for (let i = -6; i <= 14; i++) { const x = i * 60; planches += `M${x} 336L${(400 + (x - 400) * 1.6).toFixed(0)} 450`; }
+      const ampoules = [...Array(11).keys()].map((k) => { const x = 30 + k * 74, y = 34 + Math.sin(k * 1.1) * 8 + (k % 2) * 10; return `<circle cx="${x}" cy="${y.toFixed(0)}" r="5" fill="#ffe08a" class="fv-guirlande" style="animation-delay:-${(k * .37).toFixed(2)}s"/>`; }).join('');
+      return `<defs>
+        <linearGradient id="fvPoCiel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ec8ef"/><stop offset="1" stop-color="#fbe2c2"/></linearGradient>
+        <linearGradient id="fvPoMer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4f9fcf"/><stop offset="1" stop-color="#2f78a8"/></linearGradient>
+        <linearGradient id="fvPoBois" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98a5e"/><stop offset="1" stop-color="#94673f"/></linearGradient>
+        <radialGradient id="fvPoHalo"><stop offset="0" stop-color="#fff4c8" stop-opacity=".9"/><stop offset="1" stop-color="#fff4c8" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="800" height="230" fill="url(#fvPoCiel)"/>
+      <circle cx="120" cy="80" r="46" fill="url(#fvPoHalo)" class="fv-soleil"/><circle cx="120" cy="80" r="18" fill="#fff5cc"/>
+      <g class="fv-nuages"><ellipse cx="420" cy="70" rx="30" ry="8" fill="#fff"/><ellipse cx="440" cy="64" rx="16" ry="8" fill="#fff"/></g>
+      <g class="fv-mouettes"><path d="M260 110q6-6 12 0q6-6 12 0M560 90q7-7 14 0q7-7 14 0M640 128q5-5 10 0q5-5 10 0" stroke="#4a5568" stroke-width="2.200" fill="none" stroke-linecap="round"/></g>
+      <rect y="200" width="800" height="136" fill="url(#fvPoMer)"/>
+      <g class="fv-vague"><path d="M0 220Q40 212 80 220T160 220T240 220T320 220T400 220T480 220T560 220T640 220T720 220T800 220M0 262Q50 254 100 262T200 262T300 262T400 262T500 262T600 262T700 262T800 262" stroke="#cbe6f5" stroke-width="2.500" fill="none" opacity=".7"/></g>
+      <path d="M0 200H330L350 186H800V200" fill="#cdb48c"/>
+      <g class="fv-bateau"><path d="M300 272H400L386 296H314Z" fill="#f2efe6"/><rect x="300" y="268" width="100" height="6" fill="#3f7ab0"/><path d="M352 268V200" stroke="#6a5a4a" stroke-width="3"/><path d="M352 206L392 262H352Z" fill="#f4ead4"/></g>
+      <g class="fv-bateau" style="animation-delay:-1.3s"><path d="M520 246H600L590 264H530Z" fill="#c9473f"/><rect x="540" y="232" width="34" height="14" fill="#f2efe6"/><path d="M584 246V206" stroke="#6a5a4a" stroke-width="2.500"/></g>
+      <!-- La terrasse du café -->
+      <rect y="320" width="800" height="16" fill="#7a5a3a"/>
+      <rect y="336" width="800" height="114" fill="url(#fvPoBois)"/><path d="${planches}" stroke="#6a4a2a" stroke-width="1.200" opacity=".4"/>
+      <path d="M0 330H800" stroke="#5a3a20" stroke-width="3"/>
+      <!-- Le filet et les bouées, sur le poteau de droite -->
+      <path d="M760 336V120" stroke="#6a4a30" stroke-width="10"/>
+      <g class="fv-tapis"><path d="M690 130Q725 150 760 130V250Q725 270 690 250Z" fill="none" stroke="#c9b48a" stroke-width="1.500"/>${[0, 1, 2, 3, 4, 5].map((k) => `<path d="M${696 + k * 11} 134V254" stroke="#c9b48a" stroke-width="1.200"/>`).join('')}${[0, 1, 2, 3, 4].map((k) => `<path d="M690 ${150 + k * 22}Q725 ${170 + k * 22} 760 ${150 + k * 22}" stroke="#c9b48a" stroke-width="1.200" fill="none"/>`).join('')}</g>
+      <circle cx="770" cy="180" r="14" fill="#f2862e"/><path d="M756 180H784" stroke="#fff" stroke-width="4"/><circle cx="748" cy="282" r="12" fill="#f2862e"/>
+      <!-- Le parasol du café et la guirlande -->
+      <path d="M0 26Q200 60 400 30T800 34" stroke="#4a3a30" stroke-width="1.500" fill="none"/>${ampoules}
+      <path d="M82 336V150" stroke="#e8e0d0" stroke-width="5"/><path d="M-10 160Q82 96 174 160Z" fill="#3f7ab0"/><path d="M-10 160Q36 150 82 160Q128 150 174 160" fill="none" stroke="#2f5a88" stroke-width="2"/>`;
+    },
+
+    // La grande bibliothèque : les rayonnages, la grande fenêtre, le bureau des archives
+    bibliotheque: () => {
+      const r = (k) => ((k * 9301 + 49297) % 233280) / 233280;
+      let livres = '';
+      [[20, 250], [560, 790]].forEach(([x0, x1], s) => {
+        for (let rang = 0; rang < 6; rang++) {
+          const y = 60 + rang * 46;
+          let x = x0 + 6, k = rang * 31 + s * 400;
+          while (x < x1 - 14) { const w = 9 + Math.floor(r(k) * 9), h = 30 + Math.floor(r(k + 7) * 12); livres += `<rect x="${x}" y="${y + 40 - h}" width="${w}" height="${h}" fill="${['#b8483e', '#3f6a9a', '#6a8a4a', '#d9a04a', '#7a5a8a', '#2f4a5a', '#c97a4a'][k % 7]}"/>`; x += w + 1; k++; }
+          livres += `<rect x="${x0}" y="${y + 40}" width="${x1 - x0}" height="6" fill="#6a4a30"/>`;
+        }
+      });
+      const poussiere = [...Array(10).keys()].map((k) => `<circle class="fv-poussiere" cx="${330 + ((k * 31) % 140)}" cy="${200 + ((k * 43) % 130)}" r="${1.2 + (k % 3) * .5}" fill="#fff8dc" style="animation-delay:-${(k * 1.1).toFixed(1)}s"/>`).join('');
+      return `<defs>
+        <linearGradient id="fvBiMur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1e5cf"/><stop offset="1" stop-color="#e2d0b0"/></linearGradient>
+        <linearGradient id="fvBiSol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a87a52"/><stop offset="1" stop-color="#8a5f3c"/></linearGradient>
+        <linearGradient id="fvBiVitre" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe6f4"/><stop offset="1" stop-color="#f6ecd4"/></linearGradient>
+        <linearGradient id="fvBiRayon" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6d8" stop-opacity=".55"/><stop offset="1" stop-color="#fff6d8" stop-opacity="0"/></linearGradient>
+      </defs>
+      <rect width="800" height="340" fill="url(#fvBiMur)"/>
+      <rect y="340" width="800" height="110" fill="url(#fvBiSol)"/>${[...Array(9).keys()].map((k) => `<path d="M0 ${350 + k * 12}H800" stroke="#6a4a2a" stroke-width="1" opacity=".25"/>`).join('')}
+      <!-- La grande fenêtre en arc -->
+      <path d="M318 250V90A82 82 0 0 1 482 90V250Z" fill="url(#fvBiVitre)"/><path d="M400 8V250M318 150H482M318 90H482" stroke="#fffaf0" stroke-width="5"/><path d="M318 250V90A82 82 0 0 1 482 90V250Z" fill="none" stroke="#c9a77a" stroke-width="8"/>
+      <rect x="306" y="246" width="188" height="12" rx="3" fill="#c9a77a"/>
+      <path d="M318 258H482L560 400H240Z" fill="url(#fvBiRayon)" opacity=".7"/>${poussiere}
+      <!-- Les rayonnages -->
+      <rect x="14" y="50" width="242" height="300" fill="#7a5436"/><rect x="554" y="50" width="242" height="300" fill="#7a5436"/>${livres}
+      <!-- L'échelle roulante -->
+      <path d="M660 40L700 340M710 40L750 340" stroke="#b08a5a" stroke-width="6"/>${[0, 1, 2, 3, 4, 5, 6].map((k) => `<path d="M${664 + k * 5.300} ${70 + k * 40}H${714 + k * 5.300}" stroke="#b08a5a" stroke-width="5"/>`).join('')}
+      <!-- Le globe -->
+      <g transform="translate(520 330)"><path d="M-14 0H14L8-10H-8Z" fill="#6a4a30"/><path d="M0-10V-18" stroke="#6a4a30" stroke-width="3"/><g class="fv-globe"><circle cy="-40" r="22" fill="#6aa8d8"/><path d="M-12-52Q-2-48-6-40Q-14-36-10-28M6-58Q14-50 10-42Q4-36 12-30" fill="none" stroke="#7fbf7a" stroke-width="6" stroke-linecap="round"/></g><path d="M-26-40A26 26 0 0 0 0-14" stroke="#c9a04a" stroke-width="3" fill="none"/></g>`;
+    },
+
+    // La boulangerie Shamir : le pain sur les étagères, l'ardoise, et la photo de Rivka au mur
+    boulangerie: () => {
+      let carreaux = '';
+      for (let y = 20; y < 330; y += 18) carreaux += `M0 ${y}H800`;
+      for (let y = 20, k = 0; y < 330; y += 18, k++) for (let x = (k % 2) * 18; x < 800; x += 36) carreaux += `M${x} ${y}V${y + 18}`;
+      let damier = '';
+      for (let r = 0; r < 4; r++) for (let c = 0; c < 20; c++) if ((r + c) % 2) damier += `M${c * 40 + r * 0} ${340 + r * 28}h40v28h-40Z`;
+      const pains = (x, y) => `<ellipse cx="${x}" cy="${y}" rx="26" ry="11" fill="#d08a42"/><path d="M${x - 14} ${y - 6}l6 8M${x - 2} ${y - 8}l6 8M${x + 10} ${y - 6}l6 8" stroke="#a8622a" stroke-width="2.500" stroke-linecap="round"/>`;
+      const halla = (x, y) => `<g transform="translate(${x} ${y})">${[-18, -6, 6, 18].map((d, k) => `<ellipse cx="${d}" cy="${k % 2 ? -2 : 0}" rx="9" ry="8" fill="${k % 2 ? '#c9782e' : '#d98e3e'}"/>`).join('')}</g>`;
+      return `<defs>
+        <linearGradient id="fvBoMur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbf4e8"/><stop offset="1" stop-color="#f0e2cb"/></linearGradient>
+        <radialGradient id="fvBoLampe"><stop offset="0" stop-color="#fff0c4" stop-opacity=".8"/><stop offset="1" stop-color="#fff0c4" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="800" height="340" fill="url(#fvBoMur)"/><path d="${carreaux}" stroke="#e2d6c2" stroke-width="1.200"/>
+      <rect y="340" width="800" height="110" fill="#efe6d6"/><path d="${damier}" fill="#c9a77a" opacity=".55"/>
+      <!-- Les étagères à pain, derrière le comptoir -->
+      <rect x="40" y="96" width="330" height="10" rx="2" fill="#8a5a36"/><rect x="40" y="170" width="330" height="10" rx="2" fill="#8a5a36"/><rect x="40" y="244" width="330" height="10" rx="2" fill="#8a5a36"/>
+      ${pains(80, 86)}${halla(150, 88)}${pains(230, 86)}${halla(310, 88)}${halla(82, 160)}${pains(160, 160)}${halla(240, 160)}${pains(320, 160)}
+      ${[70, 110, 150, 190, 230, 270, 310, 345].map((x) => `<circle cx="${x}" cy="234" r="9" fill="#e8c27a" stroke="#c99a4a" stroke-width="2"/>`).join('')}
+      <!-- Les lampes suspendues -->
+      <g class="fv-lampe" style="transform-origin:150px 0"><path d="M150 0V30" stroke="#5b4a5e" stroke-width="2"/><path d="M134 30H166L174 48H126Z" fill="#3f6a5a"/><circle cx="150" cy="56" r="34" fill="url(#fvBoLampe)"/></g>
+      <g class="fv-lampe" style="transform-origin:420px 0;animation-delay:-1.5s"><path d="M420 0V30" stroke="#5b4a5e" stroke-width="2"/><path d="M404 30H436L444 48H396Z" fill="#3f6a5a"/><circle cx="420" cy="56" r="34" fill="url(#fvBoLampe)"/></g>
+      <!-- La photo de Rivka, encadrée au mur -->
+      <g transform="rotate(2 585 100)"><rect x="544" y="50" width="82" height="100" rx="3" fill="#8a6234"/><rect x="552" y="58" width="66" height="84" fill="#e9dcc0"/>
+        <rect x="552" y="58" width="66" height="54" fill="#cdbf9e"/><rect x="552" y="112" width="66" height="30" fill="#a8977a"/>
+        <circle cx="585" cy="96" r="7" fill="#e8d2b0"/><path d="M578 94Q580 84 585 86Q592 84 592 94Q590 89 585 89Q580 89 578 94Z" fill="#6a5040"/><path d="M576 140Q577 110 585 106Q593 110 594 140Z" fill="#f2ead8"/></g>
+      <g class="fv-brille"><path d="M630 60L632 66L638 68L632 70L630 76L628 70L622 68L628 66Z" fill="#fff6c8"/></g>
+      <!-- L'ardoise -->
+      <rect x="660" y="60" width="120" height="150" rx="6" fill="#2f3a36" stroke="#8a5a36" stroke-width="6"/>
+      ${halla(700, 96).replace(/fill="#[0-9a-f]+"/g, 'fill="none" stroke="#f2ead8" stroke-width="1.500"')}<text x="752" y="102" text-anchor="middle" font-family="Consolas, monospace" font-size="15" fill="#f2ead8">₪18</text>
+      ${pains(700, 150).replace(/fill="#[0-9a-f]+"/g, 'fill="none" stroke="#f2ead8" stroke-width="1.500"')}<text x="752" y="156" text-anchor="middle" font-family="Consolas, monospace" font-size="15" fill="#f2ead8">₪12</text>
+      <!-- La porte vitrée sur la rue -->
+      <rect x="470" y="170" width="70" height="170" rx="4" fill="#cfe6f4" stroke="#8a5a36" stroke-width="6"/><path d="M478 186L500 230M490 186L520 246" stroke="#fff" stroke-width="3" opacity=".6"/>`;
+    },
   };
   // Ce qui passe devant les personnages (comptoirs, tables)
   const FV_DEVANT = {
@@ -202,6 +319,18 @@ const FEUILLETON_VIDEO = {
       <path d="M70 140L110 200M90 140L120 185M300 150L340 210" stroke="#fff" stroke-width="3" opacity=".5"/>
       <rect x="28" y="328" width="374" height="14" rx="3" fill="#e8d6b4"/><rect x="40" y="342" width="350" height="108" fill="#c9a77a"/>
       <path d="M156 342V450M272 342V450" stroke="#b08e60" stroke-width="3"/><rect x="60" y="358" width="76" height="56" rx="4" fill="none" stroke="#b08e60" stroke-width="3"/><rect x="176" y="358" width="76" height="56" rx="4" fill="none" stroke="#b08e60" stroke-width="3"/><rect x="292" y="358" width="76" height="56" rx="4" fill="none" stroke="#b08e60" stroke-width="3"/>`,
+    port: () => `<g transform="translate(205 380)"><ellipse cx="0" cy="-36" rx="70" ry="13" fill="#f4efe6" stroke="#c9b48a" stroke-width="2"/><path d="M-4-30V40M4-30V40" stroke="#6a5a4a" stroke-width="4"/><path d="M-30 40H30" stroke="#6a5a4a" stroke-width="5" stroke-linecap="round"/>
+        <g transform="translate(-26 -40)"><g class="fv-fumee"><path d="M-4-14q-4-5 0-10t0-10M4-14q-4-5 0-10t0-10" stroke="#fff" stroke-width="2.500" fill="none" stroke-linecap="round"/></g><path d="M-10-12H10L8 0H-8Z" fill="#fffaf2"/><path d="M10-9Q17-9 15-3Q14 0 8-1" stroke="#fffaf2" stroke-width="3" fill="none"/></g>
+        <g transform="translate(24 -40)"><path d="M-10-12H10L8 0H-8Z" fill="#fffaf2"/><path d="M-9-10H9L8-6H-8Z" fill="#6b4530"/></g></g>
+      <g transform="translate(320 450)"><path d="M-30-80H30V-70H-30Z" fill="#8a6a4a"/><path d="M-26-70V0M26-70V0" stroke="#8a6a4a" stroke-width="5"/><path d="M-30-130V-80M30-130V-80" stroke="#8a6a4a" stroke-width="5"/><path d="M-30-126H30M-30-104H30" stroke="#8a6a4a" stroke-width="4"/></g>`,
+    bibliotheque: () => `<rect x="80" y="350" width="290" height="14" rx="3" fill="#8a5a36"/><rect x="90" y="364" width="270" height="86" fill="#a8744a"/><rect x="108" y="378" width="234" height="58" rx="4" fill="none" stroke="#8a5a36" stroke-width="3"/>
+      <g transform="translate(104 350)"><circle cy="-34" r="24" fill="#fff0c4" opacity=".3" class="fv-lueur"/><path d="M-4 0V-30" stroke="#c9a04a" stroke-width="4"/><path d="M-22-30Q-4-50 14-30Z" fill="#2f7a4a"/><ellipse cy="0" rx="14" ry="4" fill="#c9a04a"/></g>
+      <g transform="translate(326 350)"><rect x="-8" y="-12" width="16" height="12" fill="#5a5a6a"/><rect x="-44" y="-74" width="88" height="62" rx="4" fill="#3a3a4a"/><rect x="-38" y="-68" width="76" height="50" rx="2" fill="#8fc0e8" class="fv-ecran-pc"/><path d="M-30-56H24M-30-46H14M-30-36H20" stroke="#fff" stroke-width="3" opacity=".7"/></g>`,
+    boulangerie: () => `<rect x="40" y="296" width="340" height="12" rx="3" fill="#e8d6b4"/>
+      <rect x="44" y="308" width="332" height="56" fill="#e6f3f8" opacity=".55"/><path d="M44 308H376V364H44Z" fill="none" stroke="#b9cfd9" stroke-width="3"/>
+      ${[[80, 344], [140, 340], [200, 344], [260, 340], [320, 344]].map(([x, y], k) => (k % 2 ? `<g transform="translate(${x} ${y})"><circle r="11" fill="#d98e3e"/><path d="M0 0m-7 0a7 7 0 1 0 7-7a4 4 0 1 0 4 4" fill="none" stroke="#8a4a1a" stroke-width="2"/></g>` : `<g transform="translate(${x} ${y})">${[-12, -4, 4, 12].map((d, j) => `<ellipse cx="${d}" cy="${j % 2 ? -2 : 0}" rx="6" ry="6" fill="${j % 2 ? '#c9782e' : '#d98e3e'}"/>`).join('')}</g>`)).join('')}
+      <path d="M60 314L90 352M200 314L222 344" stroke="#fff" stroke-width="3" opacity=".6"/>
+      <rect x="40" y="364" width="340" height="86" fill="#a8744a"/><path d="M40 380H380" stroke="#8a5a36" stroke-width="3"/>${[0, 1, 2, 3].map((k) => `<rect x="${58 + k * 82}" y="392" width="64" height="44" rx="4" fill="none" stroke="#8a5a36" stroke-width="3"/>`).join('')}`,
     jaffa: () => `<rect x="70" y="318" width="232" height="10" rx="3" fill="#6a4a30"/><path d="M76 328H296V408H76Z" fill="#8a3a3a"/><path d="M76 408${[...Array(22).keys()].map((k) => `L${81 + k * 10} 416L${86 + k * 10} 408`).join('')}" fill="#8a3a3a"/>
       <path d="M90 344H282M90 392H282" stroke="#e8c27a" stroke-width="3"/>
       <g transform="translate(108 318)"><rect x="-16" y="-12" width="44" height="12" rx="6" fill="#efe0bd" transform="rotate(-8)"/><rect x="-10" y="-22" width="40" height="11" rx="5.500" fill="#e4d2a8" transform="rotate(6)"/></g>
@@ -215,7 +344,15 @@ const FEUILLETON_VIDEO = {
     ${ouverte ? '<path d="M25 38L90 4L155 38Z" fill="#e3cb93" stroke="#b39257" stroke-width="2"/><rect x="40" y="16" width="100" height="40" rx="2" fill="#fbf6ea" stroke="#d6c8a8"/><path d="M50 28H128M50 36H120M50 44H110" stroke="#8a90c0" stroke-width="1.500"/>'
       : '<path d="M25 38L90 82L155 38" fill="none" stroke="#b39257" stroke-width="2"/>'}
     <rect x="130" y="44" width="18" height="22" rx="1" fill="#d98a8a" stroke="#fff" stroke-width="2"/>`;
-  const PLANS = {
+
+  // Une horloge qui montre une heure précise (le soleil pour le matin)
+  const horlogeSvg = (h, m, soleil) => {
+    const pt = (deg, r) => [(90 + r * Math.sin(deg * Math.PI / 180)).toFixed(1), (75 - r * Math.cos(deg * Math.PI / 180)).toFixed(1)];
+    const [hx, hy] = pt(((h % 12) + m / 60) * 30, 30), [mx, my] = pt(m * 6, 42);
+    return `<circle cx="90" cy="75" r="58" fill="#fffaf0" stroke="#7a5a34" stroke-width="6"/>${[...Array(12).keys()].map((k) => { const [x, y] = pt(k * 30, 48); return `<circle cx="${x}" cy="${y}" r="${k % 3 ? 2 : 3.500}" fill="#5a4a3e"/>`; }).join('')}
+      <path d="M90 75L${hx} ${hy}" stroke="#2b2230" stroke-width="5" stroke-linecap="round"/><path d="M90 75L${mx} ${my}" stroke="#2b2230" stroke-width="3.500" stroke-linecap="round"/><circle cx="90" cy="75" r="5" fill="#b8483e"/>
+      ${soleil ? '<g transform="translate(150 24)"><circle r="12" fill="#ffd56a"/><path d="M0-20V-15M0 15V20M-20 0H-15M15 0H20M-14-14L-11-11M11 11L14 14M-14 14L-11 11M11-11L14-14" stroke="#f2b84b" stroke-width="2.500" stroke-linecap="round"/></g>' : '<g class="fv-clignote"><path d="M150 18L158 30H142Z" fill="#e46a92"/><rect x="149" y="22" width="2" height="5" fill="#fff"/></g>'}`;
+  };  const PLANS = {
     env: () => enveloppe(false),
     'env-date': () => `${enveloppe(false)}<text x="34" y="111" class="fv-main">1962</text>`,
     'env-nom': () => `${enveloppe(false)}<text x="34" y="111" class="fv-main">1962</text><text x="108" y="102" class="fv-main he" direction="rtl" text-anchor="end">לְיוֹסֵף</text>`,
@@ -265,7 +402,42 @@ const FEUILLETON_VIDEO = {
       <rect x="10" y="108" width="160" height="32" fill="#c9a77a"/>
       <g transform="translate(90 106)"><g class="fv-fumee"><path d="M-8-30q-6-8 0-16t0-16M8-30q-6-8 0-16t0-16" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/></g>
         <path d="M-22-26H22L18 0H-18Z" fill="#fffaf2"/><path d="M-20-22H20L19-16H-19Z" fill="#6b4530"/><path d="M22-20Q36-20 32-8Q30-2 19-4" stroke="#fffaf2" stroke-width="5" fill="none"/><ellipse cy="2" rx="32" ry="6" fill="#fffaf2"/></g>`,
-    horloge: () => `<circle cx="90" cy="75" r="58" fill="#fffaf0" stroke="#7a5a34" stroke-width="6"/>${[...Array(12).keys()].map((k) => { const a = k * Math.PI / 6; return `<circle cx="${(90 + 48 * Math.sin(a)).toFixed(1)}" cy="${(75 - 48 * Math.cos(a)).toFixed(1)}" r="${k % 3 ? 2 : 3.500}" fill="#5a4a3e"/>`; }).join('')}
+    // Épisode 5
+    'photo-rivka': () => `<rect x="38" y="10" width="104" height="130" rx="4" fill="#8a6234"/><rect x="48" y="20" width="84" height="110" fill="#e9dcc0"/>
+      <rect x="48" y="20" width="84" height="70" fill="#cdbf9e"/><rect x="48" y="90" width="84" height="40" fill="#a8977a"/><path d="M48 94Q70 88 90 94T132 92" stroke="#e9dcc0" stroke-width="1.500" fill="none"/>
+      <circle cx="90" cy="68" r="10" fill="#e8d2b0"/><path d="M80 66Q82 52 90 54Q99 52 100 66Q97 59 90 59Q83 59 80 66Z" fill="#6a5040"/><path d="M76 128Q78 88 90 84Q102 88 104 128Z" fill="#f2ead8"/><path d="M86 71Q90 75 94 71" stroke="#8a5040" stroke-width="1.500" fill="none"/>`,
+    'bateau-1962': () => `${PLANS.bateau()}<text x="22" y="34" class="fv-main">1962</text>`,
+    alliance: () => `<g class="fv-brille"><path d="M150 26L153 34L161 37L153 40L150 48L147 40L139 37L147 34Z" fill="#fff6c8"/></g>
+      <ellipse cx="70" cy="82" rx="34" ry="30" fill="none" stroke="#e2b54a" stroke-width="9"/><ellipse cx="70" cy="82" rx="34" ry="30" fill="none" stroke="#fff3c0" stroke-width="2" opacity=".7"/>
+      <ellipse cx="112" cy="88" rx="30" ry="27" fill="none" stroke="#d9a840" stroke-width="8"/><path d="M60 50L70 40L80 50L70 58Z" fill="#dff4ff" stroke="#9fc7e0" stroke-width="2"/>`,
+    'maison-haifa': () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#cfe7f5"/><path d="M10 96Q60 54 110 74Q140 60 170 70V140H10Z" fill="#7fae7a"/>
+      <rect x="44" y="64" width="92" height="60" fill="#f4ecdc"/><path d="M36 66L90 38L144 66Z" fill="#c9673f"/>${[0, 1, 2].map((k) => `<rect x="${54 + k * 28}" y="76" width="16" height="16" fill="#8fc0e0"/>`).join('')}<rect x="82" y="100" width="18" height="24" fill="#8a5a36"/>
+      <g class="fv-plante"><circle cx="30" cy="112" r="14" fill="#5c9c6a"/><circle cx="152" cy="110" r="12" fill="#5c9c6a"/></g><path d="M10 132H170" stroke="#5fa6cf" stroke-width="8"/>`,
+    journaux: () => `${[0, 1, 2].map((k) => `<g transform="rotate(${-8 + k * 7} 90 ${110 - k * 22})"><rect x="34" y="${88 - k * 24}" width="112" height="44" fill="${['#e8dcc0', '#efe4cc', '#f6eedc'][k]}" stroke="#c9b48a"/><rect x="42" y="${94 - k * 24}" width="96" height="8" fill="#5a5a6a" opacity=".7"/><path d="M42 ${110 - k * 24}H90M42 ${118 - k * 24}H86M98 ${110 - k * 24}H138M98 ${118 - k * 24}H132" stroke="#8a8a9a" stroke-width="2"/></g>`).join('')}`,
+    // Épisode 6
+    archives: () => `${[0, 1, 2].map((k) => `<g transform="translate(${30 + k * 42} ${60 - (k % 2) * 8})"><rect width="38" height="70" rx="3" fill="#d9c08a" stroke="#a88c5a" stroke-width="2"/><rect x="8" y="10" width="22" height="12" rx="2" fill="#fff6dc"/><circle cx="19" cy="52" r="5" fill="none" stroke="#a88c5a" stroke-width="2"/></g>`).join('')}<path d="M24 132H156" stroke="#8a5a36" stroke-width="6"/>`,
+    ordinateur: () => `<rect x="20" y="16" width="140" height="96" rx="6" fill="#3a3a4a"/><rect x="28" y="24" width="124" height="80" rx="3" fill="#e8f2fa"/>
+      <rect x="36" y="40" width="108" height="20" rx="10" fill="#fff" stroke="#8fb0cc" stroke-width="2"/><circle cx="48" cy="50" r="5" fill="none" stroke="#6a8aa8" stroke-width="2"/><path d="M52 54L56 58" stroke="#6a8aa8" stroke-width="2"/>
+      <rect x="128" y="44" width="2.500" height="12" fill="#2b2230" class="fv-clignote"/><path d="M36 74H120M36 86H100" stroke="#b9cbd9" stroke-width="4"/>
+      <rect x="80" y="112" width="20" height="14" fill="#5a5a6a"/><rect x="60" y="124" width="60" height="6" rx="3" fill="#5a5a6a"/>`,
+    'journal-mariage': () => `<g transform="rotate(-3 90 75)"><rect x="18" y="14" width="144" height="124" fill="#efe4cc" stroke="#c9b48a"/>
+      <text x="90" y="38" text-anchor="middle" font-family="Frank Ruhl Libre, serif" font-size="18" font-weight="700" fill="#3a3a4a" direction="rtl">מַזָּל טוֹב</text>
+      <rect x="30" y="48" width="56" height="64" fill="#cdbf9e"/><circle cx="50" cy="70" r="6" fill="#e8d2b0"/><path d="M42 110Q44 82 50 80Q56 82 58 110Z" fill="#f6f0e2"/><circle cx="68" cy="70" r="6" fill="#e0c4a0"/><path d="M61 66Q68 60 75 66Z" fill="#3a3030"/><path d="M60 110Q61 82 68 80Q75 82 76 110Z" fill="#4a4a5a"/>
+      <path d="M96 56H150M96 66H146M96 76H150M96 86H140M96 96H148M96 106H136M30 124H150" stroke="#8a8a9a" stroke-width="2"/></g>`,
+    boulangerie: () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#cfe7f5"/><rect x="24" y="40" width="132" height="100" fill="#f4ecdc"/>
+      <path d="M18 40H162L152 22H28Z" fill="#c9473f"/><path d="M28 40V30M52 40V30M76 40V30M100 40V30M124 40V30M148 40V30" stroke="#f4ead8" stroke-width="10" opacity=".9"/>
+      <rect x="36" y="58" width="70" height="56" fill="#cfe6f4" stroke="#8a5a36" stroke-width="3"/><g transform="translate(70 96)">${[-14, -5, 4, 13].map((d, j) => `<ellipse cx="${d}" cy="${j % 2 ? -2 : 0}" rx="7" ry="7" fill="${j % 2 ? '#c9782e' : '#d98e3e'}"/>`).join('')}</g>
+      <rect x="116" y="58" width="30" height="82" fill="#8a5a36"/><circle cx="140" cy="100" r="2.500" fill="#e8c27a"/>`,
+    'horloge-2': () => horlogeSvg(1, 40, false),
+    // Épisode 7
+    'gateau-85': () => `<rect x="34" y="78" width="112" height="50" rx="8" fill="#f2c7a0"/><path d="M34 90Q90 104 146 90V78Q90 66 34 78Z" fill="#fbeadf"/><path d="M34 78Q90 66 146 78Q90 92 34 78Z" fill="#ee92ac"/>
+      <ellipse cx="90" cy="130" rx="66" ry="8" fill="#e1d2bc"/><text x="90" y="118" text-anchor="middle" font-family="Consolas, monospace" font-size="20" font-weight="700" fill="#b8483e">85</text>
+      ${[62, 90, 118].map((x) => `<rect x="${x - 3}" y="52" width="6" height="22" rx="2" fill="#8fc0e8"/><path d="M${x} 38Q${x + 6} 46 ${x} 52Q${x - 6} 46 ${x} 38Z" fill="#ffc15a" class="fv-flamme"/>`).join('')}`,
+    telephone: () => `<g class="fv-sonne"><rect x="60" y="20" width="60" height="110" rx="10" fill="#2b2230"/><rect x="66" y="32" width="48" height="80" rx="4" fill="#8fc0e8"/><circle cx="90" cy="64" r="12" fill="#fff"/><path d="M84 58Q90 52 96 58V70Q90 76 84 70Z" fill="#3fae7a"/><rect x="82" y="120" width="16" height="4" rx="2" fill="#5a5a6a"/></g>
+      <g class="fv-clignote"><path d="M134 40Q144 50 134 60M144 32Q160 50 144 68M46 40Q36 50 46 60M36 32Q20 50 36 68" stroke="#e46a92" stroke-width="3.500" fill="none" stroke-linecap="round"/></g>`,
+    'horloge-10': () => horlogeSvg(10, 0, true),
+    horloge: () => horlogeSvg(9, 0, true),
+    horlogeAncienne: () => `<circle cx="90" cy="75" r="58" fill="#fffaf0" stroke="#7a5a34" stroke-width="6"/>${[...Array(12).keys()].map((k) => { const a = k * Math.PI / 6; return `<circle cx="${(90 + 48 * Math.sin(a)).toFixed(1)}" cy="${(75 - 48 * Math.cos(a)).toFixed(1)}" r="${k % 3 ? 2 : 3.500}" fill="#5a4a3e"/>`; }).join('')}
       <path d="M90 75L58 75" stroke="#2b2230" stroke-width="5" stroke-linecap="round"/><path d="M90 75V36" stroke="#2b2230" stroke-width="3.500" stroke-linecap="round" class="fv-aiguille"/><circle cx="90" cy="75" r="5" fill="#b8483e"/>
       <g transform="translate(150 24)"><circle r="12" fill="#ffd56a"/><path d="M0-20V-15M0 15V20M-20 0H-15M15 0H20M-14-14L-11-11M11 11L14 14M-14 14L-11 11M11-11L14-14" stroke="#f2b84b" stroke-width="2.500" stroke-linecap="round"/></g>`,
   };
