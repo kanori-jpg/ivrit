@@ -3119,3 +3119,11 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 @keyframes fvFlamme { from { transform: scaleY(.85) rotate(-4deg); } to { transform: scaleY(1.1) rotate(4deg); } }
 .fv-sonne { animation: fvSonne .25s linear infinite alternate; transform-box: fill-box; transform-origin: center; }
 @keyframes fvSonne { from { transform: rotate(-6deg); } to { transform: rotate(6deg); } }
+
+/* Feuilleton vidéo : épisode 8 (changement de lieu en fondu, cœurs, sablier, pendule) */
+.fv-couche { transition: opacity 1.4s ease; }
+.fv-coeur { animation: fvCoeur 3.6s ease-in infinite; opacity: 0; }
+@keyframes fvCoeur { 0% { opacity: 0; transform: translateY(10px) scale(.6); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(-50px) scale(1.2); } }
+.fv-balancier { animation: fvPlante 1s ease-in-out infinite alternate; transform-box: view-box; transform-origin: 650px 134px; }
+.fv-sablier { animation: fvSablier 6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes fvSablier { 0%, 80% { transform: rotate(0); } 100% { transform: rotate(180deg); } }

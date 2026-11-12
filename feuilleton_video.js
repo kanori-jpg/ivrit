@@ -45,6 +45,13 @@ const FEUILLETON_VIDEO = {
     persos: { tamar: { type: 'perso', x: 210, peau: '#f1cfb4', cheveux: '#8a4a2a', coiffure: 'queue', tenue: 'p-pois', tenueSinon: 'p-sport' }, shira: { ...FV_SHIRA, x: 455 } },
     plans: ['photo-rivka', 'env-nom', null, 'gateau-85', 'telephone', 'horloge-10'],
   },
+  8: {
+    decor: 'salon', echelle: 1.05, moi: 640,
+    persos: { rivka: { type: 'perso', x: 215, peau: '#f3d6c0', cheveux: '#f4f2f7', coiffure: 'courts', tenue: 'p-robe', tenueSinon: 'p-pull', cou: 'p-echarpe' }, shira: { ...FV_SHIRA, x: 455 } },
+    plans: ['env-nom', 'lettre-rivka', null, 'sablier', 'vendredi', null],
+    // La dernière réplique change de décor : le port au coucher du soleil, Yossef et Rivka main dans la main
+    suite: { des: 5, decor: 'portSoir', echelle: .95, moi: 300, persos: { shira: { ...FV_SHIRA, x: 150 } } },
+  },
 };
 
 (() => {
@@ -311,6 +318,60 @@ const FEUILLETON_VIDEO = {
       <!-- La porte vitrée sur la rue -->
       <rect x="470" y="170" width="70" height="170" rx="4" fill="#cfe6f4" stroke="#8a5a36" stroke-width="6"/><path d="M478 186L500 230M490 186L520 246" stroke="#fff" stroke-width="3" opacity=".6"/>`;
     },
+
+    // Chez Rivka : un salon d'autrefois, avec vue sur la mer
+    salon: () => {
+      let papier = '';
+      for (let y = 30; y < 330; y += 60) for (let x = (y / 60 % 2) * 40; x < 800; x += 80) papier += `<g transform="translate(${x} ${y})" opacity=".35"><circle r="5" fill="#d99aa8"/><circle cx="6" cy="-4" r="4" fill="#e8b4c0"/><path d="M0 6Q-6 14-2 20" stroke="#9ab48a" stroke-width="2" fill="none"/></g>`;
+      return `<defs>
+        <linearGradient id="fvSaMur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6ead8"/><stop offset="1" stop-color="#ead6bc"/></linearGradient>
+        <linearGradient id="fvSaMer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd0ee"/><stop offset=".55" stop-color="#d9eef8"/><stop offset=".56" stop-color="#5fa6cf"/><stop offset="1" stop-color="#3f86b8"/></linearGradient>
+        <linearGradient id="fvSaSol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9a6a46"/><stop offset="1" stop-color="#7d5233"/></linearGradient>
+      </defs>
+      <rect width="800" height="336" fill="url(#fvSaMur)"/>${papier}
+      <rect y="300" width="800" height="36" fill="#d9c2a2"/><rect y="298" width="800" height="5" fill="#b9966a"/>
+      <rect y="336" width="800" height="114" fill="url(#fvSaSol)"/><ellipse cx="420" cy="410" rx="300" ry="34" fill="#b5524a" opacity=".55"/><ellipse cx="420" cy="410" rx="280" ry="28" fill="none" stroke="#e8c27a" stroke-width="3" opacity=".6"/>
+      <!-- La fenêtre sur la mer, avec ses rideaux de dentelle -->
+      <rect x="290" y="56" width="220" height="170" rx="6" fill="url(#fvSaMer)"/>
+      <g class="fv-vague"><path d="M290 160Q320 154 350 160T410 160T470 160T530 160" stroke="#e6f4fb" stroke-width="2" fill="none"/></g>
+      <g class="fv-bateau"><path d="M440 150H470L464 158H446Z" fill="#fff"/><path d="M455 150V130L466 148Z" fill="#fff"/></g>
+      <path d="M400 56V226M290 140H510" stroke="#fffaf3" stroke-width="6"/><rect x="290" y="56" width="220" height="170" rx="6" fill="none" stroke="#fffaf3" stroke-width="9"/>
+      <path class="fv-rideau" d="M270 40H318Q306 130 314 230H272Z" fill="#fffaf3" opacity=".8"/><path class="fv-rideau" d="M530 40H482Q494 130 486 230H528Z" fill="#fffaf3" opacity=".8" style="animation-delay:-3s"/>
+      <rect x="262" y="34" width="276" height="8" rx="4" fill="#a8744a"/><rect x="280" y="224" width="240" height="12" rx="4" fill="#fffaf3"/>
+      <!-- La photo de David et la pendule -->
+      <rect x="96" y="70" width="70" height="86" rx="3" fill="#8a6234"/><rect x="104" y="78" width="54" height="70" fill="#d9cdb0"/><circle cx="131" cy="104" r="9" fill="#e8d2b0"/><path d="M122 100Q131 90 140 100Z" fill="#9a9aa6"/><path d="M118 148Q120 120 131 116Q142 120 144 148Z" fill="#4a4a5a"/>
+      <g transform="translate(650 110)"><rect x="-30" y="-46" width="60" height="92" rx="10" fill="#8a5a36"/><circle r="22" fill="#fffaf0" stroke="#c9a04a" stroke-width="3"/><path d="M0 0V-14M0 0L10 4" stroke="#2b2230" stroke-width="2.500" stroke-linecap="round"/><g class="fv-balancier"><path d="M0 24V36" stroke="#c9a04a" stroke-width="2"/><circle cy="38" r="5" fill="#c9a04a"/></g></g>
+      <!-- La bibliothèque basse avec les photos -->
+      <rect x="560" y="226" width="200" height="110" fill="#8a5a36"/><rect x="570" y="236" width="180" height="40" fill="#6a4228"/><rect x="570" y="284" width="180" height="40" fill="#6a4228"/>
+      ${[0, 1, 2, 3, 4, 5, 6, 7, 8].map((k) => `<rect x="${574 + k * 19}" y="${244 + (k % 3) * 2}" width="15" height="${30 - (k % 3) * 2}" fill="${['#b8483e', '#3f6a9a', '#d9a04a', '#6a8a4a'][k % 4]}"/>`).join('')}
+      <rect x="586" y="200" width="34" height="26" fill="#fff" stroke="#c9a04a" stroke-width="3"/><rect x="636" y="196" width="28" height="30" fill="#fff" stroke="#c9a04a" stroke-width="3"/><rect x="590" y="204" width="26" height="18" fill="#bcd9e8"/><rect x="640" y="200" width="20" height="22" fill="#e8cfa0"/>
+      <!-- Le fauteuil -->
+      <g transform="translate(70 336)"><path d="M-10-130Q0-150 40-150Q80-150 90-130V-40H-10Z" fill="#7a8ab0"/><rect x="-24" y="-70" width="128" height="40" rx="14" fill="#8a9ac0"/><rect x="-30" y="-90" width="24" height="70" rx="10" fill="#6a7aa0"/><path d="M-20-30V0M94-30V0" stroke="#5a3a20" stroke-width="6"/></g>`;
+    },
+
+    // Le port de Jaffa au coucher du soleil : Yossef et Rivka, de dos, se tiennent la main face à la mer
+    portSoir: () => `<defs>
+        <linearGradient id="fvPsCiel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a4a8a"/><stop offset=".45" stop-color="#e48a8a"/><stop offset=".8" stop-color="#f6b46a"/><stop offset="1" stop-color="#fbd38a"/></linearGradient>
+        <linearGradient id="fvPsMer" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8946a"/><stop offset=".3" stop-color="#9a6a8a"/><stop offset="1" stop-color="#3a4a7a"/></linearGradient>
+        <radialGradient id="fvPsSoleil"><stop offset="0" stop-color="#fff2b0"/><stop offset=".4" stop-color="#ffc46a" stop-opacity=".7"/><stop offset="1" stop-color="#ff9a5a" stop-opacity="0"/></radialGradient>
+        <clipPath id="fvPsHorizon"><rect width="800" height="230"/></clipPath>
+      </defs>
+      <rect width="800" height="230" fill="url(#fvPsCiel)"/>
+      <g class="fv-nuages"><ellipse cx="200" cy="70" rx="60" ry="8" fill="#f6a8a8" opacity=".7"/><ellipse cx="610" cy="96" rx="70" ry="9" fill="#f4b08a" opacity=".7"/></g>
+      <g clip-path="url(#fvPsHorizon)"><circle cx="430" cy="230" r="90" fill="url(#fvPsSoleil)" class="fv-soleil"/><circle cx="430" cy="230" r="34" fill="#ffe08a"/></g>
+      <rect y="230" width="800" height="220" fill="url(#fvPsMer)"/>
+      <g class="fv-vague">${[0, 1, 2, 3, 4, 5].map((k) => `<path d="M${390 - k * 14} ${244 + k * 16}H${470 + k * 14}" stroke="#ffd98a" stroke-width="${4 - k * .5}" opacity="${.9 - k * .12}" stroke-linecap="round"/>`).join('')}</g>
+      <g class="fv-mouettes"><path d="M300 120q7-7 14 0q7-7 14 0M380 100q5-5 10 0q5-5 10 0" stroke="#3a2a4a" stroke-width="2.200" fill="none" stroke-linecap="round"/></g>
+      <!-- Le quai -->
+      <path d="M0 330H800V450H0Z" fill="#6a4a3a"/><path d="M0 330H800" stroke="#8a6a4a" stroke-width="6"/>${[...Array(14).keys()].map((k) => `<path d="M${k * 62} 336V450" stroke="#5a3a2a" stroke-width="2"/>`).join('')}
+      <!-- Le banc, et Yossef et Rivka vus de dos -->
+      <g transform="translate(560 336)">
+        <rect x="-110" y="-46" width="220" height="10" rx="3" fill="#4a3020"/><rect x="-110" y="-80" width="220" height="10" rx="3" fill="#4a3020"/><path d="M-96-36V0M96-36V0" stroke="#4a3020" stroke-width="7"/>
+        <g transform="translate(-36 0)"><path d="M-30-46Q-32-110 0-112Q32-110 30-46Z" fill="#3a4a6a"/><circle cy="-128" r="22" fill="#e8c8a8"/><path d="M-23-132Q-24-154 0-156Q24-154 23-132Q18-140 0-140Q-18-140-23-132Z" fill="#2f3f6a"/><path d="M-26-138H26" stroke="#1f2f5a" stroke-width="5"/></g>
+        <g transform="translate(36 0)"><path d="M-28-46Q-30-106 0-108Q30-106 28-46Z" fill="#c97a8a"/><path d="M-30-96Q0-112 30-96L26-70Q0-80-26-70Z" fill="#e8b4c0"/><circle cy="-122" r="20" fill="#f3d6c0"/><path d="M-21-122Q-24-146 0-146Q24-146 21-122Q24-132 0-134Q-24-132-21-122Z" fill="#f4f2f7"/><path d="M-20-120Q-22-104-16-100M20-120Q22-104 16-100" stroke="#f4f2f7" stroke-width="6" fill="none"/></g>
+        <path d="M-8-70Q0-62 8-70" stroke="#e8c8a8" stroke-width="9" fill="none" stroke-linecap="round"/>
+        ${[[-10, -170, 0], [16, -190, 1.2], [-4, -212, 2.4]].map(([x, y, d]) => `<path class="fv-coeur" style="animation-delay:-${d}s" d="M${x} ${y + 6}C${x - 9} ${y} ${x - 7} ${y - 8} ${x - 2} ${y - 7}C${x - 0.5} ${y - 6.5} ${x} ${y - 5} ${x} ${y - 4}C${x} ${y - 5} ${x + 0.5} ${y - 6.5} ${x + 2} ${y - 7}C${x + 7} ${y - 8} ${x + 9} ${y} ${x} ${y + 6}Z" fill="#f48aa8"/>`).join('')}
+      </g>`,
   };
   // Ce qui passe devant les personnages (comptoirs, tables)
   const FV_DEVANT = {
@@ -319,6 +380,10 @@ const FEUILLETON_VIDEO = {
       <path d="M70 140L110 200M90 140L120 185M300 150L340 210" stroke="#fff" stroke-width="3" opacity=".5"/>
       <rect x="28" y="328" width="374" height="14" rx="3" fill="#e8d6b4"/><rect x="40" y="342" width="350" height="108" fill="#c9a77a"/>
       <path d="M156 342V450M272 342V450" stroke="#b08e60" stroke-width="3"/><rect x="60" y="358" width="76" height="56" rx="4" fill="none" stroke="#b08e60" stroke-width="3"/><rect x="176" y="358" width="76" height="56" rx="4" fill="none" stroke="#b08e60" stroke-width="3"/><rect x="292" y="358" width="76" height="56" rx="4" fill="none" stroke="#b08e60" stroke-width="3"/>`,
+    salon: () => `<g transform="translate(330 400)"><ellipse cy="-30" rx="80" ry="14" fill="#8a5a36"/><path d="M-60-24V30M60-24V30" stroke="#6a4228" stroke-width="7"/>
+        <g transform="translate(-30 -38)"><g class="fv-fumee"><path d="M-3-14q-4-5 0-10t0-10M5-14q-4-5 0-10t0-10" stroke="#fff" stroke-width="2.500" fill="none" stroke-linecap="round"/></g><path d="M-10-12H10L8 0H-8Z" fill="#fffaf2"/><path d="M10-9Q17-9 15-3Q14 0 8-1" stroke="#fffaf2" stroke-width="3" fill="none"/></g>
+        <g transform="translate(12 -40)"><path d="M-16-6Q-18-26 0-26Q18-26 16-6Z" fill="#fffaf2"/><path d="M16-18Q28-22 26-10" stroke="#fffaf2" stroke-width="4" fill="none"/><circle cy="-29" r="4" fill="#fffaf2"/><path d="M-12-14H12" stroke="#7fb3d9" stroke-width="3"/></g>
+        <g transform="translate(46 -38)"><ellipse rx="16" ry="5" fill="#fffaf2"/><circle cx="-6" cy="-4" r="5" fill="#d98e3e"/><circle cx="5" cy="-4" r="5" fill="#c9782e"/></g></g>`,
     port: () => `<g transform="translate(205 380)"><ellipse cx="0" cy="-36" rx="70" ry="13" fill="#f4efe6" stroke="#c9b48a" stroke-width="2"/><path d="M-4-30V40M4-30V40" stroke="#6a5a4a" stroke-width="4"/><path d="M-30 40H30" stroke="#6a5a4a" stroke-width="5" stroke-linecap="round"/>
         <g transform="translate(-26 -40)"><g class="fv-fumee"><path d="M-4-14q-4-5 0-10t0-10M4-14q-4-5 0-10t0-10" stroke="#fff" stroke-width="2.500" fill="none" stroke-linecap="round"/></g><path d="M-10-12H10L8 0H-8Z" fill="#fffaf2"/><path d="M10-9Q17-9 15-3Q14 0 8-1" stroke="#fffaf2" stroke-width="3" fill="none"/></g>
         <g transform="translate(24 -40)"><path d="M-10-12H10L8 0H-8Z" fill="#fffaf2"/><path d="M-9-10H9L8-6H-8Z" fill="#6b4530"/></g></g>
@@ -402,6 +467,18 @@ const FEUILLETON_VIDEO = {
       <rect x="10" y="108" width="160" height="32" fill="#c9a77a"/>
       <g transform="translate(90 106)"><g class="fv-fumee"><path d="M-8-30q-6-8 0-16t0-16M8-30q-6-8 0-16t0-16" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/></g>
         <path d="M-22-26H22L18 0H-18Z" fill="#fffaf2"/><path d="M-20-22H20L19-16H-19Z" fill="#6b4530"/><path d="M22-20Q36-20 32-8Q30-2 19-4" stroke="#fffaf2" stroke-width="5" fill="none"/><ellipse cy="2" rx="32" ry="6" fill="#fffaf2"/></g>`,
+    // Épisode 8
+    'lettre-rivka': () => `<g transform="rotate(-4 90 75)"><rect x="24" y="10" width="132" height="130" fill="#fbf6ea" stroke="#d6c8a8"/>
+      ${[0, 1, 2, 3, 4, 5].map((k) => `<path d="M${38 + (k % 2) * 6} ${34 + k * 16}Q${70} ${30 + k * 16} ${144 - (k % 3) * 10} ${34 + k * 16}" stroke="#4a5a9a" stroke-width="1.800" fill="none"/>`).join('')}
+      <path d="M118 126C110 120 112 112 117 113C119 113.500 120 115 120 116C120 115 121 113.500 123 113C128 112 130 120 122 126Z" fill="#e46a92"/>
+      <g transform="translate(48 120)"><path d="M0-12V8M-8-4H8M-10 4Q0 14 10 4" stroke="#4a5a9a" stroke-width="2" fill="none"/><circle cy="-14" r="3" fill="none" stroke="#4a5a9a" stroke-width="2"/></g></g>`,
+    sablier: () => `<g class="fv-sablier"><path d="M54 16H126M54 134H126" stroke="#8a5a36" stroke-width="8" stroke-linecap="round"/>
+      <path d="M62 20Q62 60 90 75Q62 90 62 130H118Q118 90 90 75Q118 60 118 20Z" fill="#e8f4fa" stroke="#9fc7e0" stroke-width="3"/>
+      <path d="M70 34Q72 58 90 70Q108 58 110 34Z" fill="#e8c27a"/><path d="M68 128Q74 104 90 100Q106 104 112 128Z" fill="#e8c27a"/><path d="M90 74V100" stroke="#e8c27a" stroke-width="2" class="fv-clignote"/></g>`,
+    vendredi: () => `<rect x="40" y="18" width="100" height="116" rx="8" fill="#fffdf6" stroke="#d6cdb8" stroke-width="2"/><rect x="40" y="18" width="100" height="30" rx="8" fill="#d64545"/><rect x="40" y="38" width="100" height="10" fill="#d64545"/>
+      <circle cx="64" cy="18" r="5" fill="#8a8a9a"/><circle cx="116" cy="18" r="5" fill="#8a8a9a"/>
+      <text x="90" y="88" text-anchor="middle" font-family="Frank Ruhl Libre, serif" font-size="30" font-weight="700" fill="#2b2230" direction="rtl">שִׁשִּׁי</text>
+      <g transform="translate(90 112)"><path d="M-14 2L-6-6L2 0L14-10" stroke="#4f9fcf" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M-16 8H16" stroke="#4f9fcf" stroke-width="3" stroke-linecap="round"/></g>`,
     // Épisode 5
     'photo-rivka': () => `<rect x="38" y="10" width="104" height="130" rx="4" fill="#8a6234"/><rect x="48" y="20" width="84" height="110" fill="#e9dcc0"/>
       <rect x="48" y="20" width="84" height="70" fill="#cdbf9e"/><rect x="48" y="90" width="84" height="40" fill="#a8977a"/><path d="M48 94Q70 88 90 94T132 92" stroke="#e9dcc0" stroke-width="1.500" fill="none"/>
@@ -459,8 +536,13 @@ const FEUILLETON_VIDEO = {
     if (!ep || !cfg || (!dispo(ep.num) && !st.vus[ep.num])) { location.hash = '#/feuilleton'; return; }
     const moiP = Object.assign({}, typeof CH_PERSO_DEFAUT !== 'undefined' ? CH_PERSO_DEFAUT : {}, S.perso || {});
     const echelle = cfg.echelle || 1.2;
-    const dessinPerso = (qui, emo) => { const c = cfg.persos[qui]; return c.type === 'pnj' ? pnjSvg(c, emo || 'content') : persoSvg(persoDe(c)); };
+    const dessinPerso = (c, emo) => (c.type === 'pnj' ? pnjSvg(c, emo || 'content') : persoSvg(persoDe(c)));
     const emoDe = (qui, k) => (cfg.emo && cfg.emo[qui] ? cfg.emo[qui][k] : null);
+    // Une « couche » : un décor, ses personnages, toi, et ce qui passe devant (la 2e sert aux changements de lieu)
+    const couche = (sc, n) => { const e = sc.echelle || echelle; return `<g class="fv-couche" id="fvCouche${n}"${n > 1 ? ' style="opacity:0"' : ''}>${FV_DECORS[sc.decor]()}
+      ${Object.entries(sc.persos).map(([qui, c]) => `<g class="fv-perso" data-qui="${qui}" transform="translate(${c.x} 446) scale(${e})"><g class="fv-corps">${dessinPerso(c, emoDe(qui, ep.lignes.findIndex((l) => l.qui === qui)))}</g></g>`).join('')}
+      <g class="fv-perso" data-qui="moi" transform="translate(${sc.moi || 590} 446) scale(${e})"><g class="fv-corps">${persoSvg(moiP)}</g></g>
+      ${FV_DEVANT[sc.decor] ? FV_DEVANT[sc.decor]() : ''}</g>`; };
     const autresReps = FEUILLETON.filter((e) => e !== ep).flatMap((e) => e.lignes.filter((l) => l.rep).map((l) => l.rep));
     let fr = !!S.videoFr, lent = false;
     const etroit = matchMedia('(max-width: 600px)').matches;
@@ -469,10 +551,7 @@ const FEUILLETON_VIDEO = {
       <div class="fv-ecran" id="fvEcran">
       <div class="fv-scene" id="fvScene" style="aspect-ratio:${etroit ? '560 / 450' : '16 / 9'}">
         <svg viewBox="${etroit ? '150 0 560 450' : '0 0 800 450'}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${esc(ep.lieu)}">
-          ${FV_DECORS[cfg.decor]()}
-          ${Object.entries(cfg.persos).map(([qui, c]) => `<g class="fv-perso" id="fvP_${qui}" transform="translate(${c.x} 446) scale(${echelle})"><g class="fv-corps">${dessinPerso(qui, emoDe(qui, ep.lignes.findIndex((l) => l.qui === qui)))}</g></g>`).join('')}
-          <g class="fv-perso" id="fvMoi" transform="translate(${cfg.moi || 590} 446) scale(${echelle})"><g class="fv-corps">${persoSvg(moiP)}</g></g>
-          ${FV_DEVANT[cfg.decor] ? FV_DEVANT[cfg.decor]() : ''}
+          ${couche(cfg, 1)}${cfg.suite ? couche(cfg.suite, 2) : ''}
           <g class="fv-gros" id="fvGros" transform="translate(${(cfg.gros || [310, 14]).join(' ')})" style="--gx:${(cfg.gros || [310])[0]}px;--gy:${(cfg.gros || [0, 14])[1]}px"><rect width="180" height="150" rx="16" fill="#fffdf8" stroke="#fff" stroke-width="6"/><rect width="180" height="150" rx="16" fill="none" stroke="#2b1f3a" stroke-opacity=".12" stroke-width="1"/><g id="fvGrosContenu"></g></g>
         </svg>
         <div class="fv-lieu">📍 ${esc(ep.lieu)}</div>
@@ -518,9 +597,11 @@ const FEUILLETON_VIDEO = {
       lecteur.play().catch(() => { if (!pause) done(); });
     });
     window.addEventListener('hashchange', () => { lecteur.pause(); }, { once: true });
-    const anime = (qui) => { const id = qui === 'moi' ? 'fvMoi' : 'fvP_' + qui; $$('.fv-perso').forEach((g) => g.classList.toggle('fv-parle', g.id === id)); };
+    const anime = (qui) => { $$('.fv-perso').forEach((g) => g.classList.toggle('fv-parle', g.dataset.qui === qui)); };
     // L'humeur du personnage (style des scènes) change avec ce qu'il dit
-    const humeur = (qui, k) => { const c = cfg.persos[qui], e = emoDe(qui, k), g = $('#fvP_' + qui); if (c && c.type === 'pnj' && e && g) g.querySelector('.fv-corps').innerHTML = pnjSvg(c, e); };
+    const humeur = (qui, k) => { const c = cfg.persos[qui], e = emoDe(qui, k); if (c && c.type === 'pnj' && e) $$(`.fv-perso[data-qui="${qui}"] .fv-corps`).forEach((g) => (g.innerHTML = pnjSvg(c, e))); };
+    // Changement de lieu en cours d'épisode : on passe en fondu à la 2e couche
+    const lieu = (k) => { if (!cfg.suite) return; const deux = k >= cfg.suite.des; $('#fvCouche1').style.opacity = deux ? 0 : 1; $('#fvCouche2').style.opacity = deux ? 1 : 0; };
     const plan = (k) => {
       const g = $('#fvGros'), id = cfg.plans[k];
       if (!id) { g.classList.remove('on'); return; }
@@ -553,7 +634,7 @@ const FEUILLETON_VIDEO = {
       const t = ++jeton; i = k; phase = 'ligne';
       stopAudio(); progres();
       const l = ep.lignes[k], p = FEUILLETON_PERSOS[l.qui];
-      plan(k); humeur(l.qui, k); anime(l.qui);
+      lieu(k); plan(k); humeur(l.qui, k); anime(l.qui);
       sousTitre(`${p.em} ${esc(p.nom)}`, l);
       if (pause) { await attendrePause(); if (t !== jeton || !vivant()) return; }
       await parler(l.he);
