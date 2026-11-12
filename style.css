@@ -3080,3 +3080,9 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .fv-st .fv-choix { gap: 6px; }
 .fv-st .fv-choix .opt { padding: 6px 10px; min-height: 0; }
 @media (max-width: 600px) { .fv-st .fv-choix .opt .he { font-size: 1.1rem; } .fv-st .fv-choix .opt .tr { font-size: .72rem; } .fv-st .fv-atoi { margin: 6px 0 4px; font-size: .9rem; } .fv-st .tr { font-size: .8rem; } }
+
+/* Le + dans la bulle des mots */
+.bulle-plus-zone { display: inline-flex; align-items: center; gap: 6px; }
+.bulle-plus { width: 32px; height: 32px; font-size: 1rem; }
+.bulle-plus.on { background: color-mix(in srgb, var(--gold) 30%, var(--card)); box-shadow: none; }
+.bulle-plus-note { color: var(--muted); font-size: .72rem; }

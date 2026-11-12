@@ -52,7 +52,21 @@ function brancherMotsClic(zone, bulle) {
     bulle.innerHTML = `<span class="he" lang="he" dir="rtl">${esc(mot)}</span>
       <span class="bulle-fr">${g.prefixe ? `<small>${esc(g.prefixe)} + </small>` : ''}<b>${esc(g.fr)}</b>${g.tr ? `<small> · ${esc(g.tr)}</small>` : ''}</span>
       ${g.prefixe ? `<span class="bulle-base">mot de base : <span class="he" lang="he" dir="rtl">${esc(g.he)}</span></span>` : ''}
-      ${appris ? '<span class="bulle-etat">✓ dans tes cartes</span>' : ''}`;
+      <span class="bulle-plus-zone"></span>`;
+    // Le + : ajouter le mot (sa forme de base) à « Mes mots » ; ⭐ = déjà ajouté, toucher pour retirer
+    const entree = [NFC(g.he), g.tr || '', g.fr], zonePlus = bulle.querySelector('.bulle-plus-zone');
+    const etatPlus = () => {
+      if (vu && vu.theme !== 'mesmots') { zonePlus.innerHTML = appris ? '<span class="bulle-etat">✓ dans tes cartes</span>' : '<span class="bulle-etat">✓ dans le vocabulaire du site</span>'; return; }
+      const dedans = estDansMesMots(entree[0]);
+      zonePlus.innerHTML = `<button type="button" class="gl-plus bulle-plus${dedans ? ' on' : ''}" title="${dedans ? 'Dans tes mots · toucher pour retirer' : 'Ajouter à mes mots à apprendre'}" aria-label="${dedans ? 'Retirer de mes mots à apprendre' : 'Ajouter à mes mots à apprendre'}">${dedans ? '⭐' : '＋'}</button>${g.prefixe && !dedans ? '<small class="bulle-plus-note">ajoute le mot de base</small>' : ''}`;
+      zonePlus.querySelector('button').onclick = (ev) => {
+        ev.stopPropagation();
+        if (estDansMesMots(entree[0])) { retirerMesMots(entree[0]); toast('Retiré de tes mots à apprendre'); }
+        else { ajouterMesMots(entree); toast(`⭐ ${entree[0]} ajouté à tes cartes (thème « Mes mots »)`); }
+        etatPlus();
+      };
+    };
+    etatPlus();
     bulle.hidden = false;
   }));
 }
