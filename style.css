@@ -2955,3 +2955,12 @@ body.jade .ac { --muted: #506c64; }
 .qi-carte .bulle-mot { display: flex; margin: 6px auto; }
 .qi-trad { display: block; color: var(--muted); font-size: .85rem; }
 .qi-info { margin: 12px 0 0; padding: 10px 14px; border-radius: 14px; background: var(--blue-soft); text-align: left; }
+
+/* Dictionnaire : trois onglets (mots, expressions, phrases) */
+.dico-cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0 0 12px; }
+.dico-cats button { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 6px; border-radius: 16px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font-weight: 800; font-size: .95rem; cursor: pointer; }
+.dico-cats button small { color: var(--muted); font-weight: 600; font-size: .75rem; }
+.dico-cats button.on { background: #b5485a; color: #fff; border-color: #b5485a; }
+.dico-cats button.on small { color: #ffe3ea; }
+body.etoiles .dico-cats button.on { background: #f5b5d6; color: #2a1a50; border-color: #f5b5d6; }
+body.etoiles .dico-cats button.on small { color: #4a3470; }
