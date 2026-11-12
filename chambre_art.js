@@ -84,11 +84,31 @@ const CH_MURS = {
   'mur-peche': { nom: 'Pêche', haut: '#fbe7d8', bas: '#f1cfb9', motif: '<path d="M7 0V28" stroke="#eec4ab" stroke-width="1"/><circle cx="21" cy="14" r="1.300" fill="#e7b095"/>', taille: 28, op: .7 },
   'mur-rayures': { nom: 'Rayures', haut: '#fbeef2', bas: '#f1dbe4', motif: '<rect width="16" height="40" fill="#f2d2df"/><path d="M24 0V40" stroke="#ecc6d5" stroke-width="1"/>', taille: 40, op: 1 },
   'mur-etoiles': { nom: 'Étoiles', haut: '#41376f', bas: '#2b2456', motif: `${chEtoile(18, 16, 4, '#f2d98a')}${chEtoile(54, 50, 2.800, '#f2d98a')}<circle cx="44" cy="14" r="1" fill="#fff"/><circle cx="12" cy="56" r=".9" fill="#fff"/>`, taille: 70, op: .9 },
+  'mur-menthe': { nom: 'Menthe', haut: '#e2f3ea', bas: '#c9e6d6', motif: '<path d="M20 30Q14 22 20 12Q26 22 20 30Z" fill="#9fcfb3"/><path d="M20 30V15" stroke="#86bb9c" stroke-width=".8"/><path d="M52 64Q46 56 52 46Q58 56 52 64Z" fill="#9fcfb3" transform="rotate(30 52 55)"/>', taille: 70, op: .7 },
+  'mur-soleil': { nom: 'Jaune soleil', haut: '#fbf0c8', bas: '#f3dc9c', motif: '<circle cx="10" cy="10" r="2" fill="#e9bd4c"/><circle cx="30" cy="30" r="2" fill="#e9bd4c"/>', taille: 40, op: .6 },
+  'mur-pois': { nom: 'À pois', haut: '#fdf6f8', bas: '#f6e4ea', motif: '<circle cx="12" cy="12" r="5" fill="#f2b8cb"/><circle cx="36" cy="36" r="5" fill="#f2b8cb"/>', taille: 48, op: .8 },
+  'mur-vichy': { nom: 'Vichy bleu', haut: '#eef3fb', bas: '#dde7f6', motif: '<rect width="12" height="24" fill="#9db8e2" opacity=".35"/><rect width="24" height="12" fill="#9db8e2" opacity=".35"/>', taille: 24, op: 1 },
+  'mur-briques': { nom: 'Briques', haut: '#efc8b4', bas: '#e2b29a', motif: '<rect x="1" y="1" width="58" height="13" rx="1.500" fill="#d9876a"/><rect x="-29" y="16" width="58" height="13" rx="1.500" fill="#d07e62"/><rect x="31" y="16" width="58" height="13" rx="1.500" fill="#d07e62"/><rect x="1" y="31" width="58" height="13" rx="1.500" fill="#d9876a"/><rect x="-29" y="46" width="58" height="13" rx="1.500" fill="#d07e62"/><rect x="31" y="46" width="58" height="13" rx="1.500" fill="#d07e62"/>', taille: 60, op: .9 },
+  'mur-fleurs': { nom: 'Fleurs', haut: '#f6eef9', bas: '#eadcf0', motif: '<g fill="#e6a6c6"><circle cx="25" cy="19" r="4"/><circle cx="31" cy="23" r="4"/><circle cx="29" cy="30" r="4"/><circle cx="21" cy="30" r="4"/><circle cx="19" cy="23" r="4"/></g><circle cx="25" cy="25" r="3" fill="#f2d27a"/><g fill="#b8a3dc"><circle cx="65" cy="61" r="2.500"/><circle cx="69" cy="65" r="2.500"/><circle cx="65" cy="69" r="2.500"/><circle cx="61" cy="65" r="2.500"/></g><circle cx="65" cy="65" r="1.800" fill="#f2d27a"/>', taille: 80, op: .75 },
+  'mur-coeurs': { nom: 'Cœurs', haut: '#fde9ee', bas: '#f7d3dd', motif: '<path d="M20 26C10 19 12 11 17 12C19 12.500 20 14 20 15C20 14 21 12.500 23 12C28 11 30 19 20 26Z" fill="#ee9fb5"/><path d="M50 58C43 53 44 47 48 48C49.500 48.300 50 49.500 50 50C50 49.500 50.500 48.300 52 48C56 47 57 53 50 58Z" fill="#f4bccb"/>', taille: 64, op: .75 },
+  'mur-lambris': { nom: 'Lambris', haut: '#dcb991', bas: '#c79f78', motif: '<path d="M0 0V40M20 0V40" stroke="#a87d56" stroke-width="1.500"/><path d="M5 0V40M25 0V40" stroke="#ecd0ac" stroke-width="1" opacity=".6"/>', taille: 40, op: .8 },
+  'mur-aurore': { nom: 'Coucher de soleil', haut: '#f9d4b8', bas: '#eea6b6', motif: '<ellipse cx="20" cy="22" rx="14" ry="4" fill="#fff"/><ellipse cx="28" cy="19" rx="8" ry="4" fill="#fff"/><ellipse cx="66" cy="68" rx="11" ry="3.500" fill="#fff"/>', taille: 90, op: .45 },
+  'mur-alefbet': { nom: 'Lettres hébraïques', haut: '#efe8dc', bas: '#e2d6c3', motif: '<text x="12" y="32" font-family="Frank Ruhl Libre, serif" font-size="20" fill="#bfa98a">א</text><text x="52" y="72" font-family="Frank Ruhl Libre, serif" font-size="18" fill="#c9a7b8">ש</text><text x="54" y="28" font-family="Frank Ruhl Libre, serif" font-size="14" fill="#a9b7c9">ב</text><text x="14" y="70" font-family="Frank Ruhl Libre, serif" font-size="14" fill="#b2c4a6">ל</text>', taille: 80, op: .6 },
 };
 const CH_SOLS = {
   bois: { nom: 'Bois', a: '#bb8a64', b: '#8a5d41', ligne: '#5e3d2a', type: 'planches' },
   'sol-clair': { nom: 'Parquet clair', a: '#ecd5b4', b: '#cba982', ligne: '#a3825d', type: 'planches' },
   'sol-carrelage': { nom: 'Carrelage', a: '#f1ece4', b: '#d6ccc0', ligne: '#b3a798', type: 'carreaux' },
+  'sol-chene': { nom: 'Chêne doré', a: '#d9a86a', b: '#b07d45', ligne: '#7d5530', type: 'planches' },
+  'sol-noyer': { nom: 'Noyer foncé', a: '#7a5038', b: '#4f3022', ligne: '#2e1a12', type: 'planches' },
+  'sol-blanchi': { nom: 'Bois blanchi', a: '#e4ddd3', b: '#c4b9ab', ligne: '#9b8f80', type: 'planches' },
+  'sol-rose': { nom: 'Parquet rose', a: '#f0cdd2', b: '#d9a9b3', ligne: '#b5808c', type: 'planches' },
+  'sol-damier': { nom: 'Damier noir et blanc', a: '#f4f0ea', b: '#d9d2c8', ligne: '#8a8178', c: '#2f2b36', type: 'damier' },
+  'sol-damier-rose': { nom: 'Damier rose', a: '#fbf1ec', b: '#ead8d0', ligne: '#c99aa6', c: '#f0b9c8', type: 'damier' },
+  'sol-tomettes': { nom: 'Tomettes', a: '#d98a5f', b: '#b4623f', ligne: '#8a4429', type: 'carreaux' },
+  'sol-menthe': { nom: 'Carreaux menthe', a: '#d3eee0', b: '#a9d3bd', ligne: '#7fb39a', type: 'carreaux' },
+  'sol-moquette': { nom: 'Moquette lilas', a: '#c9b6e2', b: '#a891c9', ligne: '#7d64a6', type: 'moquette' },
+  'sol-marbre': { nom: 'Marbre', a: '#f5f3f0', b: '#dcd7d2', ligne: '#a39c96', type: 'marbre' },
 };
 
 /* ---------- Personnage ---------- */
@@ -292,10 +312,10 @@ function persoSvg(p0) {
 
 /* ---------- La pièce ---------- */
 function chSolSvg(s) {
-  const vp = 120, k = (y) => (y - vp) / (CH_SOL - vp), larg = s.type === 'carreaux' ? 54 : 34, X = (i, y) => 400 + i * larg * k(y);
+  const vp = 120, k = (y) => (y - vp) / (CH_SOL - vp), larg = s.type === 'planches' ? 34 : 54, X = (i, y) => 400 + i * larg * k(y);
   let lignes = '', bandes = '';
   for (let i = -16; i <= 16; i++) lignes += `M${X(i, CH_SOL).toFixed(1)} ${CH_SOL}L${X(i, CH_HAUT).toFixed(1)} ${CH_HAUT}`;
-  if (s.type === 'carreaux') {
+  if (s.type !== 'planches') {
     [1, 2, 3, 4].forEach((j) => { const y = vp + (CH_SOL - vp) / (1 - j * .12); lignes += `M0 ${y.toFixed(1)}H${CH_LARGE}`; });
   } else {
     for (let i = -16; i < 16; i++) {
@@ -303,7 +323,20 @@ function chSolSvg(s) {
       if (i % 2) bandes += `M${X(i, CH_SOL).toFixed(1)} ${CH_SOL}L${X(i + 1, CH_SOL).toFixed(1)} ${CH_SOL}L${X(i + 1, CH_HAUT).toFixed(1)} ${CH_HAUT}L${X(i, CH_HAUT).toFixed(1)} ${CH_HAUT}Z`;
     }
   }
-  return `<rect y="${CH_SOL}" width="${CH_LARGE}" height="${CH_HAUT - CH_SOL}" fill="url(#chSolG)"/>${bandes ? `<path d="${bandes}" fill="#fff" opacity=".05"/>` : ''}<path d="${lignes}" stroke="${s.ligne}" stroke-width="1.200" opacity=".45"/>`;
+  // Damier : une case sur deux colorée ; moquette : sans joints, juste un grain ; marbre : quelques veines
+  let extra = '';
+  if (s.type === 'damier') {
+    const ys = [CH_SOL, ...[1, 2, 3, 4].map((j) => vp + (CH_SOL - vp) / (1 - j * .12))];
+    let d = '';
+    for (let r = 0; r < 4; r++) for (let i = -16; i < 16; i++) if ((i + r + 32) % 2) { const y0 = ys[r], y1 = ys[r + 1]; d += `M${X(i, y0).toFixed(1)} ${y0.toFixed(1)}L${X(i + 1, y0).toFixed(1)} ${y0.toFixed(1)}L${X(i + 1, y1).toFixed(1)} ${y1.toFixed(1)}L${X(i, y1).toFixed(1)} ${y1.toFixed(1)}Z`; }
+    extra = `<path d="${d}" fill="${s.c}"/>`;
+  } else if (s.type === 'moquette') {
+    lignes = 'M0 0';
+    extra = [...Array(160).keys()].map((n) => `<circle cx="${(n * 97) % CH_LARGE}" cy="${CH_SOL + 6 + ((n * 53) % 184)}" r="1.200" fill="${s.ligne}" opacity=".3"/>`).join('');
+  } else if (s.type === 'marbre') {
+    extra = `<path d="${[[60, 350], [250, 372], [470, 345], [640, 380], [130, 430], [380, 470], [600, 455], [40, 500], [720, 505]].map(([x, y]) => `M${x} ${y}q30-9 62 3t54-7`).join('')}" stroke="${s.ligne}" stroke-width=".9" fill="none" opacity=".35"/>`;
+  }
+  return `<rect y="${CH_SOL}" width="${CH_LARGE}" height="${CH_HAUT - CH_SOL}" fill="url(#chSolG)"/>${extra}${bandes ? `<path d="${bandes}" fill="#fff" opacity=".05"/>` : ''}<path d="${lignes}" stroke="${s.ligne}" stroke-width="1.200" opacity=".45"/>`;
 }
 
 function chFond() {
