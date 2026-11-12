@@ -2988,3 +2988,66 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .dico-dep button { padding: 5px 12px; border-radius: 99px; border: 1px solid #b5485a; background: none; color: var(--ink); font-weight: 700; font-size: .82rem; cursor: pointer; }
 .dico-dep button:hover { background: #b5485a; color: #fff; }
 .dico-dep .dico-dep-annuler { border: 0; text-decoration: underline; color: var(--muted); font-weight: 600; }
+
+/* ===== Le feuilleton en vidéo ===== */
+.fv-scene { position: relative; aspect-ratio: 16 / 9; border-radius: 22px; overflow: hidden; box-shadow: var(--shadow); background: #ead6bb; }
+.fv-scene > svg { width: 100%; height: 100%; display: block; }
+.fv-nuages { animation: fvNuages 38s linear infinite alternate; }
+@keyframes fvNuages { from { transform: translateX(-40px); } to { transform: translateX(60px); } }
+.fv-soleil { animation: fvSoleil 5s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+@keyframes fvSoleil { to { transform: scale(1.18); opacity: .7; } }
+.fv-rideau { animation: fvRideau 6s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: top center; }
+@keyframes fvRideau { to { transform: skewX(-3deg); } }
+.fv-lampe { animation: fvLampe 4s ease-in-out infinite alternate; transform-box: view-box; transform-origin: 360px 0; }
+@keyframes fvLampe { from { transform: rotate(-2.5deg); } to { transform: rotate(2.5deg); } }
+.fv-plante, .fv-palme { animation: fvPlante 3.6s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: bottom center; }
+@keyframes fvPlante { from { transform: rotate(-3deg); } to { transform: rotate(3deg); } }
+.fv-poussiere { animation: fvPoussiere 9s linear infinite; opacity: 0; }
+@keyframes fvPoussiere { 0% { transform: translate(0, 0); opacity: 0; } 20% { opacity: .9; } 100% { transform: translate(30px, -70px); opacity: 0; } }
+.fv-perso .fv-corps { transition: opacity .3s; }
+.fv-parle .fv-corps { animation: fvParle .38s ease-in-out infinite alternate; }
+@keyframes fvParle { from { transform: translateY(0); } to { transform: translateY(-5px) rotate(.6deg); } }
+.fv-gros { opacity: 0; transform-box: fill-box; transform-origin: center; transition: opacity .35s; pointer-events: none; }
+.fv-gros.on { opacity: 1; animation: fvPop .45s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes fvPop { from { transform: translate(310px, 20px) scale(.6); } to { transform: translate(310px, 20px) scale(1); } }
+.fv-main { font-family: 'Segoe Script', 'Bradley Hand', 'Comic Sans MS', cursive; font-size: 20px; fill: #3f4f96; }
+.fv-main.he { font-family: 'Frank Ruhl Libre', serif; font-size: 22px; }
+.fv-cle { animation: fvCle 1.6s ease-in-out infinite alternate; }
+@keyframes fvCle { from { transform: translate(138px, 92px) rotate(28deg); } to { transform: translate(138px, 92px) rotate(16deg); } }
+.fv-brille { animation: fvBrille 1.2s ease-in-out infinite alternate; }
+@keyframes fvBrille { from { opacity: .2; } to { opacity: 1; } }
+.fv-en-pause svg * { animation-play-state: paused !important; }
+.fv-lieu { position: absolute; left: 12px; top: 10px; padding: 4px 10px; border-radius: 99px; background: rgba(43, 31, 58, .55); color: #fff; font-size: .78rem; font-weight: 700; }
+.fv-debut { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; border: 0; cursor: pointer; color: #fff; background: radial-gradient(circle at 50% 45%, rgba(43, 31, 58, .35), rgba(43, 31, 58, .8)); font: inherit; }
+.fv-debut .fv-clap { font-size: 2.6rem; }
+.fv-debut small { text-transform: uppercase; letter-spacing: .12em; font-weight: 800; opacity: .85; }
+.fv-debut b { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.6rem; }
+.fv-go { margin-top: 10px; padding: 10px 26px; border-radius: 99px; background: linear-gradient(135deg, var(--pink), var(--gold)); font-weight: 800; box-shadow: 0 6px 18px rgba(0, 0, 0, .25); }
+.fv-attend::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 4px var(--gold); border-radius: 22px; pointer-events: none; animation: fvBrille 1s ease-in-out infinite alternate; }
+.fv-fin { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 18px 26px; text-align: center; color: #fff; background: rgba(28, 18, 44, .82); overflow: auto; }
+.fv-fin[hidden] { display: none; }
+.fv-fin p { margin: 0; max-width: 560px; }
+.fv-asuivre { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; color: #f6d38a; }
+.fv-ctrl { display: flex; align-items: center; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
+.fv-ctrl button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--ink); font-size: 1.1rem; cursor: pointer; }
+.fv-ctrl button.on { background: var(--gold); color: #2b1f3a; border-color: var(--gold); }
+.fv-ctrl .fv-play { width: 54px; height: 54px; font-size: 1.4rem; background: linear-gradient(135deg, var(--pink), var(--gold)); color: #fff; border: 0; }
+.fv-prog { margin-left: auto; color: var(--muted); font-weight: 700; font-size: .85rem; }
+.fv-frbtn { display: inline-flex; align-items: center; gap: 4px; font-weight: 800; font-size: .85rem; }
+.fv-sous { text-align: center; }
+.fv-qui { font-weight: 800; color: var(--muted); font-size: .85rem; margin-bottom: 4px; }
+.fv-he .mots-clic { font-family: 'Frank Ruhl Libre', serif; font-size: 1.7rem; line-height: 1.5; }
+.fv-sous .tr { display: block; color: var(--muted); }
+.fv-fr { font-style: italic; color: var(--muted); margin-top: 4px; }
+.fv-fr[hidden] { display: none; }
+.fv-sous .bulle-mot { display: flex; margin: 8px auto 0; }
+.fv-atoi { margin: 12px 0 6px; font-weight: 800; color: var(--gold); }
+.fv-choix { display: grid; gap: 8px; }
+.fv-choix .opt { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.fv-choix .opt .he { font-size: 1.3rem; }
+.fv-entree { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; padding: 12px 16px; border-radius: 18px; color: #fff; text-decoration: none; background: linear-gradient(135deg, #3b2a6e, #b0507a); box-shadow: var(--shadow); }
+.fv-entree > span:first-child { font-size: 1.8rem; }
+.fv-entree b { display: block; }
+.fv-entree small { opacity: .85; }
+.fv-entree-go { margin-left: auto; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 255, 255, .2); font-size: 1.1rem; }
+@media (max-width: 600px) { .fv-scene { border-radius: 16px; margin: 0 -6px; } .fv-he .mots-clic { font-size: 1.45rem; } .fv-debut b { font-size: 1.2rem; } .fv-fin { font-size: .85rem; padding: 10px 14px; } .fv-asuivre { font-size: 1.15rem; } .fv-ctrl button { width: 40px; height: 40px; } }
