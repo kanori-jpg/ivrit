@@ -56,3 +56,21 @@ function brancherMotsClic(zone, bulle) {
     bulle.hidden = false;
   }));
 }
+
+// Articles du journal : le sens du mot touché, et un bouton « + » pour l'ajouter à tes mots à apprendre (seulement si tu le touches)
+function gloseArticle(b, zone) {
+  const he = NFC(b.dataset.he.replace(/[^א-ת֑-ׇ\s־׳]/g, '').trim()), fr = b.dataset.g;
+  const g = gloseMot(he);
+  const site = WORDS.find((w) => w.theme !== 'mesmots' && (NFC(w.he) === he || (g && g.base && NFC(w.he) === NFC(g.base))));
+  const dessiner = () => {
+    let etat;
+    if (site) etat = `<span class="gl-etat">✓ ${NFC(site.he) === he ? 'déjà' : `<span class="he" lang="he" dir="rtl">${esc(site.he)}</span>`} dans le vocabulaire du site</span>`;
+    else if (estDansMesMots(he)) etat = '<span class="gl-etat">⭐ Ajouté à tes mots</span><button type="button" class="gl-annuler">annuler</button>';
+    else etat = '<button type="button" class="gl-plus" aria-label="Ajouter ce mot à mes mots à apprendre">＋</button>';
+    zone.innerHTML = `<span class="gl-fr">${esc(fr)}</span>${etat}`;
+    const plus = zone.querySelector('.gl-plus'), annuler = zone.querySelector('.gl-annuler');
+    if (plus) plus.onclick = () => { ajouterMesMots([he, g && NFC(g.he) === he ? g.tr || '' : '', fr]); toast('⭐ Mot ajouté à tes cartes (thème « Mes mots »)'); dessiner(); };
+    if (annuler) annuler.onclick = () => { retirerMesMots(he); dessiner(); };
+  };
+  dessiner();
+}

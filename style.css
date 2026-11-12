@@ -2964,3 +2964,11 @@ body.jade .ac { --muted: #506c64; }
 .dico-cats button.on small { color: #ffe3ea; }
 body.etoiles .dico-cats button.on { background: #f5b5d6; color: #2a1a50; border-color: #f5b5d6; }
 body.etoiles .dico-cats button.on small { color: #4a3470; }
+
+/* Articles : le sens du mot touché et le bouton « + » */
+#gloss { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 8px 10px; }
+.gl-plus { width: 34px; height: 34px; border-radius: 50%; border: 0; background: linear-gradient(135deg, var(--pink), var(--gold)); color: #fff; font-size: 1.2rem; font-weight: 800; line-height: 1; cursor: pointer; box-shadow: var(--shadow); }
+.gl-plus:hover { transform: scale(1.08); }
+.gl-etat { font-size: .82rem; font-weight: 700; color: var(--green); }
+.gl-etat .he { font-size: 1rem; }
+.gl-annuler { border: 0; background: none; color: var(--muted); font-size: .8rem; text-decoration: underline; cursor: pointer; }

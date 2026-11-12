@@ -331,7 +331,7 @@ function journal(id) {
     <p class="center" id="gloss" style="min-height:1.6em;font-weight:800">&nbsp;</p>
     <div class="section"><b>${esc(art.q)}</b><div class="col-choices mt">${art.opts.map((o, i) => `<button class="opt ans" data-i="${i}">${esc(o)}</button>`).join('')}</div><p class="center hint" id="fb">&nbsp;</p></div>
   </div>`;
-  $$('.w').forEach((b) => (b.onclick = () => { $$('.w.on').forEach((x) => x.classList.remove('on')); b.classList.add('on'); $('#gloss').textContent = b.dataset.g; speak(b.dataset.he); }));
+  $$('.w').forEach((b) => (b.onclick = () => { $$('.w.on').forEach((x) => x.classList.remove('on')); b.classList.add('on'); gloseArticle(b, $('#gloss')); speak(b.dataset.he); }));
   $$('.link').forEach((b) => (b.onclick = () => { $('#t' + b.dataset.t).hidden = false; b.remove(); }));
   $$('.ans').forEach((b) => (b.onclick = () => {
     if (+b.dataset.i === art.a) {

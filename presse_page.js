@@ -36,7 +36,7 @@ function presse(id) {
   </div>
   <p class="hint mt">Les titres sont de vrais titres parus dans la presse israélienne entre le 3 et le 9 novembre 2026. Les phrases en hébreu simple sont un résumé écrit pour apprendre : pour l’article complet, ouvre le lien. ${S.presse.length} / ${PRESSE.length} articles lus.</p>`;
   $('#uneTr').onclick = (e) => { $('#uneFr').hidden = false; e.target.remove(); };
-  $$('.w').forEach((b) => (b.onclick = () => { $$('.w.on').forEach((x) => x.classList.remove('on')); b.classList.add('on'); $('#gloss').textContent = b.dataset.g; speak(b.dataset.he); }));
+  $$('.w').forEach((b) => (b.onclick = () => { $$('.w.on').forEach((x) => x.classList.remove('on')); b.classList.add('on'); gloseArticle(b, $('#gloss')); speak(b.dataset.he); }));
   $$('.link[data-t]').forEach((b) => (b.onclick = () => { $('#t' + b.dataset.t).hidden = false; b.remove(); }));
   $$('.ans').forEach((b) => (b.onclick = () => {
     if (+b.dataset.i === art.a) {
