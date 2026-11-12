@@ -2,12 +2,32 @@
 /* ============ Le feuilleton en « vidéo » (#/feuilleton/N/video) ============
    Un petit dessin animé : le décor bouge (nuages, rideau, lampe, poussière), le personnage qui parle s'anime,
    les répliques s'enchaînent avec le son et les sous-titres, et la vidéo s'arrête quand c'est à toi de répondre.
-   FEUILLETON_VIDEO[num] = { decor, persos: { qui: apparence }, plans: [état du gros plan pour chaque réplique] } */
+   FEUILLETON_VIDEO[num] = { decor, echelle, moi (place de ton personnage),
+     persos: { qui: { type: 'perso' (style de ta chambre) | 'pnj' (style des scènes), x, apparence } },
+     plans: [gros plan pour chaque réplique], emo: { qui: [humeur à chaque réplique] } } */
+const FV_SHIRA = { type: 'perso', peau: '#eec3a1', cheveux: '#2b2230', coiffure: 'boucles', tenue: 'p-salopette', tenueSinon: 'p-pull' };
 const FEUILLETON_VIDEO = {
   1: {
-    decor: 'appart',
-    persos: { shira: { peau: '#eec3a1', cheveux: '#2b2230', coiffure: 'boucles', tenue: 'p-salopette', tenueSinon: 'p-pull' } },
+    decor: 'appart', echelle: 1.2, moi: 590,
+    persos: { shira: { ...FV_SHIRA, x: 255 } },
     plans: ['env', 'env-date', 'env-nom', 'env-nom', 'env-ouverte', 'photo-cle'],
+  },
+  2: {
+    decor: 'escalier', echelle: 1.05, moi: 625,
+    persos: { cohen: { type: 'perso', x: 215, peau: '#f3d6c0', cheveux: '#d9d4de', coiffure: 'chignon', tenue: 'p-pull', tenueSinon: 'p-robe', yeux: 'p-lunettes', cou: 'p-collier' }, shira: { ...FV_SHIRA, x: 430 } },
+    plans: [null, 'env-date', 'bateau', 'bateau', 'album', 'album-photo'],
+  },
+  3: {
+    decor: 'poste', echelle: 1.05, moi: 640,
+    persos: { pakid: { type: 'pnj', x: 222, peau: '#d9a57c', cheveux: '#2b2230', coiffure: 'court', haut: '#c94a4a', bas: '#3a3f55', lunettes: true, yeux: '#4a3a2a' }, shira: { ...FV_SHIRA, x: 455 } },
+    plans: ['ticket', 'cle-112', 'recu', 'cle-112', 'boite-112', 'carte-postale'],
+    emo: { pakid: ['content', 'neutre', 'surpris', 'desole', 'ravi'] },
+  },
+  4: {
+    decor: 'jaffa', echelle: 1.05, moi: 630, gros: [470, 14],
+    persos: { mokher: { type: 'pnj', x: 190, peau: '#c98e6a', cheveux: '#e6e1d8', coiffure: 'casquette', casquette: '#5b4a3a', haut: '#e2cfa6', bas: '#4a4038', tablier: '#7a5a3a', moustache: true, yeux: '#3a2a1a' }, shira: { ...FV_SHIRA, x: 440 } },
+    plans: ['carte-postale', null, 'cartes', 'cafe', 'horloge', null],
+    emo: { mokher: [null, 'ravi', 'content', 'neutre', 'desole'] },
   },
 };
 
@@ -68,6 +88,125 @@ const FEUILLETON_VIDEO = {
       <!-- La plante -->
       <g transform="translate(455 330)"><g class="fv-plante"><path d="M0 0Q-4-30-20-52M0 0Q2-36 8-62M0 0Q8-26 26-44M0 0Q-10-20-30-28" stroke="#4f8a5f" stroke-width="4" fill="none" stroke-linecap="round"/><g fill="#6aa772"><ellipse cx="-20" cy="-54" rx="10" ry="6" transform="rotate(-40 -20 -54)"/><ellipse cx="8" cy="-64" rx="7" ry="11"/><ellipse cx="27" cy="-46" rx="10" ry="6" transform="rotate(35 27 -46)"/><ellipse cx="-31" cy="-29" rx="9" ry="5" transform="rotate(-15 -31 -29)"/></g></g><path d="M-16 0H16L12 26H-12Z" fill="#d07a5a"/></g>`;
     },
+
+    // La cage d'escalier de l'immeuble : la porte de Mme Cohen, la fenêtre, les marches et le chat de l'immeuble
+    escalier: () => {
+      const granito = [...Array(140).keys()].map((k) => `<circle cx="${(k * 97) % 800}" cy="${364 + ((k * 41) % 84)}" r="${1 + (k % 3) * .7}" fill="${['#9b8f7c', '#b7584a', '#5d6f8a', '#f2ede3'][k % 4]}" opacity=".55"/>`).join('');
+      let marches = '', barreaux = '';
+      for (let s = 0; s < 8; s++) { const x0 = 520 + s * 36, y = 360 - s * 26; marches += `<rect x="${x0}" y="${y - 26}" width="${800 - x0}" height="26" fill="${s % 2 ? '#c9bfae' : '#d6cdbd'}"/><path d="M${x0} ${y - 26}H800" stroke="#a89c88" stroke-width="2"/>`; barreaux += `M${x0 + 14} ${y - 26}V${y - 86}`; }
+      const poussiere = [...Array(10).keys()].map((k) => `<circle class="fv-poussiere" cx="${330 + ((k * 31) % 110)}" cy="${230 + ((k * 43) % 110)}" r="${1.2 + (k % 3) * .5}" fill="#fff8dc" style="animation-delay:-${(k * 1.1).toFixed(1)}s"/>`).join('');
+      return `<defs>
+        <linearGradient id="fvEscMur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f2e6"/><stop offset="1" stop-color="#e3e6d4"/></linearGradient>
+        <linearGradient id="fvEscSol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ddd5c6"/><stop offset="1" stop-color="#c7bdab"/></linearGradient>
+        <linearGradient id="fvEscPorte" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffefc6"/><stop offset="1" stop-color="#f7cf8a"/></linearGradient>
+        <linearGradient id="fvEscRayon" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe6" stop-opacity=".6"/><stop offset="1" stop-color="#fffbe6" stop-opacity="0"/></linearGradient>
+        <radialGradient id="fvEscHalo"><stop offset="0" stop-color="#fff2c2" stop-opacity=".85"/><stop offset="1" stop-color="#fff2c2" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="800" height="360" fill="url(#fvEscMur)"/>
+      <rect y="222" width="800" height="138" fill="#a9c3a4"/><rect y="218" width="800" height="5" fill="#8faa8a"/>
+      <rect y="360" width="800" height="90" fill="url(#fvEscSol)"/>${granito}
+      <!-- La porte de Mme Cohen, ouverte sur un appartement chaleureux -->
+      <rect x="34" y="112" width="142" height="250" fill="#8a6a4a"/><rect x="46" y="124" width="118" height="238" fill="url(#fvEscPorte)" class="fv-lueur"/>
+      <rect x="62" y="150" width="40" height="52" rx="3" fill="#e9b97a" opacity=".6"/><path d="M116 362V250H150V362" fill="#e8b46e" opacity=".45"/>
+      <path d="M164 124L206 140V350L164 362Z" fill="#7a5a3e"/><circle cx="196" cy="248" r="4" fill="#e8c27a"/>
+      <rect x="196" y="160" width="26" height="22" rx="3" fill="#e7e2d2" stroke="#9b8f7c"/><text x="209" y="176" text-anchor="middle" font-size="14" font-weight="700" fill="#5a4a3e">7</text>
+      <ellipse cx="110" cy="372" rx="62" ry="9" fill="#b5524a" opacity=".85"/>
+      <!-- La grande fenêtre de la cage d'escalier -->
+      <rect x="324" y="36" width="116" height="170" rx="6" fill="#e9f4f8"/><rect x="324" y="36" width="116" height="170" rx="6" fill="#fff" class="fv-soleil" opacity=".35"/>
+      <path d="M382 36V206M324 92H440M324 150H440" stroke="#fff" stroke-width="5"/><rect x="324" y="36" width="116" height="170" rx="6" fill="none" stroke="#f6f6ef" stroke-width="8"/>
+      <path d="M324 206L440 206L520 360H250Z" fill="url(#fvEscRayon)" opacity=".7"/>${poussiere}
+      <!-- L'ampoule de l'escalier -->
+      <path d="M262 0V44" stroke="#5b4a5e" stroke-width="2"/><circle cx="262" cy="56" r="30" fill="url(#fvEscHalo)" class="fv-ampoule"/><circle cx="262" cy="54" r="9" fill="#fff6d0"/><rect x="257" y="40" width="10" height="8" fill="#9a8a7a"/>
+      <!-- Les marches qui montent -->
+      ${marches}
+      <path d="${barreaux}" stroke="#5a4a3e" stroke-width="3"/><path d="M534 274L800 66" stroke="#4a3a30" stroke-width="8" stroke-linecap="round"/>
+      <!-- Le chat de l'immeuble, sur la quatrième marche -->
+      <g transform="translate(676 256)"><path d="M-22 0Q-26-26 0-28Q22-26 20 0Z" fill="#e3a35c"/><circle cx="-2" cy="-36" r="15" fill="#e3a35c"/><path d="M-14-44L-16-60L-4-48ZM10-46L14-60L2-49Z" fill="#e3a35c"/><path d="M-8-38Q-6-35-4-38M2-38Q4-35 6-38" stroke="#4a3020" stroke-width="1.600" fill="none"/><path d="M-3-32L0-30L3-32" stroke="#4a3020" stroke-width="1.300" fill="none"/>
+        <g class="fv-queue"><path d="M18-4Q40-6 38-30" stroke="#e3a35c" stroke-width="7" fill="none" stroke-linecap="round"/></g></g>
+      <!-- Une grande plante près de la porte -->
+      <g transform="translate(250 362)"><g class="fv-plante"><path d="M0 0Q-6-50-26-84M0 0Q4-60 14-100M0 0Q10-40 34-70" stroke="#3f7a52" stroke-width="4" fill="none"/><g fill="#5c9c6a"><ellipse cx="-27" cy="-86" rx="16" ry="10" transform="rotate(-35 -27 -86)"/><ellipse cx="14" cy="-102" rx="12" ry="17"/><ellipse cx="35" cy="-72" rx="16" ry="9" transform="rotate(30 35 -72)"/><ellipse cx="-12" cy="-52" rx="13" ry="8" transform="rotate(-20 -12 -52)"/></g></g><path d="M-18 0H18L14 30H-14Z" fill="#c76f50"/></g>`;
+    },
+
+    // Le bureau de poste du quartier : le guichet (vitre et comptoir passent devant le guichetier), les boîtes postales
+    poste: () => {
+      let joints = '';
+      for (let i = -6; i <= 14; i++) { const x = i * 70; joints += `M${x} 340L${(400 + (x - 400) * 1.6).toFixed(0)} 450`; }
+      [372, 410].forEach((y) => (joints += `M0 ${y}H800`));
+      let boites = '';
+      for (let r = 0; r < 6; r++) for (let c = 0; c < 5; c++) { const x = 572 + c * 42, y = 102 + r * 37, ici = r === 2 && c === 1; boites += `<rect x="${x}" y="${y}" width="36" height="31" rx="2" fill="${ici ? '#f0c96e' : '#d7ae66'}" ${ici ? 'class="fv-boite"' : ''}/><circle cx="${x + 28}" cy="${y + 16}" r="2.300" fill="#7a5a2a"/><rect x="${x + 5}" y="${y + 5}" width="14" height="4" rx="1" fill="#fff6dc" opacity=".8"/>`; }
+      return `<defs>
+        <linearGradient id="fvPoMur" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#eaf1f6"/><stop offset="1" stop-color="#d6e1ea"/></linearGradient>
+        <linearGradient id="fvPoSol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d4dadf"/><stop offset="1" stop-color="#b9c2ca"/></linearGradient>
+      </defs>
+      <rect width="800" height="340" fill="url(#fvPoMur)"/><rect y="330" width="800" height="10" fill="#c4cfd8"/>
+      <rect y="340" width="800" height="110" fill="url(#fvPoSol)"/><path d="${joints}" stroke="#9aa5ae" stroke-width="1.200" opacity=".6"/>
+      <!-- L'enseigne -->
+      <rect x="86" y="20" width="250" height="52" rx="12" fill="#d64545"/><rect x="104" y="32" width="40" height="28" rx="3" fill="#fff"/><path d="M104 32L124 48L144 32" stroke="#d64545" stroke-width="3" fill="none"/>
+      <text x="318" y="58" text-anchor="end" font-family="Frank Ruhl Libre, serif" font-size="32" font-weight="700" fill="#fff">דֹּאַר</text>
+      <!-- L'écran des numéros et l'horloge -->
+      <rect x="362" y="34" width="84" height="44" rx="6" fill="#2b2230"/><text x="404" y="66" text-anchor="middle" font-family="Consolas, monospace" font-size="26" font-weight="700" fill="#ff6a5a" class="fv-clignote">38</text>
+      <circle cx="490" cy="56" r="24" fill="#fff" stroke="#5a6a7a" stroke-width="4"/><path d="M490 56V40" stroke="#2b2230" stroke-width="3" stroke-linecap="round"/><path d="M490 56L502 56" stroke="#2b2230" stroke-width="3" stroke-linecap="round" class="fv-aiguille"/>
+      <!-- Le mur des boîtes postales -->
+      <rect x="560" y="90" width="226" height="240" rx="6" fill="#8a6234"/>${boites}
+      <!-- Une affiche de timbres -->
+      <rect x="470" y="120" width="70" height="90" rx="4" fill="#fff" stroke="#c9d3db" stroke-width="3"/><rect x="480" y="130" width="22" height="28" fill="#7fb3d9"/><rect x="508" y="130" width="22" height="28" fill="#f2b84b"/><rect x="480" y="166" width="22" height="28" fill="#8fc79a"/><rect x="508" y="166" width="22" height="28" fill="#e88a9a"/>
+      <!-- Le fond du guichet -->
+      <rect x="40" y="110" width="350" height="230" fill="#cfdbe4"/><rect x="60" y="150" width="80" height="60" rx="3" fill="#e8eef2"/><path d="M70 170H130M70 185H120" stroke="#aab7c2" stroke-width="3"/>
+      <!-- Un banc d'attente -->
+      <rect x="440" y="306" width="110" height="10" rx="4" fill="#7d8a96"/><path d="M450 316V340M540 316V340" stroke="#5f6b76" stroke-width="5"/>`;
+    },
+
+    // Jaffa : le marché aux puces au pied de la tour de l'Horloge, avec le stand du brocanteur
+    jaffa: () => {
+      let paves = '';
+      for (let r = 0; r < 5; r++) { const y = 336 + r * 24; paves += `M0 ${y}H800`; for (let c = 0; c < 18; c++) { const x = c * 52 + (r % 2) * 26; paves += `M${x} ${y}V${y + 24}`; } }
+      const maisons = [[0, 196, 120, '#e8cfa0'], [120, 222, 100, '#dfc08c'], [380, 214, 110, '#e6c99a'], [490, 186, 120, '#ead3a8'], [610, 230, 70, '#dcbd88']]
+        .map(([x, y, w, c]) => `<rect x="${x}" y="${y}" width="${w}" height="${336 - y}" fill="${c}"/>${[0, 1].map((k) => `<path d="M${x + 16 + k * (w / 2)} ${y + 70}V${y + 40}A12 12 0 0 1 ${x + 40 + k * (w / 2)} ${y + 40}V${y + 70}Z" fill="#7a5a44" opacity=".75"/>`).join('')}`).join('');
+      const tapis = [[680, '#b8483e', '#f2c45a'], [722, '#3f6a9a', '#f0e2c0'], [764, '#6a8a4a', '#e8a85a']]
+        .map(([x, a, b], k) => `<g class="fv-tapis" style="animation-delay:-${k * 1.2}s"><rect x="${x}" y="150" width="38" height="150" fill="${a}"/><rect x="${x + 5}" y="158" width="28" height="134" fill="none" stroke="${b}" stroke-width="3"/><path d="M${x + 19} 180L${x + 30} 225L${x + 19} 270L${x + 8} 225Z" fill="${b}"/></g>`).join('');
+      return `<defs>
+        <linearGradient id="fvJaCiel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86c3ee"/><stop offset=".8" stop-color="#d6ecf6"/><stop offset="1" stop-color="#fbe6c6"/></linearGradient>
+        <linearGradient id="fvJaSol" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dcc6a2"/><stop offset="1" stop-color="#c6ac86"/></linearGradient>
+        <linearGradient id="fvJaTour" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ecd09a"/><stop offset="1" stop-color="#cfa96c"/></linearGradient>
+        <radialGradient id="fvJaHalo"><stop offset="0" stop-color="#fff4c8" stop-opacity=".9"/><stop offset="1" stop-color="#fff4c8" stop-opacity="0"/></radialGradient>
+      </defs>
+      <rect width="800" height="340" fill="url(#fvJaCiel)"/>
+      <circle cx="700" cy="70" r="50" fill="url(#fvJaHalo)" class="fv-soleil"/><circle cx="700" cy="70" r="20" fill="#fff5cc"/>
+      <g class="fv-nuages"><ellipse cx="520" cy="60" rx="34" ry="9" fill="#fff"/><ellipse cx="540" cy="53" rx="18" ry="9" fill="#fff"/><ellipse cx="120" cy="90" rx="26" ry="7" fill="#fff" opacity=".9"/></g>
+      <g class="fv-mouettes"><path d="M80 120q7-7 14 0q7-7 14 0M150 96q5-5 10 0q5-5 10 0M610 130q6-6 12 0q6-6 12 0" stroke="#4a5568" stroke-width="2.200" fill="none" stroke-linecap="round"/></g>
+      <!-- La mer du vieux port, entre les maisons -->
+      <rect x="610" y="262" width="190" height="74" fill="#5fa6cf"/><path d="M610 280Q650 274 690 280T770 280" stroke="#d9eef8" stroke-width="2" fill="none"/>
+      <g class="fv-bateau"><path d="M716 290H760L752 302H724Z" fill="#fff"/><path d="M738 290V258L756 288Z" fill="#f4f1ea"/><path d="M738 290V264L724 288Z" fill="#e88a6a"/></g>
+      ${maisons}
+      <!-- La tour de l'Horloge -->
+      <rect x="290" y="70" width="84" height="266" fill="url(#fvJaTour)"/><rect x="282" y="62" width="100" height="14" fill="#c9a065"/><rect x="300" y="36" width="64" height="28" fill="url(#fvJaTour)"/><path d="M296 36H368L332 14Z" fill="#c9a065"/>
+      <circle cx="332" cy="116" r="25" fill="#fffaf0" stroke="#7a5a34" stroke-width="4"/><path d="M332 116V100" stroke="#2b2230" stroke-width="3" stroke-linecap="round"/><path d="M332 116L346 116" stroke="#2b2230" stroke-width="3" stroke-linecap="round" class="fv-aiguille"/>
+      <path d="M314 200V172A18 18 0 0 1 350 172V200Z" fill="#7a5a44" opacity=".8"/><path d="M314 268V240A18 18 0 0 1 350 240V268Z" fill="#7a5a44" opacity=".8"/>
+      <!-- Le sol pavé -->
+      <rect y="336" width="800" height="114" fill="url(#fvJaSol)"/><path d="${paves}" stroke="#a88c66" stroke-width="1.300" opacity=".5"/>
+      <!-- Le stand de tapis -->
+      <path d="M670 146H800" stroke="#6a4a30" stroke-width="5"/>${tapis}
+      <!-- Le stand du brocanteur : l'auvent rayé et l'étagère d'antiquités -->
+      <path d="M78 190V336M272 190V336" stroke="#6a4a30" stroke-width="6"/>
+      <g class="fv-store"><path d="M60 150H290V190Q278 200 267 190Q256 200 244 190Q233 200 221 190Q210 200 198 190Q187 200 175 190Q164 200 152 190Q141 200 129 190Q118 200 106 190Q95 200 83 190Q72 200 60 190Z" fill="#f4ead8"/>${[0, 1, 2, 3, 4].map((k) => `<path d="M${60 + k * 46} 150H${83 + k * 46}V190Q${78 + k * 46} 196 ${72 + k * 46} 193L${60 + k * 46} 190Z" fill="#c9473f"/>`).join('')}</g>
+      <rect x="86" y="236" width="180" height="8" fill="#7a5a3a"/>
+      <g transform="translate(110 236)"><path d="M0 0V-22M-10-22H10L4-40H-4Z" fill="#c9a04a" stroke="#8a6a2a"/><path d="M-6-40Q0-52 6-40" fill="#fff3b0"/></g>
+      <g transform="translate(160 236)"><rect x="-14" y="-16" width="28" height="16" fill="#7a4a2a"/><path d="M4-16L14-44Q30-50 34-36Q24-30 10-16Z" fill="#d9b04a" stroke="#8a6a2a"/></g>
+      <g transform="translate(222 236)"><path d="M-10 0Q-16-14-8-26H8Q16-14 10 0Z" fill="#4a7ab0"/><path d="M-6-26V-32H6V-26" fill="#4a7ab0"/></g>`;
+    },
+  };
+  // Ce qui passe devant les personnages (comptoirs, tables)
+  const FV_DEVANT = {
+    poste: () => `<path d="M40 110H390V330H40Z M168 272H262V330H168Z" fill="#dff0fa" fill-rule="evenodd" opacity=".32"/>
+      <path d="M40 110H390V330H40Z" fill="none" stroke="#9fb3c2" stroke-width="5"/><path d="M168 330V272H262V330" fill="none" stroke="#9fb3c2" stroke-width="4"/>
+      <path d="M70 140L110 200M90 140L120 185M300 150L340 210" stroke="#fff" stroke-width="3" opacity=".5"/>
+      <rect x="28" y="328" width="374" height="14" rx="3" fill="#e8d6b4"/><rect x="40" y="342" width="350" height="108" fill="#c9a77a"/>
+      <path d="M156 342V450M272 342V450" stroke="#b08e60" stroke-width="3"/><rect x="60" y="358" width="76" height="56" rx="4" fill="none" stroke="#b08e60" stroke-width="3"/><rect x="176" y="358" width="76" height="56" rx="4" fill="none" stroke="#b08e60" stroke-width="3"/><rect x="292" y="358" width="76" height="56" rx="4" fill="none" stroke="#b08e60" stroke-width="3"/>`,
+    jaffa: () => `<rect x="70" y="318" width="232" height="10" rx="3" fill="#6a4a30"/><path d="M76 328H296V408H76Z" fill="#8a3a3a"/><path d="M76 408${[...Array(22).keys()].map((k) => `L${81 + k * 10} 416L${86 + k * 10} 408`).join('')}" fill="#8a3a3a"/>
+      <path d="M90 344H282M90 392H282" stroke="#e8c27a" stroke-width="3"/>
+      <g transform="translate(108 318)"><rect x="-16" y="-12" width="44" height="12" rx="6" fill="#efe0bd" transform="rotate(-8)"/><rect x="-10" y="-22" width="40" height="11" rx="5.500" fill="#e4d2a8" transform="rotate(6)"/></g>
+      <g transform="translate(176 318)"><circle cy="-11" r="11" fill="#c9a04a" stroke="#7a5a2a" stroke-width="2"/><path d="M0-19L3-11L0-3L-3-11Z" fill="#b8483e"/></g>
+      <g transform="translate(238 318)"><path d="M-14 0Q-18-16 0-18Q18-16 14 0Z" fill="#9a6a3a"/><path d="M14-10Q26-14 26-4" stroke="#9a6a3a" stroke-width="4" fill="none"/><circle cy="-20" r="3" fill="#9a6a3a"/></g>`,
   };
 
   /* ---------- Le gros plan sur les objets (180 × 150) ---------- */
@@ -86,6 +225,49 @@ const FEUILLETON_VIDEO = {
         <circle cx="66" cy="62" r="8" fill="#f0c9a8"/><path d="M58 60Q60 48 66 50Q74 48 74 60Q72 54 66 54Q60 54 58 60Z" fill="#5a3a2c"/><path d="M56 104Q58 74 66 72Q74 74 76 104Z" fill="#f4f1ea"/><path d="M63 64Q66 67 69 64" stroke="#b05060" stroke-width="1.300" fill="none"/></g>
       <g transform="translate(138 92) rotate(28)" class="fv-cle"><circle r="12" fill="none" stroke="#e2b54a" stroke-width="5"/><path d="M12 0H40M30 0V8M36 0V6" stroke="#e2b54a" stroke-width="5" stroke-linecap="round"/></g>
       <g class="fv-brille"><path d="M156 60L159 68L167 71L159 74L156 82L153 74L145 71L153 68Z" fill="#fff6c8"/><path d="M126 112L128 117L133 119L128 121L126 126L124 121L119 119L124 117Z" fill="#fff6c8"/></g>`,
+    // Épisode 2
+    bateau: () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#cfe7f5"/><circle cx="140" cy="38" r="12" fill="#ffe9a8"/>
+      <rect x="10" y="92" width="160" height="48" fill="#5fa6cf"/><g class="fv-vague"><path d="M10 100Q30 94 50 100T90 100T130 100T170 100" stroke="#e6f4fb" stroke-width="3" fill="none"/></g>
+      <g class="fv-tangue"><path d="M46 92H134L120 112H58Z" fill="#3b4a6a"/><rect x="62" y="74" width="46" height="18" fill="#f4f1ea"/><rect x="68" y="78" width="8" height="8" fill="#8fc0e0"/><rect x="82" y="78" width="8" height="8" fill="#8fc0e0"/><rect x="96" y="78" width="8" height="8" fill="#8fc0e0"/><rect x="84" y="56" width="10" height="18" fill="#c9473f"/><path d="M89 52q-6-8 2-14q8-6 2-14" stroke="#b9c2ca" stroke-width="3" fill="none" class="fv-fumee"/></g>`,
+    album: () => `<rect x="34" y="18" width="112" height="116" rx="6" fill="#6a3a2a"/><rect x="40" y="24" width="100" height="104" rx="4" fill="none" stroke="#d9b06a" stroke-width="2"/>
+      <path d="M34 18L48 18L34 32Z M146 18L132 18L146 32Z M34 134L48 134L34 120Z M146 134L132 134L146 120Z" fill="#d9b06a"/><rect x="62" y="58" width="56" height="34" rx="3" fill="#f2e6c8"/><path d="M72 70H108M76 80H104" stroke="#8a6a3a" stroke-width="2"/>`,
+    'album-photo': () => `<rect x="8" y="18" width="164" height="116" rx="5" fill="#f4ecd8" stroke="#c9b48a" stroke-width="2"/><path d="M90 18V134" stroke="#c9b48a" stroke-width="2"/>
+      <g transform="rotate(-3 48 70)"><rect x="18" y="30" width="62" height="76" fill="#fff" stroke="#ddd2b8"/><rect x="23" y="35" width="52" height="58" fill="#d9cfbd"/>
+        <circle cx="40" cy="54" r="7" fill="#f0c9a8"/><path d="M33 52Q35 42 40 44Q46 42 47 52Q45 47 40 47Q35 47 33 52Z" fill="#5a3a2c"/><path d="M31 93Q32 66 40 63Q48 66 50 93Z" fill="#fff"/><path d="M34 46Q40 36 47 46" stroke="#fff" stroke-width="3" fill="none"/>
+        <circle cx="60" cy="54" r="7" fill="#e8bd98"/><path d="M53 50Q60 42 67 50Z" fill="#2b2230"/><path d="M52 93Q53 66 60 63Q67 66 68 93Z" fill="#2f3550"/></g>
+      <path d="M22 116H76M28 124H70" stroke="#8a90c0" stroke-width="1.600"/>
+      <g transform="rotate(4 132 70)"><rect x="102" y="34" width="58" height="48" fill="#fff" stroke="#ddd2b8"/><rect x="107" y="39" width="48" height="34" fill="#bcd9e8"/><rect x="107" y="60" width="48" height="13" fill="#6fa9c9"/></g>
+      <path d="M106 100H156M110 108H150" stroke="#8a90c0" stroke-width="1.600"/>`,
+    // Épisode 3
+    ticket: () => `<g transform="rotate(-6 90 75)"><path d="M50 20H130V130L120 124L110 130L100 124L90 130L80 124L70 130L60 124L50 130Z" fill="#fffdf6" stroke="#d6cdb8" stroke-width="2"/>
+      <rect x="60" y="30" width="60" height="14" rx="3" fill="#d64545"/><text x="90" y="92" text-anchor="middle" font-family="Consolas, monospace" font-size="38" font-weight="700" fill="#2b2230">38</text><path d="M64 104H116" stroke="#c9c0ac" stroke-width="2"/></g>`,
+    'cle-112': () => `<g transform="translate(70 70) rotate(-20)" class="fv-tangue"><circle r="20" fill="none" stroke="#c9a04a" stroke-width="7"/><path d="M20 0H70M54 0V12M64 0V9" stroke="#c9a04a" stroke-width="7" stroke-linecap="round"/></g>
+      <path d="M60 60L48 92" stroke="#b9a07a" stroke-width="2"/><rect x="22" y="90" width="58" height="34" rx="5" fill="#fff6dc" stroke="#c9b48a" stroke-width="2"/><text x="51" y="114" text-anchor="middle" font-family="Consolas, monospace" font-size="20" font-weight="700" fill="#3f4f96">112</text>`,
+    recu: () => `<rect x="36" y="14" width="108" height="124" rx="4" fill="#fffdf6" stroke="#d6cdb8" stroke-width="2"/><rect x="36" y="14" width="108" height="20" rx="4" fill="#d64545"/>
+      ${[0, 1, 2, 3, 4].map((k) => `<text x="48" y="${54 + k * 18}" font-family="Consolas, monospace" font-size="11" fill="#5a5a6a">${2022 + k}</text><path d="M84 ${50 + k * 18}H112" stroke="#c9c0ac" stroke-width="2"/><path d="M120 ${48 + k * 18}L124 ${53 + k * 18}L132 ${43 + k * 18}" stroke="#3fae7a" stroke-width="2.500" fill="none"/>`).join('')}`,
+    'boite-112': () => `<rect x="30" y="16" width="120" height="118" rx="6" fill="#8a6234"/><rect x="44" y="30" width="92" height="90" rx="3" fill="#2e2219"/>
+      <g transform="rotate(-8 90 80)"><rect x="56" y="52" width="70" height="46" rx="2" fill="#fbf6ea"/><rect x="104" y="58" width="16" height="18" fill="#7fb3d9"/></g>
+      <path d="M44 30L14 40V128L44 120Z" fill="#e0b86e" stroke="#a8823e" stroke-width="2"/><text x="28" y="80" text-anchor="middle" font-family="Consolas, monospace" font-size="11" font-weight="700" fill="#5a3a1a" transform="rotate(-90 28 80)">112</text>
+      <g class="fv-brille"><path d="M150 26L153 34L161 37L153 40L150 48L147 40L139 37L147 34Z" fill="#fff6c8"/></g>`,
+    // Épisodes 3 et 4 : la carte postale de la tour de l'Horloge
+    'carte-postale': () => `<g transform="rotate(-4 90 75)"><rect x="14" y="24" width="152" height="104" rx="4" fill="#fffdf6" stroke="#d6cdb8" stroke-width="2"/>
+      <rect x="22" y="32" width="84" height="88" fill="#a9d4ee"/><rect x="22" y="100" width="84" height="20" fill="#dcc6a2"/>
+      <rect x="54" y="48" width="22" height="58" fill="#e6c48c"/><rect x="50" y="44" width="30" height="6" fill="#c9a065"/><path d="M54 44H76L65 36Z" fill="#c9a065"/><circle cx="65" cy="60" r="6" fill="#fff" stroke="#7a5a34" stroke-width="1.500"/>
+      <rect x="132" y="32" width="26" height="30" fill="#e88a9a" stroke="#fff" stroke-width="2"/><circle cx="130" cy="58" r="13" fill="none" stroke="#5a5a8a" stroke-width="1.500" opacity=".7"/>
+      <path d="M114 78H158M114 90H152M114 102H156" stroke="#8a90c0" stroke-width="1.600"/></g>`,
+    // Épisode 4
+    cartes: () => `<g transform="rotate(-5 90 75)"><rect x="20" y="30" width="120" height="90" fill="#f0e2bd" stroke="#c9b48a" stroke-width="2"/>
+      <path d="M40 110Q50 80 44 60Q60 44 80 50Q96 40 104 60Q120 74 108 96Q90 112 70 104Q54 116 40 110Z" fill="#d9c08a" stroke="#a88c5a" stroke-width="1.500"/>
+      <path d="M30 40Q60 50 90 42T138 46" stroke="#8fb8d6" stroke-width="2" fill="none" stroke-dasharray="4 3"/>
+      <g transform="translate(118 92)"><circle r="12" fill="#fffaf0" stroke="#8a6a3a"/><path d="M0-12L3 0L0 12L-3 0Z" fill="#b8483e"/></g></g>
+      <rect x="128" y="18" width="16" height="120" rx="8" fill="#e8d6aa" stroke="#c9b48a" transform="rotate(12 136 78)"/>`,
+    cafe: () => `<rect x="10" y="10" width="160" height="130" rx="10" fill="#cfe7f5"/><rect x="10" y="74" width="160" height="66" fill="#5fa6cf"/><path d="M10 82Q40 76 70 82T130 82T170 82" stroke="#e6f4fb" stroke-width="2" fill="none"/>
+      <rect x="10" y="108" width="160" height="32" fill="#c9a77a"/>
+      <g transform="translate(90 106)"><g class="fv-fumee"><path d="M-8-30q-6-8 0-16t0-16M8-30q-6-8 0-16t0-16" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" opacity=".85"/></g>
+        <path d="M-22-26H22L18 0H-18Z" fill="#fffaf2"/><path d="M-20-22H20L19-16H-19Z" fill="#6b4530"/><path d="M22-20Q36-20 32-8Q30-2 19-4" stroke="#fffaf2" stroke-width="5" fill="none"/><ellipse cy="2" rx="32" ry="6" fill="#fffaf2"/></g>`,
+    horloge: () => `<circle cx="90" cy="75" r="58" fill="#fffaf0" stroke="#7a5a34" stroke-width="6"/>${[...Array(12).keys()].map((k) => { const a = k * Math.PI / 6; return `<circle cx="${(90 + 48 * Math.sin(a)).toFixed(1)}" cy="${(75 - 48 * Math.cos(a)).toFixed(1)}" r="${k % 3 ? 2 : 3.500}" fill="#5a4a3e"/>`; }).join('')}
+      <path d="M90 75L58 75" stroke="#2b2230" stroke-width="5" stroke-linecap="round"/><path d="M90 75V36" stroke="#2b2230" stroke-width="3.500" stroke-linecap="round" class="fv-aiguille"/><circle cx="90" cy="75" r="5" fill="#b8483e"/>
+      <g transform="translate(150 24)"><circle r="12" fill="#ffd56a"/><path d="M0-20V-15M0 15V20M-20 0H-15M15 0H20M-14-14L-11-11M11 11L14 14M-14 14L-11 11M11-11L14-14" stroke="#f2b84b" stroke-width="2.500" stroke-linecap="round"/></g>`,
   };
 
   const persoDe = (cfg) => {
@@ -103,10 +285,10 @@ const FEUILLETON_VIDEO = {
     const sortie = (n) => { const d = new Date(st.debut + 'T00:00'); d.setDate(d.getDate() + 7 * (n - 1)); return dayKey(d); };
     const dispo = (n) => n === 1 || (!!st.vus[n - 1] && sortie(n) <= dayKey());
     if (!ep || !cfg || (!dispo(ep.num) && !st.vus[ep.num])) { location.hash = '#/feuilleton'; return; }
-    const quiParle = [...new Set(ep.lignes.map((l) => l.qui))];
-    const autre = quiParle[0];
     const moiP = Object.assign({}, typeof CH_PERSO_DEFAUT !== 'undefined' ? CH_PERSO_DEFAUT : {}, S.perso || {});
-    const autreP = persoDe(cfg.persos[autre] || {});
+    const echelle = cfg.echelle || 1.2;
+    const dessinPerso = (qui, emo) => { const c = cfg.persos[qui]; return c.type === 'pnj' ? pnjSvg(c, emo || 'content') : persoSvg(persoDe(c)); };
+    const emoDe = (qui, k) => (cfg.emo && cfg.emo[qui] ? cfg.emo[qui][k] : null);
     const autresReps = FEUILLETON.filter((e) => e !== ep).flatMap((e) => e.lignes.filter((l) => l.rep).map((l) => l.rep));
     let fr = !!S.videoFr, lent = false;
     const etroit = matchMedia('(max-width: 600px)').matches;
@@ -116,9 +298,10 @@ const FEUILLETON_VIDEO = {
       <div class="fv-scene" id="fvScene" style="aspect-ratio:${etroit ? '560 / 450' : '16 / 9'}">
         <svg viewBox="${etroit ? '150 0 560 450' : '0 0 800 450'}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${esc(ep.lieu)}">
           ${FV_DECORS[cfg.decor]()}
-          <g class="fv-perso" id="fvAutre" transform="translate(255 446) scale(1.2)"><g class="fv-corps">${persoSvg(autreP)}</g></g>
-          <g class="fv-perso" id="fvMoi" transform="translate(590 446) scale(1.2)"><g class="fv-corps">${persoSvg(moiP)}</g></g>
-          <g class="fv-gros" id="fvGros" transform="translate(310 20)"><rect width="180" height="150" rx="16" fill="#fffdf8" stroke="#fff" stroke-width="6"/><rect width="180" height="150" rx="16" fill="none" stroke="#2b1f3a" stroke-opacity=".12" stroke-width="1"/><g id="fvGrosContenu"></g></g>
+          ${Object.entries(cfg.persos).map(([qui, c]) => `<g class="fv-perso" id="fvP_${qui}" transform="translate(${c.x} 446) scale(${echelle})"><g class="fv-corps">${dessinPerso(qui, emoDe(qui, ep.lignes.findIndex((l) => l.qui === qui)))}</g></g>`).join('')}
+          <g class="fv-perso" id="fvMoi" transform="translate(${cfg.moi || 590} 446) scale(${echelle})"><g class="fv-corps">${persoSvg(moiP)}</g></g>
+          ${FV_DEVANT[cfg.decor] ? FV_DEVANT[cfg.decor]() : ''}
+          <g class="fv-gros" id="fvGros" transform="translate(${(cfg.gros || [310, 14]).join(' ')})" style="--gx:${(cfg.gros || [310])[0]}px;--gy:${(cfg.gros || [0, 14])[1]}px"><rect width="180" height="150" rx="16" fill="#fffdf8" stroke="#fff" stroke-width="6"/><rect width="180" height="150" rx="16" fill="none" stroke="#2b1f3a" stroke-opacity=".12" stroke-width="1"/><g id="fvGrosContenu"></g></g>
         </svg>
         <div class="fv-lieu">📍 ${esc(ep.lieu)}</div>
         <button type="button" class="fv-debut" id="fvDebut"><span class="fv-clap">🎬</span><small>Épisode ${ep.num}</small><b>${esc(ep.titre)}</b><span class="fv-go">▶ Regarder</span></button>
@@ -163,10 +346,9 @@ const FEUILLETON_VIDEO = {
       lecteur.play().catch(() => { if (!pause) done(); });
     });
     window.addEventListener('hashchange', () => { lecteur.pause(); }, { once: true });
-    const anime = (qui) => {
-      $('#fvAutre').classList.toggle('fv-parle', qui === 'autre');
-      $('#fvMoi').classList.toggle('fv-parle', qui === 'moi');
-    };
+    const anime = (qui) => { const id = qui === 'moi' ? 'fvMoi' : 'fvP_' + qui; $$('.fv-perso').forEach((g) => g.classList.toggle('fv-parle', g.id === id)); };
+    // L'humeur du personnage (style des scènes) change avec ce qu'il dit
+    const humeur = (qui, k) => { const c = cfg.persos[qui], e = emoDe(qui, k), g = $('#fvP_' + qui); if (c && c.type === 'pnj' && e && g) g.querySelector('.fv-corps').innerHTML = pnjSvg(c, e); };
     const plan = (k) => {
       const g = $('#fvGros'), id = cfg.plans[k];
       if (!id) { g.classList.remove('on'); return; }
@@ -199,7 +381,7 @@ const FEUILLETON_VIDEO = {
       const t = ++jeton; i = k; phase = 'ligne';
       stopAudio(); progres();
       const l = ep.lignes[k], p = FEUILLETON_PERSOS[l.qui];
-      plan(k); anime('autre');
+      plan(k); humeur(l.qui, k); anime(l.qui);
       sousTitre(`${p.em} ${esc(p.nom)}`, l);
       if (pause) { await attendrePause(); if (t !== jeton || !vivant()) return; }
       await parler(l.he);

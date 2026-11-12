@@ -3009,7 +3009,8 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 @keyframes fvParle { from { transform: translateY(0); } to { transform: translateY(-5px) rotate(.6deg); } }
 .fv-gros { opacity: 0; transform-box: fill-box; transform-origin: center; transition: opacity .35s; pointer-events: none; }
 .fv-gros.on { opacity: 1; animation: fvPop .45s cubic-bezier(.3, 1.6, .5, 1); }
-@keyframes fvPop { from { transform: translate(310px, 20px) scale(.6); } to { transform: translate(310px, 20px) scale(1); } }
+@keyframes fvPop { from { transform: translate(var(--gx, 310px), var(--gy, 14px)) scale(.6); } to { transform: translate(var(--gx, 310px), var(--gy, 14px)) scale(1); } }
+.fv-en-pause svg .fv-gros { animation-play-state: running !important; }
 .fv-main { font-family: 'Segoe Script', 'Bradley Hand', 'Comic Sans MS', cursive; font-size: 20px; fill: #3f4f96; }
 .fv-main.he { font-family: 'Frank Ruhl Libre', serif; font-size: 22px; }
 .fv-cle { animation: fvCle 1.6s ease-in-out infinite alternate; }
@@ -3086,3 +3087,26 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .bulle-plus { width: 32px; height: 32px; font-size: 1rem; }
 .bulle-plus.on { background: color-mix(in srgb, var(--gold) 30%, var(--card)); box-shadow: none; }
 .bulle-plus-note { color: var(--muted); font-size: .72rem; }
+
+/* Feuilleton vidéo : animations des décors des épisodes 2 à 4 */
+.fv-lueur { animation: fvLueur 4s ease-in-out infinite alternate; }
+@keyframes fvLueur { to { opacity: .82; } }
+.fv-ampoule { animation: fvAmpoule 3s ease-in-out infinite; }
+@keyframes fvAmpoule { 0%, 100% { opacity: 1; } 48% { opacity: .95; } 50% { opacity: .55; } 52% { opacity: 1; } }
+.fv-queue { animation: fvQueue 1.8s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 0% 100%; }
+@keyframes fvQueue { from { transform: rotate(-10deg); } to { transform: rotate(14deg); } }
+.fv-clignote { animation: fvBrille .9s steps(2) infinite alternate; }
+.fv-aiguille { animation: fvAiguille 12s linear infinite; transform-box: fill-box; transform-origin: 0% 50%; }
+@keyframes fvAiguille { to { transform: rotate(360deg); } }
+.fv-boite { animation: fvBrille 1.4s ease-in-out infinite alternate; }
+.fv-mouettes { animation: fvMouettes 22s linear infinite; }
+@keyframes fvMouettes { from { transform: translateX(-120px); } to { transform: translateX(160px); } }
+.fv-bateau, .fv-tangue { animation: fvTangue 2.6s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center bottom; }
+@keyframes fvTangue { from { transform: rotate(-3deg) translateY(0); } to { transform: rotate(3deg) translateY(-2px); } }
+.fv-tapis { animation: fvPlante 3.2s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: top center; }
+.fv-store { animation: fvStore 2.4s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: top center; }
+@keyframes fvStore { to { transform: scaleY(1.04); } }
+.fv-vague { animation: fvVague 2s ease-in-out infinite alternate; }
+@keyframes fvVague { to { transform: translateX(-8px); } }
+.fv-fumee { animation: fvFumee 2.4s ease-in-out infinite; }
+@keyframes fvFumee { 0% { opacity: 0; transform: translateY(6px); } 40% { opacity: .9; } 100% { opacity: 0; transform: translateY(-8px); } }
