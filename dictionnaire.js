@@ -16,7 +16,7 @@ const DICO_CATS = [['mot', '📗', 'Mots'], ['expr', '💬', 'Expressions'], ['p
 function dicoCatAuto(w) {
   const he = w.he.normalize('NFC').trim();
   if (DICO_EXPRESSIONS.has(he)) return 'expr';
-  if (w.theme === 'contraires') return 'mot'; // les paires de contraires restent avec les mots
+  if (w.theme === 'contraires' || w.theme === 'binyanim') return 'mot'; // les paires de contraires restent avec les mots
   if (w.theme === 'parle' && /\s/.test(he)) return 'expr'; // l'hébreu parlé : les tournures de plusieurs mots sont des expressions
   if (!/\s/.test(he)) return 'mot';
   // Plusieurs mots : une question, une virgule, un pronom sujet ou trois mots et plus, c'est une phrase ; sinon un mot composé
