@@ -384,6 +384,7 @@ const THEMES = [
     ['יְמָמָה', 'yemama', 'vingt-quatre heures, journée entière'],
     ['חֲצוֹת', 'khatsot', 'minuit'],
     ['תְּקוּפָה', 'tkoufa', 'époque, période'],
+    ['דּוֹר', 'dor', 'génération'],
   ]},
   { id: 'grandsnombres', name: 'Grands nombres', emoji: '💯', words: [
     ['אֶפֶס', 'efes', 'zéro (0)'],
@@ -626,6 +627,9 @@ const THEMES = [
     ['רֵיק', 'rek', 'vide'],
     ['שָׁבוּר', 'shavour', 'cassé'],
     ['מְפֻרְסָם', 'mefoursam', 'célèbre'],
+    ['שָׁקֵט', 'shaket', 'calme, silencieux'],
+    ['עָמֹק', 'amok', 'profond'],
+    ['שָׂבֵעַ', 'savéa', 'rassasié'],
   ]},
   { id: 'animaux', name: 'Animaux & paysages', emoji: '🦋', words: [
     ['פָּרָה', 'para', 'vache'],
@@ -717,6 +721,8 @@ const THEMES = [
     ['לִצְחֹק', 'litskhok', 'rire'],
     ['לְחַיֵּךְ', 'lekhayekh', 'sourire'],
     ['לְפַחֵד', 'lefakhed', 'avoir peur'],
+    ['לִסְפֹּר', 'lispor', 'compter'],
+    ['לְגַדֵּל', 'legadel', 'élever, faire pousser'],
   ]},
   { id: 'quotidien', name: 'Phrases du quotidien', emoji: '☀️', words: [
     ['אֲנִי רוֹצָה לִישֹׁן', 'ani rotsa lishon', 'je veux dormir (femme)'], // Tatoeba 13996861
@@ -898,6 +904,7 @@ const THEMES = [
     ['צִלּוּם', 'tsiloum', 'photographie'],
     ['שְׂחִיָּה', 'skhiya', 'natation'],
     ['רִיצָה', 'ritsa', 'course (à pied)'],
+    ['דַּיִג', 'dayig', 'pêche (l’activité)'],
   ] },
   { id: 'fetes', name: 'Fêtes', emoji: '🕎', words: [
     ['נֵרוֹת', 'nerot', 'bougies'],
@@ -1457,6 +1464,7 @@ const THEMES = [
     ['דָּתִי', 'dati', 'religieux'],
     ['סְבִיבָה', 'sviva', 'environnement'],
     ['מְחָאָה', 'mekhaa', 'protestation'],
+    ['יֹקֶר', 'yoker', 'cherté, vie chère'],
   ] },
   { id: 'arts', name: 'Musique et arts', emoji: '🎻', words: [
     ['מוּזִיקָה', 'mouzika', 'musique'],
@@ -1572,6 +1580,7 @@ const THEMES = [
     ['מְעַט', 'meat', 'peu'],
     ['בְּעֶרֶב', 'beérev', 'le soir'],
     ['בַּבֹּקֶר', 'baboker', 'le matin'],
+    ['מִזְּמַן', 'mizman', 'depuis longtemps'],
   ] },
   { id: 'verbes3', name: 'Verbes utiles', emoji: '⚙️', words: [
     ['לְהַצִּיעַ', 'lehatsia', 'proposer'],
@@ -1634,6 +1643,7 @@ const THEMES = [
     ['לְהִתְפַּתֵּחַ', 'lehitpatéakh', 'se développer'],
     ['לְהַמְתִּין', 'lehamtin', 'attendre (soutenu)'],
     ['לְהִצְטָרֵךְ', 'lehitstarekh', 'avoir besoin de'],
+    ['לְלַמֵּד', 'lelamed', 'enseigner'],
   ] },
   { id: 'parle', name: 'Hébreu parlé et argot', emoji: '😎', words: [
     ['סַבַּבָּה', 'sababa', 'd’accord, cool, ça marche'],
@@ -1701,6 +1711,8 @@ const THEMES = [
     ['בֹּקֶר טוֹב עוֹלָם', 'boker tov olam', 'bonjour le monde ! (enfin réveillé)'],
     ['לֵךְ תֵּדַע', 'lekh teda', 'va savoir'],
     ['מַה זֶּה מְשַׁנֶּה', 'ma zé meshané', 'qu’est-ce que ça change ?'],
+    ['חֲבָל', 'khaval', 'dommage'],
+    ['אֵין עָלַיִךְ', 'ein alayikh', 't’es la meilleure (à une femme)'],
   ] },
   { id: 'contraires', name: 'Les contraires', emoji: '☯️', words: [
     ['גָּדוֹל – קָטָן', 'gadol – katan', 'grand – petit'],
