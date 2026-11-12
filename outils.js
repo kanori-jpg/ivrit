@@ -476,7 +476,7 @@ function grammaire(id, etape) {
   const prec = GRAMMAIRE[i - 1], suiv = GRAMMAIRE[i + 1];
   const partie = GRAMMAIRE_PARTIES.find((p) => p.ids.includes(l.id));
   const tete = `<div class="q-head"><a href="#/grammaire">← Toutes les leçons</a><span>${partie ? `${partie.em} ${esc(partie.titre)}` : `${i + 1}/${GRAMMAIRE.length}`}</span></div><h2>${l.em} ${texteGram(l.titre)}</h2>`;
-  const exemple = (e) => `<div class="gr-ex"><div class="gr-ex-he">${HE(e.he)}</div><small>${TRS(e.tr)}${esc(e.fr)}</small>${sayBtn(e.he)}</div>`;
+  const exemple = (e) => `<div class="gr-ex"><div class="gr-ex-he">${HE(e.he)}</div><small>${TRS(e.tr)}${esc(e.fr)}</small>${sayBtn(e.he)}${plusGram(e)}</div>`;
   const piedNav = `<div class="row mt" style="justify-content:space-between">${prec ? `<a class="btn ghost" href="#/grammaire/${prec.id}">← Leçon précédente</a>` : '<span></span>'}${suiv ? `<a class="btn ghost" href="#/grammaire/${suiv.id}">Leçon suivante →</a>` : '<span></span>'}</div>`;
   if (etape === 'tout') {
     app.innerHTML = `${tete}
@@ -512,6 +512,20 @@ function grammaire(id, etape) {
   };
   rendre();
 }
+// Le + des exemples de grammaire : ajoute l'exemple à « Mes mots » (⭐ = déjà ajouté ; on peut le retirer)
+function plusGram(e) {
+  if (WORDS.some((w) => w.theme !== 'mesmots' && NFC(w.he) === NFC(e.he))) return '';
+  const dedans = estDansMesMots(e.he);
+  return `<button type="button" class="gl-plus gr-plus${dedans ? ' on' : ''}" data-he="${esc(NFC(e.he))}" data-tr="${esc(e.tr || '')}" data-fr="${esc(e.fr)}" aria-label="${dedans ? 'Retirer de mes mots à apprendre' : 'Ajouter à mes mots à apprendre'}" title="${dedans ? 'Dans tes mots · toucher pour retirer' : 'Ajouter à mes mots à apprendre'}">${dedans ? '⭐' : '＋'}</button>`;
+}
+document.addEventListener('click', (ev) => {
+  const b = ev.target.closest('.gr-plus'); if (!b) return;
+  ev.stopPropagation();
+  const { he, tr, fr } = b.dataset;
+  if (estDansMesMots(he)) { retirerMesMots(he); toast('Retiré de tes mots à apprendre'); }
+  else { ajouterMesMots([he, tr, fr]); toast('⭐ Ajouté à tes cartes (thème « Mes mots »)'); }
+  b.outerHTML = plusGram({ he, tr, fr });
+});
 function exerciceGram(l, i) {
   const file = shuffle(l.exercices).map((e) => ({ ...e }));
   const nb = file.length;
@@ -556,12 +570,10 @@ function exerciceGram(l, i) {
     addXP(gagne);
     if (bonnes === nb) confetti();
     const suiv = GRAMMAIRE[i + 1];
-    // Les exemples de la leçon rejoignent « Mes mots », révisés dans les cartes et la séance du jour
-    const nouveauxMots = l.exemples.filter((e) => !estDansMesMots(e.he) && !WORDS.some((w) => NFC(w.he) === NFC(e.he)));
-    nouveauxMots.forEach((e) => ajouterMesMots([NFC(e.he), e.tr, e.fr]));
-    if (nouveauxMots.length) later(() => toast(`⭐ ${nouveauxMots.length} expression${nouveauxMots.length > 1 ? 's' : ''} ajoutée${nouveauxMots.length > 1 ? 's' : ''} à tes mots à apprendre`), 600);
+    // Les exemples de la leçon : c'est toi qui choisis, avec le +, ceux que tu veux apprendre
+    const nouveauxMots = l.exemples.filter((e) => plusGram(e));
     app.innerHTML = `<div class="card center result"><div class="em">${bonnes === nb ? '🏆' : '💪'}</div><h2>${bonnes === nb ? 'Sans faute !' : 'Leçon terminée'}</h2><p class="score">${bonnes} / ${nb}</p><p class="sub">+${gagne} XP${premiere ? ' (dont 10 de bonus)' : ''}</p>
-    ${nouveauxMots.length ? `<div class="sea-new"><div class="cap">⭐ Ajoutés à tes mots à apprendre</div>${nouveauxMots.map((e) => `<div>${HE(e.he)}<small>${TRS(e.tr)}${esc(e.fr)}</small>${sayBtn(e.he)}</div>`).join('')}</div>` : ''}
+    ${nouveauxMots.length ? `<div class="sea-new"><div class="cap">Les exemples de la leçon · touche ＋ pour en apprendre un</div>${nouveauxMots.map((e) => `<div>${HE(e.he)}<small>${TRS(e.tr)}${esc(e.fr)}</small>${sayBtn(e.he)}${plusGram(e)}</div>`).join('')}</div>` : ''}
     <div class="row" style="justify-content:center">${suiv ? `<a class="btn gold" href="#/grammaire/${suiv.id}">Leçon suivante →</a>` : '<a class="btn gold" href="#/grammaire">Toutes les leçons</a>'}<a class="btn ghost" href="#/grammaire/${l.id}">Revoir la leçon</a><button class="btn ghost" id="gagain">Refaire</button></div></div>`;
     $('#gagain').onclick = () => exerciceGram(l, i);
   };

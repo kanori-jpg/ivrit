@@ -2972,3 +2972,8 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .gl-etat { font-size: .82rem; font-weight: 700; color: var(--green); }
 .gl-etat .he { font-size: 1rem; }
 .gl-annuler { border: 0; background: none; color: var(--muted); font-size: .8rem; text-decoration: underline; cursor: pointer; }
+
+/* Grammaire : le + à côté des exemples */
+.gr-ex, .sea-new > div { position: relative; }
+.gr-plus { width: 30px; height: 30px; font-size: 1rem; margin-inline-start: 6px; vertical-align: middle; flex: none; }
+.gr-plus.on { background: color-mix(in srgb, var(--gold) 30%, var(--card)); box-shadow: none; }
