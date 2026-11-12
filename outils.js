@@ -536,9 +536,8 @@ function exerciceGram(l, i) {
       save();
       $('#fb').innerHTML = `${ok ? '✅ Bravo !' : '❌ Pas tout à fait.'} ${texteGramSon(e.pourquoi)}`;
       if (he && strip(e.ok).length > 1) speak(e.ok);
-      // Le temps de lire l'explication : c'est toi qui passes à la suite après une erreur
-      if (ok) later(avancer, 1800);
-      else { $('#suite').innerHTML = '<button class="btn" id="contin">Continuer</button>'; $('#contin').onclick = avancer; }
+      // Le temps de lire l'explication : c'est toujours toi qui passes à la suite
+      $('#suite').innerHTML = '<button class="btn" id="contin">Continuer →</button>'; $('#contin').onclick = avancer;
     };
     $$('.opt').forEach((b) => (b.onclick = () => choisir(+b.dataset.j)));
     keyHandler = (ev) => {
@@ -1315,8 +1314,8 @@ function seance() {
       save();
       $('#fb').innerHTML = `${ok ? '✅ Bravo !' : '❌ Pas tout à fait.'} ${texteGramSon(e.pourquoi)}`;
       if (he && strip(e.ok).length > 1) speak(e.ok);
-      if (ok) later(avancer, 1600);
-      else { $('#suite').innerHTML = `<button class="btn" id="contin">Continuer</button> <a class="btn ghost" href="#/grammaire/${e.lecon.id}">Revoir la leçon</a>`; $('#contin').onclick = avancer; }
+      // Le temps de lire l'explication : c'est toujours toi qui passes à la suite
+      $('#suite').innerHTML = `<button class="btn" id="contin">Continuer →</button>${ok ? '' : ` <a class="btn ghost" href="#/grammaire/${e.lecon.id}">Revoir la leçon</a>`}`; $('#contin').onclick = avancer;
     };
     $$('.opt').forEach((b) => (b.onclick = () => choisir(+b.dataset.j)));
     keyHandler = (ev) => {

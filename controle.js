@@ -69,8 +69,8 @@ function controleGram(cle) {
       noterGram(e.lecon.id, ok); save();
       $('#fb').innerHTML = `${ok ? '✅ Bravo !' : '❌ Pas tout à fait.'} ${texteGramSon(e.pourquoi)}`;
       if (he && strip(e.ok).length > 1) speak(e.ok);
-      if (ok) later(avancer, 1600);
-      else { $('#suite').innerHTML = '<button class="btn" id="contin">Continuer</button>'; $('#contin').onclick = avancer; }
+      // Le temps de lire l'explication : c'est toujours toi qui passes à la suite
+      $('#suite').innerHTML = '<button class="btn" id="contin">Continuer →</button>'; $('#contin').onclick = avancer;
     };
     $$('.opt').forEach((b) => (b.onclick = () => choisir(+b.dataset.j)));
     keyHandler = (ev) => {
