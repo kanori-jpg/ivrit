@@ -1429,11 +1429,52 @@ function sauvegardeUI(apercu) {
     $('#saveNo').onclick = () => sauvegardeUI();
     $('#saveYes').onclick = () => {
       localStorage.setItem(KEY_AVANT, JSON.stringify(S));
-      localStorage.setItem(KEY, JSON.stringify(Object.assign(defaults(), apercu.progression, { shInit: true })));
+      localStorage.setItem(KEY, JSON.stringify(Object.assign(defaults(), apercu.progression, { shInit: true, remiseAZero: Date.now() }))); // la synchro ne la mélange pas avec l'ancienne
       location.reload();
     };
   }
-  if (avant) $('#saveUndo').onclick = () => { localStorage.setItem(KEY, avant); localStorage.removeItem(KEY_AVANT); location.reload(); };
+  if (avant) $('#saveUndo').onclick = () => { localStorage.setItem(KEY, JSON.stringify(Object.assign(JSON.parse(avant), { remiseAZero: Date.now() }))); localStorage.removeItem(KEY_AVANT); location.reload(); };
+  zoneRemiseAZero(zone);
+}
+
+/* ============ Recommencer depuis le début ============
+   Remet l'XP et tout ce qui a été appris à zéro, sans rien effacer :
+   - la progression d'avant est gardée dans ce navigateur (KEY_ZERO) et téléchargée dans un fichier ;
+   - on garde ce qui est à toi et tes réglages (Mes mots, sons signalés, options, personnage) ;
+   - remiseAZero (date) dit à la synchronisation de ne pas ramener l'ancienne progression des autres appareils. */
+const KEY_ZERO = 'ivrit-ludique-avant-remise-a-zero';
+const GARDES_REMISE = ['mesMots', 'sonsAvis', 'sonsRefaitVu', 'dicoCat', 'goal', 'night', 'sansVoyelles', 'sansTranslit', 'chronoMuet', 'voyProg', 'styleScenes', 'videoFr', 'micro', 'relecture', 'rolesTrad', 'perso', 'lastExport'];
+function remettreAZero() {
+  exporterProgression(); // un fichier de la progression d'avant, en plus de la copie gardée ici
+  localStorage.setItem(KEY_ZERO, JSON.stringify({ date: new Date().toISOString(), progression: S }));
+  const neuf = Object.assign(defaults(), { shInit: true, remiseAZero: Date.now() });
+  GARDES_REMISE.forEach((k) => { if (S[k] !== undefined) neuf[k] = JSON.parse(JSON.stringify(S[k])); });
+  localStorage.setItem(KEY, JSON.stringify(neuf));
+  setTimeout(() => { location.hash = '#/'; location.reload(); }, 600); // le temps que le fichier parte
+}
+function zoneRemiseAZero(zone) {
+  let ancienne = null;
+  try { ancienne = JSON.parse(localStorage.getItem(KEY_ZERO) || 'null'); } catch { ancienne = null; }
+  const bloc = document.createElement('div');
+  bloc.innerHTML = `<h3>Recommencer depuis le début</h3><div class="card">
+    <p class="sub" style="margin:0 0 10px">Remet à zéro l’XP, les shekels, les mots appris, les leçons, les histoires, le feuilleton et les lettres, pour tout reprendre depuis le début. Rien n’est effacé : ta progression actuelle est gardée dans ce navigateur et téléchargée dans un fichier. Tu gardes « Mes mots », tes sons signalés et tes réglages.</p>
+    <div id="zeroZone"><button class="btn ghost" id="zeroGo">🔄 Remettre ma progression à zéro</button></div>
+    ${ancienne ? `<p style="margin:12px 0 0"><button class="link" id="zeroUndo">↩ Retrouver ma progression d’avant la remise à zéro (${esc(new Date(ancienne.date).toLocaleDateString('fr-FR'))} : ${esc(resumeProgression(ancienne.progression))})</button></p>` : ''}
+  </div>`;
+  zone.appendChild(bloc);
+  $('#zeroGo').onclick = () => {
+    $('#zeroZone').innerHTML = `<div class="save-box"><b>Tout reprendre depuis le début ?</b>
+      <p class="hint" style="margin:6px 0 10px">Actuelle : ${esc(resumeProgression(S))}. Elle sera gardée et tu pourras la retrouver ici.</p>
+      <div class="row"><button class="btn" id="zeroOui">Oui, remettre à zéro</button><button class="btn ghost" id="zeroNon">Annuler</button></div></div>`;
+    $('#zeroNon').onclick = () => sauvegardeUI();
+    $('#zeroOui').onclick = remettreAZero;
+  };
+  if (ancienne) $('#zeroUndo').onclick = () => {
+    if (!confirm('Revenir à ta progression d’avant la remise à zéro ? Ce que tu as fait depuis sera remplacé (une copie est gardée pour revenir en arrière).')) return;
+    localStorage.setItem(KEY_AVANT, JSON.stringify(S));
+    localStorage.setItem(KEY, JSON.stringify(Object.assign(defaults(), ancienne.progression, { shInit: true, remiseAZero: Date.now() })));
+    location.reload();
+  };
 }
 
 Object.assign(routes, { sons: pageSons, seance, conjexo, erreurs, cursive, grammaire, histoire, carte, scenes, jour, journal, boutique: () => location.replace('#/chambre/boutique'), conjugaison });

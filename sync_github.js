@@ -18,7 +18,16 @@
   const canon = (v) => (Array.isArray(v) ? `[${v.map(canon).join(',')}]` : estObj(v) ? `{${Object.keys(v).sort().map((k) => JSON.stringify(k) + ':' + canon(v[k])).join(',')}}` : JSON.stringify(v));
   const vide = (d) => !(d.xp > 0) && !Object.keys(d.cards || {}).length;
   const REGLAGES_OBJETS = ['chambre', 'perso']; // la chambre et le personnage : on garde l'appareil le plus récent
-  function fusionner(local, distant, localPlusRecent) {
+  // Après une remise à zéro (ou une restauration), la progression d'avant ne doit pas revenir par un autre appareil :
+  // du côté le plus ancien, on ne garde que ce qui est à toi et les réglages (GARDES_REMISE, dans outils.js)
+  function apresRemise(local, distant) {
+    const ra = local.remiseAZero || 0, rd = distant.remiseAZero || 0;
+    if (ra === rd) return [local, distant];
+    const garder = (p) => { const g = {}; (typeof GARDES_REMISE !== 'undefined' ? GARDES_REMISE : ['mesMots', 'sonsAvis']).forEach((k) => { if (p[k] !== undefined) g[k] = p[k]; }); return g; };
+    return ra > rd ? [local, garder(distant)] : [garder(local), distant];
+  }
+  function fusionner(local0, distant0, localPlusRecent) {
+    const [local, distant] = apresRemise(local0, distant0);
     // « base » : l'appareil le plus récent (ses réglages l'emportent) ; une progression vide ne l'emporte jamais
     const [base, autre] = vide(local) ? [distant, local] : vide(distant) ? [local, distant] : localPlusRecent ? [local, distant] : [distant, local];
     const r = JSON.parse(JSON.stringify(base));
@@ -36,7 +45,7 @@
         case 'correspondances': Object.entries(b || {}).forEach(([id, cb]) => { const ca = a[id]; if (!ca) { a[id] = cb; return; } if (cb.debut && (!ca.debut || cb.debut < ca.debut)) ca.debut = cb.debut; ca.rep = { ...(cb.rep || {}), ...(ca.rep || {}) }; }); return;
         case 'quizIsrael': a.best = Math.max(a.best || 0, b.best || 0); a.parties = Math.max(a.parties || 0, b.parties || 0); return;
         case 'rates': Object.entries(b || {}).forEach(([w, rb]) => { const ra = a[w]; if (!ra || (rb.n || 0) > (ra.n || 0)) a[w] = rb; }); return;
-        case 'xp': case 'written': case 'perfect': r[k] = Math.max(a || 0, b || 0); return;
+        case 'xp': case 'written': case 'perfect': case 'remiseAZero': r[k] = Math.max(a || 0, b || 0); return;
         case 'best': case 'stats': Object.entries(b || {}).forEach(([kk, x]) => { if (typeof x === 'number') a[kk] = Math.max(a[kk] || 0, x); }); return;
         case 'lastDay': case 'seance': case 'lastExport': if ((b || '') > (a || '')) r[k] = b; return;
         case 'mesMots': { const vus = new Set(a.map((m) => NFC(m[0]))); (b || []).forEach((m) => { if (!vus.has(NFC(m[0]))) a.push(m); }); return; }
