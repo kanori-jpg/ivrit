@@ -1704,7 +1704,7 @@ const THEMES = [
     ['תַּגִּידִי', 'taguidi', 'dis (à une femme)'],
     ['רֶגַע', 'rega', 'attends, une seconde'],
     ['בָּרוּר', 'barour', 'évidemment, c’est clair'],
-    ['נִרְאֶה', 'nirè', 'on verra'],
+    ['נִרְאֶה', 'nirè', 'on dirait, ça a l’air (נִרְאֶה כְּמוֹ) ; on verra'],
     ['לֹא מְשַׁנֶּה', 'lo meshané', 'peu importe'],
     ['אֵין לִי מֻשָּׂג', 'ein li moussag', 'je n’en ai aucune idée'],
     ['מַה נִּשְׁמָע אִתְּךָ', 'ma nishma itkha', 'quoi de neuf pour toi ? (à un homme)'],
