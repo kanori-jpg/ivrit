@@ -930,12 +930,15 @@ const FEUILLETON_VIDEO = {
       sous.innerHTML = `<div class="fv-qui">${nom}</div>
         <div class="fv-he">${phraseCliquable(l.he)}</div>
         <small class="tr">${esc(l.tr)}</small>
-        <div class="fv-actions"><button type="button" class="fv-reecoute" data-he="${esc(l.he)}" title="Réécouter la phrase" aria-label="Réécouter la phrase">🔊 Réécouter</button>${typeof plusGram === 'function' ? plusGram(l) : ''}</div>
+        <div class="fv-actions"><button type="button" class="fv-reecoute" data-he="${esc(l.he)}" title="Réécouter la phrase" aria-label="Réécouter la phrase">🔊 Réécouter</button><button type="button" class="fv-reecoute fv-trad" aria-expanded="${fr}">${fr ? 'Masquer' : 'Traduction'}</button>${typeof plusGram === 'function' ? plusGram(l) : ''}</div>
         <div class="fv-fr" ${fr ? '' : 'hidden'}>${esc(l.fr)}</div>${choixHtml}`;
       sous.appendChild(bulle); bulle.hidden = true;
       brancherMotsClic(sous, bulle);
       sous.querySelectorAll('.mot-clic').forEach((b) => b.addEventListener('click', () => mettrePause(true)));
       // Réécouter : on met la vidéo en pause et on joue la phrase à part, sans toucher au déroulement
+      // Traduction : seulement si tu la demandes, phrase par phrase
+      const tr1 = sous.querySelector('.fv-trad');
+      if (tr1) tr1.onclick = () => { const z = sous.querySelector('.fv-fr'); z.hidden = !z.hidden; tr1.textContent = z.hidden ? 'Traduction' : 'Masquer'; tr1.setAttribute('aria-expanded', String(!z.hidden)); };
       const re1 = sous.querySelector('.fv-reecoute');
       if (re1) re1.onclick = () => { if (phase === 'ligne' || phase === 'reponse') mettrePause(true); const f = fichierSon(re1.dataset.he); if (!f) return speak(re1.dataset.he); ecoute.src = 'audio/' + f; ecoute.playbackRate = lent ? 0.75 : 1; ecoute.play().catch(() => {}); };
     };
