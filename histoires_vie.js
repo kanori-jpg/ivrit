@@ -518,6 +518,78 @@ const HISTOIRES_VIE = [
     ['שָׁמַעְתְּ אֶת הַשּׁוֹפָר בְּבֵית הַכְּנֶסֶת?', 'shamat et hashofar bevet hakneset ?', 'Tu as entendu le shofar à la synagogue ?', 'כֵּן! הוּא הָיָה חָזָק מְאוֹד', 'kèn ! hou haya khazak meod', 'Oui ! Il était très fort'],
     ['אֲנִי מְחַכָּה לָךְ בְּסֻכּוֹת. נְשִׁיקוֹת!', 'ani mekhaka lakh beSoukkot. neshikot !', 'Je t’attends pour Soukkot. Bisous !'],
   ], mots: [['מֹתֶק', 'motek', 'chéri(e), mon cœur'], ['לְאַחֵל', 'leakhel', 'souhaiter'], ['מָתוֹק', 'matok', 'doux, sucré'], ['שׁוֹפָר', 'shofar', 'shofar (corne de bélier)'], ['בֵּית כְּנֶסֶת', 'beit kneset', 'synagogue']], formes: {} },
+  // Chapitre 19 : Ramla, le goût du quotidien
+  { id: 'houmous', cat: 'Le goût du quotidien', em: '🥙', title: 'Au restaurant de houmous', who: 'Le serveur', lignes: [
+    ['שָׁלוֹם! חוּמוּס עִם מָה?', 'shalom ! khoumous im ma ?', 'Bonjour ! Un houmous avec quoi ?', 'חוּמוּס עִם פוּל, בְּבַקָּשָׁה', 'khoumous im foul, bevakasha', 'Un houmous avec des fèves, s’il vous plaît'],
+    ['רוֹצָה גַּם בֵּיצָה קָשָׁה?', 'rotsa gam beitsa kasha ?', 'Vous voulez aussi un œuf dur ?', 'כֵּן, וְעוֹד פִּיתָה', 'kèn, veod pita', 'Oui, et une pita de plus'],
+    ['מָה לִשְׁתּוֹת? יֵשׁ לִימוֹנָדָה עִם נַעְנַע.', 'ma lishtot ? yesh limonada im naana.', 'Qu’est-ce que vous buvez ? Il y a de la limonade à la menthe.', 'נִשְׁמָע מְצֻיָּן', 'nishma metsouyan', 'Ça a l’air excellent'],
+    ['בְּתֵאָבוֹן! תַּגִּידִי אִם חָסֵר מַשֶּׁהוּ.', 'beteavon ! taguidi im khaser mashéhou.', 'Bon appétit ! Dites-moi s’il manque quelque chose.', 'אֶפְשָׁר עוֹד קְצָת טְחִינָה?', 'efshar od ktsat tkhina ?', 'Je peux avoir encore un peu de tahini ?'],
+    ['בֶּטַח! הַטְּחִינָה עָלֵינוּ.', 'betakh ! hatkhina alenou.', 'Bien sûr ! Le tahini, c’est la maison qui offre.'],
+  ], mots: [['חוּמוּס', 'khoumous', 'houmous'], ['פוּל', 'foul', 'fèves'], ['נַעְנַע', 'naana', 'menthe'], ['טְחִינָה', 'tkhina', 'tahini, crème de sésame'], ['בְּתֵאָבוֹן', 'beteavon', 'bon appétit']], formes: {} },
+  { id: 'shoukramla', cat: 'Le goût du quotidien', em: '🍓', title: 'Au marché de Ramla', who: 'Le marchand de fruits', lignes: [
+    ['תּוּתִים טְרִיִּים! רַק עֶשֶׂר שְׁקָלִים לַקִּילוֹ!', 'toutim triyim ! rak eser shkalim lakilo !', 'Des fraises fraîches ! Seulement dix shekels le kilo !', 'הֵם מְתוּקִים?', 'hem metoukim ?', 'Elles sont sucrées ?'],
+    ['תִּטְעֲמִי! מְתוּקִים כְּמוֹ דְּבַשׁ.', 'titami ! metoukim kmo dvash.', 'Goûtez ! Sucrées comme du miel.', 'בֶּאֱמֶת טְעִימִים. אֲנִי לוֹקַחַת קִילוֹ', 'beemet teïmim. ani lokakhat kilo', 'Vraiment bonnes. Je prends un kilo'],
+    ['עוֹד מַשֶּׁהוּ? יֵשׁ לִי אֲבַטִּיחַ מְצֻיָּן.', 'od mashéhou ? yesh li avatiakh metsouyan.', 'Autre chose ? J’ai une excellente pastèque.', 'הוּא כָּבֵד מִדַּי בִּשְׁבִילִי', 'hou kaved midaï bishvili', 'Elle est trop lourde pour moi'],
+    ['אָז חֲצִי אֲבַטִּיחַ? אֲנִי חוֹתֵךְ לָךְ.', 'az khatsi avatiakh ? ani khotekh lakh.', 'Alors une demi-pastèque ? Je vous la coupe.', 'יוֹפִי! כַּמָּה הַכֹּל?', 'yofi ! kama hakol ?', 'Super ! Combien pour le tout ?'],
+    ['עֶשְׂרִים וְחָמֵשׁ. וּבִשְׁבִילֵךְ, עֶשְׂרִים!', 'esrim vekhamesh. ouvishvilekh, esrim !', 'Vingt-cinq. Et pour vous, vingt !'],
+  ], mots: [['תּוּת', 'tout', 'fraise'], ['טָרִי', 'tari', 'frais'], ['אֲבַטִּיחַ', 'avatiakh', 'pastèque'], ['לַחְתֹּךְ', 'lakhtokh', 'couper'], ['כָּבֵד', 'kaved', 'lourd']], formes: {} },
+  { id: 'cafenoir', cat: 'Le goût du quotidien', em: '☕', title: 'Un café à la cardamome', who: 'Le cafetier', lignes: [
+    ['בֹּקֶר טוֹב! מָה לְהָבִיא לָךְ?', 'boker tov ! ma lehavi lakh ?', 'Bonjour ! Qu’est-ce que je vous apporte ?', 'קָפֶה שָׁחֹר, בְּבַקָּשָׁה', 'kafé shakhor, bevakasha', 'Un café noir, s’il vous plaît'],
+    ['עִם הֶל?', 'im hel ?', 'À la cardamome ?', 'מָה זֶה הֶל?', 'ma zé hel ?', 'C’est quoi, la cardamome ?'],
+    ['תַּבְלִין שֶׁנּוֹתֵן לַקָּפֶה רֵיחַ מְיֻחָד. כָּאן כֻּלָּם שׁוֹתִים כָּכָה.', 'tavlin shenoten lakafé réakh meyoukhad. kan koulam shotim kakha.', 'Une épice qui donne au café une odeur spéciale. Ici, tout le monde le boit comme ça.', 'אָז כֵּן, עִם הֶל', 'az kèn, im hel', 'Alors oui, à la cardamome'],
+    ['סֻכָּר?', 'soukar ?', 'Du sucre ?', 'רַק כַּפִּית אַחַת', 'rak kapit akhat', 'Une seule cuillère'],
+    ['הִנֵּה. תִּזָּהֲרִי, הוּא חַם מְאוֹד!', 'hiné. tizahari, hou kham meod !', 'Voilà. Attention, il est très chaud !'],
+  ], mots: [['שָׁחֹר', 'shakhor', 'noir'], ['הֶל', 'hel', 'cardamome'], ['תַּבְלִין', 'tavlin', 'épice'], ['כַּפִּית', 'kapit', 'petite cuillère'], ['לְהִזָּהֵר', 'lehizaher', 'faire attention']], formes: {} },
+  { id: 'receptionamis', cat: 'Le goût du quotidien', em: '🍽️', title: 'Des amis à dîner', who: 'Ton amie Galit', lignes: [
+    ['שָׁלוֹם! אֲנַחְנוּ בַּדֶּרֶךְ. צָרִיךְ לְהָבִיא מַשֶּׁהוּ?', 'shalom ! anakhnou badérekh. tsarikh lehavi mashéhou ?', 'Salut ! On est en route. Il faut apporter quelque chose ?', 'לֹא, הַכֹּל מוּכָן', 'lo, hakol moukhan', 'Non, tout est prêt'],
+    ['מָה בִּשַּׁלְתְּ?', 'ma bishalt ?', 'Qu’est-ce que tu as cuisiné ?', 'אֹרֶז, עוֹף וְסָלָט', 'orez, of vesalat', 'Du riz, du poulet et une salade'],
+    ['אַתְּ צְרִיכָה עֶזְרָה לַעֲרֹךְ אֶת הַשֻּׁלְחָן?', 'at tsrikha ezra laarokh et hashoulkhan ?', 'Tu as besoin d’aide pour mettre la table ?', 'כֵּן, תּוֹדָה! הַצַּלָּחוֹת בָּאָרוֹן', 'kèn, toda ! hatsalakhot baaron', 'Oui, merci ! Les assiettes sont dans le placard'],
+    ['וְאֵיפֹה הַמַּזְלְגוֹת וְהַסַּכִּינִים?', 'veeifo hamazlegot vehasakinim ?', 'Et où sont les fourchettes et les couteaux ?', 'בַּמְּגֵרָה, לְיַד הַכִּיּוֹר', 'bamegera, leyad hakiyor', 'Dans le tiroir, à côté de l’évier'],
+    ['מְצֻיָּן. וְאַחֲרֵי הָאֹכֶל, אֲנַחְנוּ שׁוֹטְפִים אֶת הַכֵּלִים!', 'metsouyan. veakharei haokhel, anakhnou shotfim et hakelim !', 'Parfait. Et après le repas, c’est nous qui faisons la vaisselle !'],
+  ], mots: [['לַעֲרֹךְ', 'laarokh', 'mettre (la table), préparer'], ['מַזְלֵג', 'mazleg', 'fourchette'], ['סַכִּין', 'sakin', 'couteau'], ['כִּיּוֹר', 'kiyor', 'évier, lavabo'], ['כֵּלִים', 'kelim', 'vaisselle, ustensiles']], formes: {} },
+  { id: 'livraisonsuper', cat: 'Le goût du quotidien', em: '🛍️', title: 'La livraison du supermarché', who: 'Le livreur', lignes: [
+    ['שָׁלוֹם, יֵשׁ לִי מִשְׁלוֹחַ מֵהַסּוּפֶּר.', 'shalom, yesh li mishloakh mehasouper.', 'Bonjour, j’ai une livraison du supermarché.', 'אֲנִי יוֹרֶדֶת לְמַטָּה', 'ani yorédet lemata', 'Je descends'],
+    ['יֵשׁ שֵׁשׁ שַׂקִּיּוֹת. הֵן כְּבֵדוֹת!', 'yesh shesh sakiyot. hen kvedot !', 'Il y a six sacs. Ils sont lourds !', 'אֵין בְּעָיָה, יֵשׁ מַעֲלִית', 'ein beaya, yesh maalit', 'Pas de problème, il y a un ascenseur'],
+    ['חָסֵר מוּצָר אֶחָד: הַיּוֹגוּרְט נִגְמַר.', 'khaser moutsar ekhad : hayogourt nigmar.', 'Il manque un produit : il n’y avait plus de yaourt.', 'חֲבָל. אָז לֹא אֲשַׁלֵּם עָלָיו?', 'khaval. az lo ashalem alav ?', 'Dommage. Alors je ne le paie pas ?'],
+    ['נָכוֹן, הַכֶּסֶף יַחֲזֹר לַכַּרְטִיס שֶׁלָּךְ.', 'nakhon, hakessef yakhzor lakartis shelakh.', 'C’est ça, l’argent reviendra sur ta carte.', 'תּוֹדָה, וְיוֹם טוֹב!', 'toda, veyom tov !', 'Merci, et bonne journée !'],
+    ['גַּם לָךְ! תֵּהָנִי מֵהָאֹכֶל.', 'gam lakh ! tehani mehaokhel.', 'À toi aussi ! Profite bien de ton repas.'],
+  ], mots: [['מִשְׁלוֹחַ', 'mishloakh', 'livraison, envoi'], ['מוּצָר', 'moutsar', 'produit'], ['לְהִגָּמֵר', 'lehigamer', 'se terminer, être épuisé'], ['יוֹגוּרְט', 'yogourt', 'yaourt'], ['לֵהָנוֹת', 'lehanot', 'profiter, apprécier']], formes: {} },
+  // Chapitre 20 : Ashkelon, l'entraide et le bénévolat
+  { id: 'colisfete', cat: 'Entraide et bénévolat', em: '📦', title: 'Les colis de fête', who: 'Miri, la responsable', lignes: [
+    ['תּוֹדָה שֶׁבָּאת לְהִתְנַדֵּב!', 'toda shebat lehitnadev !', 'Merci d’être venue faire du bénévolat !', 'בְּשִׂמְחָה. מָה עוֹשִׂים?', 'besimkha. ma osim ?', 'Avec plaisir. Qu’est-ce qu’on fait ?'],
+    ['אֲנַחְנוּ מְכִינִים חֲבִילוֹת אֹכֶל לְמִשְׁפָּחוֹת לִפְנֵי הַחַג.', 'anakhnou mekhinim khavilot okhel lemishpakhot lifnei hakhag.', 'Nous préparons des colis de nourriture pour des familles avant la fête.', 'מָה שָׂמִים בְּכָל חֲבִילָה?', 'ma samim bekhol khavila ?', 'Qu’est-ce qu’on met dans chaque colis ?'],
+    ['שֶׁמֶן, אֹרֶז, קֶמַח, סֻכָּר וְשִׁמּוּרִים.', 'shémen, orez, kémakh, soukar veshimourim.', 'De l’huile, du riz, de la farine, du sucre et des conserves.', 'וְכַמָּה חֲבִילוֹת צָרִיךְ?', 'vekhama khavilot tsarikh ?', 'Et combien de colis faut-il ?'],
+    ['מָאתַיִם! אֲבָל יֵשׁ פֹּה עֶשְׂרִים מִתְנַדְּבִים.', 'matayim ! aval yesh po esrim mitnadvim.', 'Deux cents ! Mais il y a vingt bénévoles ici.', 'אָז כָּל אֶחָד עוֹשֶׂה עֶשֶׂר. קָדִימָה!', 'az kol ekhad osé eser. kadima !', 'Alors chacun en fait dix. Allez !'],
+    ['אַתְּ מְהִירָה! בַּשָּׁנָה הַבָּאָה אַתְּ הָאַחְרָאִית.', 'at mehira ! bashana habaa at haakhraït.', 'Tu es rapide ! L’année prochaine, c’est toi la responsable.'],
+  ], mots: [['לְהִתְנַדֵּב', 'lehitnadev', 'faire du bénévolat'], ['חֲבִילָה', 'khavila', 'colis, paquet'], ['שִׁמּוּרִים', 'shimourim', 'conserves'], ['מִתְנַדֵּב', 'mitnadev', 'bénévole'], ['אַחְרַאי', 'akhraï', 'responsable']], formes: {} },
+  { id: 'voisinedessus', cat: 'Entraide et bénévolat', em: '🧺', title: 'La voisine du troisième', who: 'Mme Lévi, la voisine', lignes: [
+    ['סְלִיחָה, מֹתֶק... אַתְּ יְכוֹלָה לַעֲזֹר לִי עִם הַסַּלִּים?', 'slikha, motek… at yekhola laazor li im hasalim ?', 'Pardon, ma chérie… tu peux m’aider avec les paniers ?', 'כַּמּוּבָן! תְּנִי לִי', 'kamouvan ! tni li', 'Bien sûr ! Donnez-les-moi'],
+    ['תּוֹדָה. הַבִּרְכַּיִם שֶׁלִּי כְּבָר לֹא מָה שֶׁהָיוּ.', 'toda. habirkayim sheli kvar lo ma shehayou.', 'Merci. Mes genoux ne sont plus ce qu’ils étaient.', 'אַתְּ גָּרָה בַּקּוֹמָה הַשְּׁלִישִׁית, נָכוֹן?', 'at gara bakoma hashlishit, nakhon ?', 'Vous habitez au troisième étage, c’est ça ?'],
+    ['כֵּן. וְהַמַּעֲלִית שׁוּב לֹא עוֹבֶדֶת.', 'kèn. vehamaalit shouv lo ovédet.', 'Oui. Et l’ascenseur ne marche encore pas.', 'אֲנִי אֶתְקַשֵּׁר לְוַעַד הַבַּיִת', 'ani etkasher levaad habayit', 'J’appellerai le syndic de l’immeuble'],
+    ['אַתְּ מַלְאָךְ! בּוֹאִי, אֲנִי אָכִין לָנוּ תֵּה.', 'at malakh ! boï, ani akhin lanou té.', 'Tu es un ange ! Viens, je vais nous faire du thé.', 'רַק אִם יֵשׁ גַּם עוּגִיּוֹת', 'rak im yesh gam ouguiyot', 'Seulement s’il y a aussi des biscuits'],
+    ['תָּמִיד יֵשׁ עוּגִיּוֹת אֶצְלִי. בִּשְׁבִיל זֶה יֵשׁ שְׁכֵנִים!', 'tamid yesh ouguiyot etsli. bishvil zé yesh shkhenim !', 'Il y a toujours des biscuits chez moi. C’est à ça que servent les voisins !'],
+  ], mots: [['סַל', 'sal', 'panier'], ['בֶּרֶךְ', 'berekh', 'genou'], ['קוֹמָה', 'koma', 'étage'], ['וַעַד הַבַּיִת', 'vaad habayit', 'syndic de l’immeuble'], ['מַלְאָךְ', 'malakh', 'ange']], formes: {} },
+  { id: 'dondusang', cat: 'Entraide et bénévolat', em: '🩸', title: 'Le don du sang', who: 'L’infirmier', lignes: [
+    ['שָׁלוֹם! זֹאת הַפַּעַם הָרִאשׁוֹנָה שֶׁאַתְּ תּוֹרֶמֶת דָּם?', 'shalom ! zot hapaam harishona sheat torémet dam ?', 'Bonjour ! C’est la première fois que tu donnes ton sang ?', 'כֵּן, וַאֲנִי קְצָת מְפַחֶדֶת', 'kèn, vaani ktsat mefakhédet', 'Oui, et j’ai un peu peur'],
+    ['אַל תִּדְאֲגִי. זֶה לוֹקֵחַ רַק עֶשֶׂר דַּקּוֹת.', 'al tidagi. zé lokéakh rak eser dakot.', 'Ne t’inquiète pas. Ça ne prend que dix minutes.', 'זֶה כּוֹאֵב?', 'zé koev ?', 'Ça fait mal ?'],
+    ['רַק עֲקִיצָה קְטַנָּה. אָכַלְתְּ הַבֹּקֶר?', 'rak akitsa ktana. akhalt haboker ?', 'Juste une petite piqûre. Tu as mangé ce matin ?', 'כֵּן, אָכַלְתִּי וְשָׁתִיתִי הַרְבֵּה מַיִם', 'kèn, akhalti veshatiti harbé mayim', 'Oui, j’ai mangé et j’ai bu beaucoup d’eau'],
+    ['מְצֻיָּן. תִּסְתַּכְּלִי עָלַי, לֹא עַל הַיָּד.', 'metsouyan. tistakli alaï, lo al hayad.', 'Parfait. Regarde-moi, pas ton bras.', 'זֶהוּ? כְּבָר נִגְמַר?', 'zéhou ? kvar nigmar ?', 'C’est tout ? C’est déjà fini ?'],
+    ['נִגְמַר! קְחִי מִיץ וְעוּגִיָּה. הַיּוֹם הִצַּלְתְּ חַיִּים.', 'nigmar ! kkhi mits veouguiya. hayom hitsalt khayim.', 'Fini ! Prends un jus et un biscuit. Aujourd’hui, tu as sauvé des vies.'],
+  ], mots: [['לִתְרֹם', 'litrom', 'donner, faire un don'], ['דָּם', 'dam', 'sang'], ['לִדְאֹג', 'lidog', 's’inquiéter'], ['עֲקִיצָה', 'akitsa', 'piqûre'], ['לְהַצִּיל', 'lehatsil', 'sauver']], formes: {} },
+  { id: 'plagepropre', cat: 'Entraide et bénévolat', em: '🐢', title: 'Nettoyer la plage', who: 'Yoav, du club de plongée', lignes: [
+    ['בְּרוּכָה הַבָּאָה! קְחִי כְּפָפוֹת וְשַׂקִּית.', 'broukha habaa ! kkhi kfafot vesakit.', 'Bienvenue ! Prends des gants et un sac.', 'מָה אוֹסְפִים?', 'ma osfim ?', 'Qu’est-ce qu’on ramasse ?'],
+    ['כָּל מָה שֶׁלֹּא שַׁיָּךְ לַיָּם: בַּקְבּוּקִים, שַׂקִּיּוֹת, פְּקָקִים...', 'kol ma shelo shayakh layam : bakboukim, sakiyot, pkakim…', 'Tout ce qui n’appartient pas à la mer : bouteilles, sacs, bouchons…', 'וַאֲפִלּוּ סִיגַרְיוֹת?', 'vaafilou sigariyot ?', 'Et même les cigarettes ?'],
+    ['בְּעִקָּר סִיגַרְיוֹת! הֵן מְסֻכָּנוֹת לַדָּגִים.', 'beikar sigariyot ! hen mesoukanot ladaguim.', 'Surtout les cigarettes ! Elles sont dangereuses pour les poissons.', 'לֹא יָדַעְתִּי', 'lo yadati', 'Je ne savais pas'],
+    ['תִּרְאִי, מָצָאת צָב! הוּא תָּקוּעַ בְּרֶשֶׁת.', 'tiri, matsat tsav ! hou takoua bereshet.', 'Regarde, tu as trouvé une tortue ! Elle est coincée dans un filet.', 'בּוֹא נְשַׁחְרֵר אוֹתוֹ, לְאַט', 'bo neshakhrer oto, leat', 'Libérons-la, doucement'],
+    ['הִנֵּה, הוּא חוֹזֵר לַמַּיִם. עֲבוֹדָה טוֹבָה!', 'hiné, hou khozer lamayim. avoda tova !', 'Voilà, elle retourne dans l’eau. Beau travail !'],
+  ], mots: [['כְּפָפָה', 'kfafa', 'gant'], ['לֶאֱסֹף', 'leesof', 'ramasser, collecter'], ['שַׁיָּךְ', 'shayakh', 'qui appartient'], ['מְסֻכָּן', 'mesoukan', 'dangereux'], ['לְשַׁחְרֵר', 'leshakhrer', 'libérer']], formes: {} },
+  { id: 'devoirs', cat: 'Entraide et bénévolat', em: '✏️', title: 'L’aide aux devoirs', who: 'Amit, un élève de dix ans', lignes: [
+    ['שָׁלוֹם! אַתְּ הַמִּתְנַדֶּבֶת הַחֲדָשָׁה?', 'shalom ! at hamitnadévet hakhadasha ?', 'Bonjour ! C’est toi, la nouvelle bénévole ?', 'כֵּן! מָה אַתָּה צָרִיךְ לַעֲשׂוֹת הַיּוֹם?', 'kèn ! ma ata tsarikh laasot hayom ?', 'Oui ! Qu’est-ce que tu dois faire aujourd’hui ?'],
+    ['שִׁעוּרֵי בַּיִת בְּחֶשְׁבּוֹן. אֲנִי שׂוֹנֵא חֶשְׁבּוֹן!', 'shiourei bayit bekheshbon. ani soné kheshbon !', 'Des devoirs de calcul. Je déteste le calcul !', 'בּוֹא נִרְאֶה. אוּלַי זֶה לֹא כָּל כָּךְ קָשֶׁה', 'bo nirè. oulaï zé lo kol kakh kashé', 'Voyons. Ce n’est peut-être pas si difficile'],
+    ['שֶׁבַע כָּפוּל שְׁמוֹנֶה... אֲנִי אַף פַּעַם לֹא זוֹכֵר.', 'sheva kafoul shmoné… ani af paam lo zokher.', 'Sept fois huit… je ne m’en souviens jamais.', 'חֲמִשִּׁים וְשֵׁשׁ! תִּזְכֹּר: חָמֵשׁ, שֵׁשׁ, שֶׁבַע, שְׁמוֹנֶה', 'khamishim veshesh ! tizkor : khamesh, shesh, sheva, shmoné', 'Cinquante-six ! Retiens : cinq, six, sept, huit'],
+    ['אֵיזֶה יוֹפִי! חָמֵשׁ, שֵׁשׁ... שֶׁבַע כָּפוּל שְׁמוֹנֶה!', 'eizé yofi ! khamesh, shesh… sheva kafoul shmoné !', 'Génial ! Cinq, six… sept fois huit !', 'אַתָּה רוֹאֶה? חֶשְׁבּוֹן יָכוֹל לִהְיוֹת כֵּיף', 'ata roé ? kheshbon yakhol lihyot kef', 'Tu vois ? Le calcul, ça peut être amusant'],
+    ['אַתְּ בָּאָה גַּם בַּשָּׁבוּעַ הַבָּא? בְּבַקָּשָׁה!', 'at baa gam bashavoua habaa ? bevakasha !', 'Tu reviens aussi la semaine prochaine ? S’il te plaît !'],
+  ], mots: [['שִׁעוּרֵי בַּיִת', 'shiourei bayit', 'devoirs (à la maison)'], ['חֶשְׁבּוֹן', 'kheshbon', 'calcul ; addition (au restaurant)'], ['לִשְׂנֹא', 'lisno', 'détester'], ['כָּפוּל', 'kafoul', 'fois (multiplié par) ; double'], ['לִזְכֹּר', 'lizkor', 'se souvenir, retenir']], formes: {} },
 ];
 
 // Réponses fausses : tirées d'autres histoires, sans les réponses passe-partout

@@ -43,3 +43,67 @@ window.GLOSES_HEBDO = Object.assign(window.GLOSES_HEBDO || {}, {
   'יִתְלוּ': ['accrocheront', 'yitlou'], 'שְׁלוֹמֵךְ': ['« מָה שְׁלוֹמֵךְ » : comment vas-tu (à une femme)', 'shlomekh'], 'אָכַלְתְּ': ['tu as mangé (femme)', 'akhalt'], 'מְאַחֶלֶת': ['souhaite (femme)', 'meakhélet'],
   'וּבְרִיאָה': ['et en bonne santé (féminin)', 'oubria'], 'שָׁמַעְתְּ': ['tu as entendu (femme)', 'shamat'], 'הַכְּנֶסֶת': ['« בֵּית הַכְּנֶסֶת » : la synagogue', 'hakneset'],
 });
+
+/* Chapitres 19 et 20 : Ramla (le goût du quotidien) et Ashkelon (l'entraide). */
+VILLES.push(
+  { id: 'vramla', num: 19, lieu: 'Ramla', he: 'רַמְלָה', theme: 'Le goût du quotidien', devise: 'Là où l’on mange, on parle',
+    pal: { d: '#8a5a2a', p: '#f8e6cc', t: '#fff4e2', i: '#6e4520' }, ridge: 'collines', sil: 'tour',
+    poeme: ['Autour de la vieille tour blanche, le marché s’éveille.', 'On goûte, on discute, on marchande,', 'et l’on se dit <span class="he">בְּתֵאָבוֹן</span>, « bon appétit ».'],
+    note: 'Un houmous, des fraises au marché, un café à la cardamome, des amis à dîner et une livraison qui arrive… sans le yaourt.',
+    mots: [['שׁוּק', 'marché'], ['טַעַם', 'goût'], ['אֹכֶל', 'nourriture'], ['מִגְדָּל', 'tour']],
+    histoires: ['houmous', 'shoukramla', 'cafenoir', 'receptionamis', 'livraisonsuper'] },
+  { id: 'vashkelon', num: 20, lieu: 'Ashkelon', he: 'אַשְׁקְלוֹן', theme: 'Entraide et bénévolat', devise: 'Là où l’on se donne la main',
+    pal: { d: '#2a6a7a', p: '#dcf0f2', t: '#eefafa', i: '#1f5260' }, ridge: 'vagues', sil: 'coeur',
+    poeme: ['Au bord de la mer, les vieilles colonnes regardent les vagues.', 'Ici, on aide un voisin, on donne un peu de son temps,', 'et l’on apprend le mot <span class="he">עֶזְרָה</span>, « l’aide ».'],
+    note: 'Des colis pour la fête, la voisine du troisième, un don du sang, une plage à nettoyer et un élève fâché avec le calcul.',
+    mots: [['עֶזְרָה', 'aide'], ['שָׁכֵן', 'voisin'], ['חוֹף', 'plage'], ['יָם', 'mer']],
+    histoires: ['colisfete', 'voisinedessus', 'dondusang', 'plagepropre', 'devoirs'] },
+);
+
+Object.assign(DECORS, {
+  vramla: (u) => { const r = aleaChap(141); let etals = ''; for (let i = 0; i < 5; i++) { const x = 10 + i * 74; etals += `<path d="M${x} 470 H${x + 66} L${x + 58} 440 H${x + 8}Z" fill="${['#e5566b', '#f2c14e', '#5f9a4a', '#e88a3a', '#8e4f9e'][i]}"/><rect x="${x + 6}" y="470" width="54" height="34" fill="#a8774a"/>${[0, 1, 2].map((k) => `<circle cx="${x + 16 + k * 17}" cy="468" r="7" fill="${['#f2a54a', '#d84a4f', '#7fb35c'][(k + i) % 3]}"/>`).join('')}`; }
+    let nuages = ''; for (let i = 0; i < 4; i++) nuages += `<ellipse cx="${(r() * 380).toFixed(0)}" cy="${(60 + r() * 90).toFixed(0)}" rx="${(40 + r() * 30).toFixed(0)}" ry="12" fill="#fff" opacity=".55"/>`;
+    return `<defs><linearGradient id="${u}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7ab4e0"/><stop offset=".6" stop-color="#f6dcb0"/></linearGradient></defs>
+    <rect width="380" height="640" fill="url(#${u}s)"/>${nuages}
+    <g fill="#f2ead8"><rect x="160" y="150" width="60" height="230"/><rect x="152" y="140" width="76" height="16"/><path d="M160 140 V120 H220 V140" /><rect x="170" y="100" width="40" height="22"/></g>
+    <g fill="#8a7a6a">${[190, 240, 290, 340].map((y) => `<rect x="182" y="${y - 30}" width="16" height="26" rx="8"/>`).join('')}</g>
+    <path d="M0 380 Q120 350 240 372 T380 364 V640 H0Z" fill="#d8b888"/>${etals}
+    <path d="M0 520 Q120 500 240 516 T380 508 V640 H0Z" fill="#c8a070"/>`; },
+  vashkelon: (u) => { const r = aleaChap(151); let reflets = ''; for (let i = 0; i < 16; i++) reflets += `<rect x="${(r() * 360).toFixed(0)}" y="${(320 + r() * 120).toFixed(0)}" width="${(10 + r() * 24).toFixed(0)}" height="2" fill="#fff" opacity=".6"/>`;
+    const colonne = (x, h) => `<rect x="${x}" y="${470 - h}" width="22" height="${h}" fill="#efe6d4"/><rect x="${x - 5}" y="${462 - h}" width="32" height="10" fill="#e2d6c0"/><path d="M${x + 6} ${474 - h} V466 M${x + 12} ${474 - h} V466" stroke="#d6c8ae" stroke-width="2"/>`;
+    return `<defs><linearGradient id="${u}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ab0d8"/><stop offset=".5" stop-color="#bfe4ee"/><stop offset=".52" stop-color="#2f8ab0"/><stop offset="1" stop-color="#1f6a8a"/></linearGradient></defs>
+    <rect width="380" height="640" fill="url(#${u}s)"/><circle cx="90" cy="110" r="34" fill="#fff6c4"/>${reflets}
+    <path d="M0 440 Q100 420 200 436 T380 428 V640 H0Z" fill="#f0dcae"/>
+    ${colonne(230, 120)}${colonne(276, 90)}${colonne(322, 140)}<rect x="220" y="466" width="140" height="12" fill="#e2d6c0"/>
+    <path d="M0 520 Q100 500 200 514 T380 506 V640 H0Z" fill="#e6cc98"/>`; },
+});
+
+Object.assign(SILHOUETTES, {
+  coeur: (c) => `<path d="M160 280 C60 210 40 140 80 100 C120 60 160 90 160 120 C160 90 200 60 240 100 C280 140 260 210 160 280Z" fill="${c}"/>`,
+});
+
+Object.assign(CARTES_VIE, {
+  houmous: { lieu: 'Au restaurant de houmous', he: 'בְּתֵאָבוֹן!', decor: 'resto', objets: [['houmous', 370, 470, 1.200], ['pita', 500, 480, 1]] },
+  shoukramla: { lieu: 'Le marché de Ramla', he: 'תּוּתִים טְרִיִּים!', decor: 'marche', objets: [['panierFruits', 370, 470, 1.200], ['orange', 500, 480, 1]] },
+  cafenoir: { lieu: 'Le café à la cardamome', he: 'קָפֶה עִם הֶל', decor: 'cafeville', objets: [['cafe', 400, 470, 1.200]] },
+  receptionamis: { lieu: 'Des amis à dîner', he: 'בְּתֵאָבוֹן', decor: 'cuisine', objets: [['assiette', 370, 480, 1.100], ['verre', 500, 480, 1]] },
+  livraisonsuper: { lieu: 'La livraison', he: 'מִשְׁלוֹחַ', decor: 'salon', objets: [['sachet', 370, 470, 1.200], ['colis', 500, 480, 1]] },
+  colisfete: { lieu: 'Les colis de fête', he: 'חֲבִילוֹת לַחַג', decor: 'supermarche', objets: [['colis', 370, 470, 1.200], ['huile', 500, 470, 1]] },
+  voisinedessus: { lieu: 'La voisine du troisième', he: 'אַתְּ מַלְאָךְ!', decor: 'salon', objets: [['the', 370, 480, 1.100], ['biscuits', 500, 480, 1]] },
+  dondusang: { lieu: 'Le don du sang', he: 'הִצַּלְתְּ חַיִּים', decor: 'medecin', objets: [['pansement', 370, 480, 1.100], ['jus', 500, 470, 1]] },
+  plagepropre: { lieu: 'La plage propre', he: 'עֲבוֹדָה טוֹבָה!', decor: 'plage', objets: [['tortue', 370, 490, 1.100], ['bouteille', 500, 470, 1]] },
+  devoirs: { lieu: 'L’aide aux devoirs', he: 'חֶשְׁבּוֹן', decor: 'classe', objets: [['cahier', 370, 480, 1.100], ['crayon', 500, 480, 1]] },
+});
+
+// Le sens des mots des chapitres 19 et 20 qui ne sont pas encore dans le vocabulaire
+window.GLOSES_HEBDO = Object.assign(window.GLOSES_HEBDO || {}, {
+  'עָלֵינוּ': ['sur nous ; « עָלֵינוּ » : c’est pour nous, c’est offert', 'alenou'], 'תּוּתִים': ['fraises', 'toutim'], 'מְתוּקִים': ['sucrés, doux (pluriel)', 'metoukim'], 'תִּטְעֲמִי': ['goûte (à une femme)', 'titami'],
+  'טְעִימִים': ['bons, savoureux (pluriel)', 'teïmim'], 'בִּשְׁבִילִי': ['pour moi', 'bishvili'], 'חוֹתֵךְ': ['coupe (homme)', 'khotekh'], 'שֶׁנּוֹתֵן': ['qui donne', 'shenoten'],
+  'תִּזָּהֲרִי': ['fais attention (à une femme)', 'tizahari'], 'בִּשַּׁלְתְּ': ['tu as cuisiné (femme)', 'bishalt'], 'וְהַסַּכִּינִים': ['et les couteaux', 'vehasakinim'], 'שׁוֹטְפִים': ['lavons, lavent', 'shotfim'],
+  'מֵהַסּוּפֶּר': ['du supermarché', 'mehasouper'], 'כְּבֵדוֹת': ['lourdes', 'kvedot'], 'אֲשַׁלֵּם': ['je paierai', 'ashalem'], 'שָׂמִים': ['on met', 'samim'], 'מְהִירָה': ['rapide (féminin)', 'mehira'],
+  'הָאַחְרָאִית': ['la responsable', 'haakhraït'], 'הַסַּלִּים': ['les paniers', 'hasalim'], 'הַבִּרְכַּיִם': ['les genoux', 'habirkayim'], 'אֶתְקַשֵּׁר': ['j’appellerai (au téléphone)', 'etkasher'],
+  'אָכִין': ['je préparerai', 'akhin'], 'שְׁכֵנִים': ['voisins', 'shkhenim'], 'תּוֹרֶמֶת': ['donnes (femme), fais un don', 'torémet'], 'אָכַלְתְּ': ['tu as mangé (femme)', 'akhalt'],
+  'אָכַלְתִּי': ['j’ai mangé', 'akhalti'], 'וְשָׁתִיתִי': ['et j’ai bu', 'veshatiti'], 'עָלַי': ['sur moi ; « תִּסְתַּכְּלִי עָלַי » : regarde-moi', 'alaï'], 'קְחִי': ['prends (à une femme)', 'kkhi'],
+  'הִצַּלְתְּ': ['tu as sauvé (femme)', 'hitsalt'], 'סִיגַרְיוֹת': ['cigarettes', 'sigariyot'], 'מְסֻכָּנוֹת': ['dangereuses', 'mesoukanot'], 'יָדַעְתִּי': ['je savais', 'yadati'],
+  'נְשַׁחְרֵר': ['libérons, nous libérerons', 'neshakhrer'], 'חוֹזֵר': ['revient, retourne', 'khozer'], 'שׂוֹנֵא': ['déteste (homme)', 'soné'], 'זוֹכֵר': ['se souvient (homme)', 'zokher'], 'תִּזְכֹּר': ['retiens, souviens-toi (à un homme)', 'tizkor'],
+});

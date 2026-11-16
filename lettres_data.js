@@ -119,7 +119,7 @@ const LETTRES_FORMULES = {
   signature: { he: 'נְשִׁיקוֹת, נוֹעָה', tr: 'neshikot, Noa', fr: 'Bisous, Noa' },
 };
 // Le sens des mots du feuilleton et des lettres (quand on les touche)
-window.GLOSES_HEBDO = {
+window.GLOSES_HEBDO = Object.assign(window.GLOSES_HEBDO || {}, {
   'יְשָׁנָה': ['vieille', 'yeshana'], 'תְּשַׁע': ['neuf (dans « neuf cents »)', 'tsha'], 'לְיוֹסֵף': ['pour Yossef', 'leYossef'], 'סְגוּרָה': ['fermée', 'sgoura'],
   'אֵלָיו': ['à lui, vers lui', 'elav'], 'פּוֹתַחַת': ['ouvre (femme)', 'potakhat'], 'בָּנוֹת': ['les filles', 'banot'], 'שְׁלוֹמְכֶן': ['comment allez-vous (à des femmes)', 'shlomkhen'],
   'מָצָאנוּ': ['nous avons trouvé', 'matsanou'], 'מִשְּׁנַת': ['depuis l’année, de l’année', 'mishnat'], 'שֶׁלָּכֶן': ['à vous (femmes), votre', 'shelakhen'], 'יוֹסֵף': ['Yossef (prénom)', 'Yossef'],
@@ -151,4 +151,4 @@ window.GLOSES_HEBDO = {
   'מוּזִיקָה': ['musique', 'mouzika'], 'אִתָּךְ': ['avec toi (femme)', 'itakh'], 'כּוֹתֶבֶת': ['écris (femme)', 'kotévet'], 'תִּשְׁלְחִי': ['envoie (à une femme)', 'tishlekhi'],
   'צָרְפָתִי': ['français', 'tsarfati'], 'מַצְלִיחָה': ['réussis, arrive à (femme)', 'matslikha'], 'פָּרִיז': ['Paris', 'Pariz'], 'הַכְּפָרִים': ['les villages', 'hakfarim'],
   'בַּדָּרוֹם': ['dans le sud', 'badarom'], 'וּנְדַבֵּר': ['et nous parlerons', 'ouneddaber'], 'נְשִׁיקוֹת': ['bisous', 'neshikot'],
-};
+});
