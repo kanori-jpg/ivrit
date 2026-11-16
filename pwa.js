@@ -16,8 +16,9 @@
   // Tous les sons du site (mêmes adresses que celles que joue le lecteur)
   const adressesSons = () => {
     const a = new Set();
-    Object.values(window.SONS || {}).forEach((f) => a.add(new URL(`audio/${f}?v=2`, location.href).href));
-    Object.values(window.VOIX || {}).forEach((v) => a.add(new URL(`audio/humain/${v.fichier}`, location.href).href));
+    // seulement le son que le site joue pour chaque texte (vraie voix, sinon Phonikud, sinon l'ancienne voix)
+    const textes = new Set([...Object.keys(window.SONS || {}), ...Object.keys(window.SONS_PK || {}), ...Object.keys(window.VOIX || {})]);
+    textes.forEach((k) => { const f = fichierAudio(k); if (f) a.add(new URL(`audio/${f}`, location.href).href); });
     return [...a];
   };
   let telechargement = null; // { fait, total, arret }

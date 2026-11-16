@@ -893,11 +893,7 @@ const FEUILLETON_VIDEO = {
     const attendrePause = async () => { while (pause && vivant()) await dodo(150); };
     const lecteur = new Audio(), ecoute = new Audio();
     lecteur.preload = 'auto';
-    const fichierSon = (texte) => {
-      const k = NFC(texte);
-      const humain = HUMAN[k] && !((S.sonsAvis[k] === 'faux' || (window.SONS_REFAITS || {})[k]) && SOUNDS[k]);
-      return humain ? 'humain/' + HUMAN[k].fichier : SOUNDS[k] ? `${SOUNDS[k]}?v=2` : null;
-    };
+    const fichierSon = (texte) => fichierAudio(texte); // vraie voix > Phonikud > ancienne voix (app.js)
     // Lit un texte avec le lecteur de la vidéo ; sans fichier son, la voix de l'appareil prend le relais
     const parler = (texte) => new Promise((res) => {
       stopAudio();

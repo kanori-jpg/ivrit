@@ -176,6 +176,26 @@ const loadVoices = () => { heVoice = speechSynthesis.getVoices().find((v) => /^(
 if ('speechSynthesis' in window) { loadVoices(); speechSynthesis.onvoiceschanged = loadVoices; }
 // Voix humaines (Lingua Libre, outils/voix_humaines.py) en priorité, sinon voix de synthèse
 const HUMAN = window.VOIX || {};
+// Voix de synthèse Phonikud (outils/generer_phonikud.py), préférée à l'ancienne voix qui reste en secours
+const PK = window.SONS_PK || {};
+// Le fichier à jouer pour un texte : vraie voix > Phonikud > ancienne voix de synthèse
+function fichierAudio(texte) {
+  const k = texte.normalize('NFC');
+  const pk = PK[k] && !(window.PK_ECARTES || {})[k];
+  const autre = pk || SOUNDS[k];
+  if (HUMAN[k] && !((S.sonsAvis[k] === 'faux' || (window.SONS_REFAITS || {})[k]) && autre)) return 'humain/' + HUMAN[k].fichier; // une vraie voix signalée puis refaite reste écartée
+  if (pk) return 'pk/' + PK[k];
+  return SOUNDS[k] ? `${SOUNDS[k]}?v=2` : null;
+}
+// D'où vient le son d'un texte (page des sons et signalements)
+function sourceSon(he) {
+  const f = fichierAudio(he) || '';
+  const k = he.normalize('NFC');
+  if (f.startsWith('humain/')) return 'vraie voix';
+  const ecartee = HUMAN[k] ? ' (vraie voix écartée)' : '';
+  if (f.startsWith('pk/')) return 'voix de synthèse Phonikud' + ecartee;
+  return f ? 'voix de synthèse' + ((window.PK_ECARTES || {})[k] ? ' (Phonikud écartée)' : '') + ecartee : 'voix du navigateur';
+}
 // Lit un texte. La promesse se termine quand la lecture est finie ou interrompue.
 function speak(text) {
   stopAudio();
@@ -183,10 +203,8 @@ function speak(text) {
     const timer = setTimeout(() => done(), 12000); // sécurité si le navigateur ne signale jamais la fin
     function done() { clearTimeout(timer); if (endSpeech === done) endSpeech = null; resolve(); }
     endSpeech = done;
-    const key = text.normalize('NFC');
     // Une vraie voix signalée comme fausse laisse la place à la voix de synthèse
-    const humain = HUMAN[key] && !((S.sonsAvis[key] === 'faux' || (window.SONS_REFAITS || {})[key]) && SOUNDS[key]); // une vraie voix signalée puis refaite reste écartée
-    const file = humain ? 'humain/' + HUMAN[key].fichier : SOUNDS[key] && `${SOUNDS[key]}?v=2`;
+    const file = fichierAudio(text);
     // La voix de l'appareil
     function synthese(alerter) {
       if (!('speechSynthesis' in window)) { if (alerter) toast('La synthèse vocale n\u2019est pas disponible sur ce navigateur.'); return done(); }
@@ -951,6 +969,8 @@ function credits() {
     <tr style="text-align:left"><th>Mot</th><th>Sens</th><th>Voix</th><th>Licence</th><th></th></tr>
     ${rows.map((r) => `<tr style="border-top:1px solid var(--line)"><td>${HE(r.he)}</td><td>${esc(r.w ? r.w.fr : '')}</td><td>${esc(r.auteur)}</td><td><a href="${esc(r.source)}" target="_blank" rel="noopener" style="color:var(--blue)">${esc(r.licence || 'voir')}</a></td><td>${sayBtn(r.he)}</td></tr>`).join('')}
   </table></div>
-  <p class="hint mt">Les ${missing.length} autres mots, ainsi que les noms des lettres et les syllabes, utilisent une voix de synthèse (Microsoft Hila), faute d’enregistrement humain disponible.</p>`;
+  <p class="hint mt">Les ${missing.length} autres mots, ainsi que les phrases, les noms des lettres et les syllabes, utilisent une voix de synthèse, faute d’enregistrement humain disponible :
+  <a href="https://phonikud.github.io" target="_blank" rel="noopener" style="color:var(--blue)">Phonikud</a> (voix et modèles de Phonikud, utilisés ici sans but commercial), qui tient compte de l’accent tonique et du chva prononcé.
+  Quand un son Phonikud est signalé faux, l’ancienne voix de synthèse (Microsoft Avri / Hila) reprend le relais.</p>`;
 }
 

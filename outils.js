@@ -1106,11 +1106,7 @@ function pageSons(choix = 'priorite') {
   majBilan();
   if (typeof majTransmission === 'function') majTransmission();
 }
-function sourceSon(he) {
-  const k = NFC(he);
-  if ((S.sonsAvis[k] === 'faux' || (window.SONS_REFAITS || {})[k]) && HUMAN[k] && SOUNDS[k]) return 'voix de synthèse (vraie voix écartée)';
-  return HUMAN[k] ? 'vraie voix' : SOUNDS[k] ? 'voix de synthèse' : 'voix du navigateur';
-}
+// sourceSon(he) : dans app.js (vraie voix, Phonikud ou ancienne voix)
 
 /* ============ Ajouter les mots des histoires à « Mes mots » ============ */
 const FORMES_NFC = Object.fromEntries(Object.entries(FORMES_HISTOIRES).map(([a, b]) => [NFC(a), NFC(b)]));
