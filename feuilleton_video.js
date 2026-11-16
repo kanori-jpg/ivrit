@@ -891,7 +891,7 @@ const FEUILLETON_VIDEO = {
     const vivant = () => scene.isConnected;
     const dodo = (ms) => new Promise((r) => setTimeout(r, ms));
     const attendrePause = async () => { while (pause && vivant()) await dodo(150); };
-    const lecteur = new Audio();
+    const lecteur = new Audio(), ecoute = new Audio();
     lecteur.preload = 'auto';
     const fichierSon = (texte) => {
       const k = NFC(texte);
@@ -911,7 +911,7 @@ const FEUILLETON_VIDEO = {
       lecteur.playbackRate = lent ? 0.75 : 1;
       lecteur.play().catch(() => { if (!pause) done(); });
     });
-    window.addEventListener('hashchange', () => { lecteur.pause(); }, { once: true });
+    window.addEventListener('hashchange', () => { lecteur.pause(); ecoute.pause(); }, { once: true });
     const anime = (qui) => { $$('.fv-perso').forEach((g) => g.classList.toggle('fv-parle', g.dataset.qui === qui)); };
     // L'humeur du personnage (style des scènes) change avec ce qu'il dit
     const humeur = (qui, k) => { const c = cfg.persos[qui], e = emoDe(qui, k); if (c && c.type === 'pnj' && e) $$(`.fv-perso[data-qui="${qui}"] .fv-corps`).forEach((g) => (g.innerHTML = pnjSvg(c, e))); };
@@ -930,10 +930,14 @@ const FEUILLETON_VIDEO = {
       sous.innerHTML = `<div class="fv-qui">${nom}</div>
         <div class="fv-he">${phraseCliquable(l.he)}</div>
         <small class="tr">${esc(l.tr)}</small>
+        <div class="fv-actions"><button type="button" class="fv-reecoute" data-he="${esc(l.he)}" title="Réécouter la phrase" aria-label="Réécouter la phrase">🔊 Réécouter</button>${typeof plusGram === 'function' ? plusGram(l) : ''}</div>
         <div class="fv-fr" ${fr ? '' : 'hidden'}>${esc(l.fr)}</div>${choixHtml}`;
       sous.appendChild(bulle); bulle.hidden = true;
       brancherMotsClic(sous, bulle);
       sous.querySelectorAll('.mot-clic').forEach((b) => b.addEventListener('click', () => mettrePause(true)));
+      // Réécouter : on met la vidéo en pause et on joue la phrase à part, sans toucher au déroulement
+      const re1 = sous.querySelector('.fv-reecoute');
+      if (re1) re1.onclick = () => { if (phase === 'ligne' || phase === 'reponse') mettrePause(true); const f = fichierSon(re1.dataset.he); if (!f) return speak(re1.dataset.he); ecoute.src = 'audio/' + f; ecoute.playbackRate = lent ? 0.75 : 1; ecoute.play().catch(() => {}); };
     };
     const progres = () => { $('#fvProg').textContent = `${Math.min(i + 1, n)} / ${n}`; };
     const mettrePause = (v) => {
@@ -974,10 +978,11 @@ const FEUILLETON_VIDEO = {
         phase = 'reponse';
         anime('moi');
         sousTitre('🙋🏻‍♀️ Toi', l.rep);
+        phase = 'attente';
+        sous.insertAdjacentHTML('beforeend', '<p class="fv-suite"><button type="button" class="btn gold" id="fvSuivant">Suivant →</button></p>');
+        $('#fvSuivant').onclick = () => { if (t !== jeton) return; ecoute.pause(); mettrePause(false); if (k + 1 < n) jouer(k + 1); else fin(); };
         await parler(l.rep.he);
         anime(null);
-        await dodo(450); await attendrePause(); if (t !== jeton || !vivant()) return;
-        if (k + 1 < n) jouer(k + 1); else fin();
       }));
     }
     function fin() {

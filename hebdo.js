@@ -53,7 +53,7 @@
       const p = l.moi ? { nom: 'Toi', em: '🙋🏻‍♀️' } : FEUILLETON_PERSOS[l.qui];
       return `<div class="fe-bulle${l.moi ? ' moi' : ''}" data-ligne="${k}">
         <span class="fe-qui">${p.em} ${esc(p.nom)}</span>
-        <div class="fe-he">${phraseMots(l.he)}${sayBtn(l.he)}</div>
+        <div class="fe-he">${phraseMots(l.he)}${sayBtn(l.he)}${typeof plusGram === 'function' ? plusGram(l) : ''}</div>
         <small class="tr fe-tr">${esc(l.tr)}</small>
         <button type="button" class="link fe-voir" data-k="${k}">Traduction</button><div class="fe-fr" id="feFr${k}" hidden>${esc(l.fr)}</div>
       </div>`;

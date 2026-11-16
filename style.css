@@ -3161,3 +3161,10 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .fv-voile { animation: fvStore 3s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: top center; }
 .fv-bat { animation: fvBat 1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
 @keyframes fvBat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.12); } 30% { transform: scale(1); } 45% { transform: scale(1.08); } }
+
+/* Feuilleton : réécouter et ajouter une phrase ; « Suivant » après ta réponse */
+.fv-actions { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 6px 0 2px; }
+.fv-reecoute { border: 1px solid rgba(255, 255, 255, .25); background: rgba(255, 255, 255, .1); color: #fff; border-radius: 99px; padding: 5px 14px; font-weight: 700; font-size: .85rem; cursor: pointer; }
+.fv-st .gr-plus.on { background: color-mix(in srgb, var(--gold) 45%, #2b2240); color: #fff; }
+.fv-suite { margin: 10px 0 4px; text-align: center; }
+.fe-he .gr-plus { margin-inline-start: 4px; }
