@@ -106,65 +106,102 @@
   }
   routes.feuilleton = feuilleton;
 
-  /* ====================== 2. Les lettres de Noa ====================== */
-  const etatL = () => { if (!S.lettres) S.lettres = { debut: auj(), rep: {} }; return S.lettres; };
-  const sortieL = (n) => plus(etatL().debut, 7 * (n - 1));
-  const dispoL = (n) => n === 1 || (!!etatL().rep[n - 1] && sortieL(n) <= auj());
-  const nouvelleLettre = () => { if (!S.lettres) return LETTRES_NOA[0]; return LETTRES_NOA.find((l) => !S.lettres.rep[l.num] && dispoL(l.num)) || null; };
-  const ouvertureDe = (l) => { if (l.num === 1) return null; const avant = etatL().rep[l.num - 1]; const k = avant && avant.r[0]; return l.ouverture[k] || Object.values(l.ouverture)[0]; };
+  /* ====================== 2. Les lettres (Noa et les autres correspondants) ====================== */
+  // Chaque correspondant écrit une lettre ; la suivante arrive le lendemain de ta réponse.
+  const NOA = { id: 'noa', nom: 'Noa', em: '👩🏻', desc: 'rencontrée au café de Tel-Aviv', ville: 'תֵּל אָבִיב', couleur: '#e46a92', lettres: LETTRES_NOA, formules: LETTRES_FORMULES };
+  const tousCorresp = () => [NOA, ...(typeof CORRESPONDANTS !== 'undefined' ? CORRESPONDANTS : [])];
+  const corrDe = (id) => tousCorresp().find((c) => c.id === id);
+  const etatC = (c) => {
+    if (c.id === 'noa') { if (!S.lettres) S.lettres = { debut: auj(), rep: {} }; return S.lettres; }
+    if (!S.correspondances) S.correspondances = {};
+    if (!S.correspondances[c.id]) S.correspondances[c.id] = { debut: auj(), rep: {} };
+    return S.correspondances[c.id];
+  };
+  const etatLu = (c) => (c.id === 'noa' ? S.lettres : (S.correspondances || {})[c.id]); // sans le créer
+  const sortieC = (c, n) => { const r = (etatLu(c) || { rep: {} }).rep[n - 1]; return r ? plus(r.d, 1) : null; };
+  const dispoC = (c, n) => n === 1 || (!!(etatLu(c) || { rep: {} }).rep[n - 1] && sortieC(c, n) <= auj());
+  const lienC = (c, n) => (c.id === 'noa' ? (n ? `#/lettres/${n}` : '#/lettres/noa') : `#/lettres/${c.id}${n ? '/' + n : ''}`);
+  const nouvelleLettreC = (c) => { const st = etatLu(c); if (!st) return c.lettres[0]; return c.lettres.find((l) => !st.rep[l.num] && dispoC(c, l.num)) || null; };
+  const nouvelleLettre = () => nouvelleLettreC(NOA);
+  const ouvertureDe = (c, l) => { if (l.num === 1) return null; const avant = etatC(c).rep[l.num - 1]; const k = avant && avant.r[0]; return l.ouverture[k] || Object.values(l.ouverture)[0]; };
 
-  function lettres(num) {
-    const st = etatL(); save();
-    const L = LETTRES_NOA.find((x) => String(x.num) === String(num));
+  // La boîte aux lettres : tous les correspondants
+  function boite() {
+    app.innerHTML = `<section class="fe-hero lt-hero">
+        <span class="he fe-hero-he" lang="he" dir="rtl">מִכְתָּבִים</span>
+        <h2>💌 Les lettres</h2>
+        <p>Des Israéliens t’écrivent. Lis chaque lettre, puis réponds en choisissant tes phrases : la lettre suivante tient compte de ta réponse, et elle arrive le lendemain.</p>
+      </section>
+      <div class="lt-corresps">${tousCorresp().map((c) => {
+        const st = etatLu(c), n = st ? Object.keys(st.rep).length : 0, nv = nouvelleLettreC(c);
+        return `<a class="card lt-corresp" href="${lienC(c)}" style="--c:${c.couleur}"><span class="lt-c-em">${c.em}</span><span class="lt-c-txt"><b>${esc(c.nom)}</b><small>${esc(c.desc)}</small><small class="lt-c-etat">${nv ? '💌 une lettre t’attend' : `${n}/${c.lettres.length} lettres · ${n < c.lettres.length ? `prochaine ${dans(sortieC(c, n + 1))}` : 'toutes lues'}`}</small></span><i>›</i></a>`;
+      }).join('')}</div>`;
+  }
+
+  function lettresDe(c, num) {
+    const st = etatC(c); save();
+    const L = c.lettres.find((x) => String(x.num) === String(num));
     if (!L) {
-      app.innerHTML = `<section class="fe-hero lt-hero">
-          <span class="he fe-hero-he" lang="he" dir="rtl">מִכְתָּבִים מִנּוֹעָה</span>
-          <h2>💌 Les lettres de Noa</h2>
-          <p>Noa, rencontrée au café de Tel-Aviv dans la première histoire, t’écrit une lettre chaque semaine. Lis-la, puis réponds-lui en choisissant tes phrases : sa lettre suivante tiendra compte de ta réponse.</p>
+      app.innerHTML = `<div class="q-head"><a href="#/lettres">← Toutes les lettres</a><span>${c.em} ${esc(c.nom)}</span></div>
+        <section class="fe-hero lt-hero" style="--c:${c.couleur}">
+          <span class="he fe-hero-he" lang="he" dir="rtl">${esc(c.ville)}</span>
+          <h2>💌 Les lettres de ${esc(c.nom)}</h2>
+          <p>${esc(c.nom)}, ${esc(c.desc)}, t’écrit. Réponds à chaque lettre : la suivante arrive le lendemain, et elle tient compte de ce que tu as dit.</p>
         </section>
-        <div class="fe-episodes">${LETTRES_NOA.map((x) => {
-          const fait = st.rep[x.num], ok = dispoL(x.num);
-          const etat = fait ? '✓ Répondu' : ok ? '💌 À lire' : st.rep[x.num - 1] ? `📭 ${dans(sortieL(x.num))}` : `📭 après ta réponse à la lettre ${x.num - 1}`;
+        <div class="fe-episodes">${c.lettres.map((x) => {
+          const fait = st.rep[x.num], ok = dispoC(c, x.num);
+          const etat = fait ? '✓ Répondu' : ok ? '💌 À lire' : st.rep[x.num - 1] ? `📭 ${dans(sortieC(c, x.num))}` : `📭 après ta réponse à la lettre ${x.num - 1}`;
           const corps = `<span class="fe-num">${x.num}</span><span class="fe-txt"><b>${esc(x.titre)}</b><small>${fait ? `reçue le ${dateFr(fait.d)}` : ok ? 'Une lettre t’attend' : 'Pas encore arrivée'}</small></span><span class="fe-etat">${etat}</span>`;
-          return ok || fait ? `<a class="card fe-ep${fait ? ' vu' : ' neuf'}" href="#/lettres/${x.num}">${corps}</a>` : `<div class="card fe-ep lock">${corps}</div>`;
+          return ok || fait ? `<a class="card fe-ep${fait ? ' vu' : ' neuf'}" href="${lienC(c, x.num)}">${corps}</a>` : `<div class="card fe-ep lock">${corps}</div>`;
         }).join('')}</div>`;
       return;
     }
-    if (!dispoL(L.num) && !st.rep[L.num]) { location.hash = '#/lettres'; return; }
-    const ouv = ouvertureDe(L);
-    const phrases = [L.phrases[0], ...(ouv ? [ouv] : []), ...L.phrases.slice(1), ...L.questions.map((q) => ({ he: q.he, tr: q.tr, fr: q.fr })), LETTRES_FORMULES.signature];
+    if (!dispoC(c, L.num) && !st.rep[L.num]) { location.hash = lienC(c); return; }
+    const F = c.formules;
+    const ouv = ouvertureDe(c, L);
+    const phrases = [L.phrases[0], ...(ouv ? [ouv] : []), ...L.phrases.slice(1), ...L.questions.map((q) => ({ he: q.he, tr: q.tr, fr: q.fr })), F.signature];
     const deja = st.rep[L.num];
-    const choix = deja ? deja.r.map((c, k) => L.questions[k].options.find((o) => o.cle === c)) : [null, null];
-    const ligne = (p, k) => `<p class="lt-phrase" data-ligne="l${k}">${phraseMots(p.he)} ${sayBtn(p.he)}<small class="lt-fr" hidden>${esc(p.fr)}</small></p>`;
+    const choix = deja ? deja.r.map((k2, k) => L.questions[k].options.find((o) => o.cle === k2)) : [null, null];
+    const plusP = (p) => (typeof plusGram === 'function' ? plusGram(p) : '');
+    const ligne = (p, k) => `<p class="lt-phrase" data-ligne="l${k}">${phraseMots(p.he)} ${sayBtn(p.he)}${plusP(p)}<small class="lt-fr" hidden>${esc(p.fr)}</small></p>`;
     const reponseHtml = () => {
-      const morceaux = [LETTRES_FORMULES.salut, ...choix.filter(Boolean), LETTRES_FORMULES.bises];
+      const morceaux = [F.salut, ...choix.filter(Boolean), F.bises];
       return `<div class="lt-papier moi">${morceaux.map((m, k) => `<p class="lt-phrase" data-ligne="r${k}">${phraseMots(m.he)} ${sayBtn(m.he)}<small class="lt-fr" hidden>${esc(m.fr)}</small></p>`).join('')}</div>`;
     };
     const dessiner = () => {
       const complet = choix.every(Boolean);
-      app.innerHTML = `<div class="q-head"><a href="#/lettres">← Les lettres</a><span>💌 Lettre ${L.num} · ${esc(L.titre)}</span></div>
+      const suivante = c.lettres.find((x) => x.num === L.num + 1);
+      app.innerHTML = `<div class="q-head"><a href="${lienC(c)}">← ${c.em} ${esc(c.nom)}</a><span>💌 Lettre ${L.num} · ${esc(L.titre)}</span></div>
         <div class="lt-papier">
-          <p class="lt-date">תֵּל אָבִיב · ${dateFr(deja ? deja.d : auj())}</p>
+          <p class="lt-date">${esc(c.ville)} · ${dateFr(deja ? deja.d : auj())}</p>
           ${phrases.map(ligne).join('')}
         </div>
         <div class="row lt-outils"><button class="btn ghost" id="ltEcoute">🔊 Écouter la lettre</button><button class="btn ghost" id="ltTrad">🇫🇷 Traduction</button></div>
-        <h3>${deja ? 'Ta réponse' : 'Réponds à Noa'}</h3>
+        <h3>${deja ? 'Ta réponse' : `Réponds à ${esc(c.nom)}`}</h3>
         ${deja ? reponseHtml() : `${L.questions.map((q, k) => `<div class="lt-question"><p><b>${esc(q.fr)}</b></p><div class="lt-options">${q.options.map((o) => `<button type="button" class="opt lt-opt${choix[k] === o ? ' on' : ''}" data-q="${k}" data-c="${o.cle}"><span class="he" lang="he" dir="rtl">${esc(o.he)}</span><small>${esc(o.fr)}</small></button>`).join('')}</div></div>`).join('')}
           ${complet ? `<p class="sub">Ta lettre :</p>${reponseHtml()}<p class="center"><button class="btn gold" id="ltEnvoi">📨 Envoyer ma réponse</button></p>` : ''}`}
-        ${deja ? `<p class="hint center">${LETTRES_NOA.find((x) => x.num === L.num + 1) ? (dispoL(L.num + 1) ? `<a href="#/lettres/${L.num + 1}">Noa t’a répondu : lire sa lettre →</a>` : `Noa te répondra ${dans(sortieL(L.num + 1))}.`) : 'C’était la dernière lettre… pour l’instant !'}</p>` : ''}`;
+        ${deja ? `<p class="hint center">${suivante ? (dispoC(c, L.num + 1) ? `<a href="${lienC(c, L.num + 1)}">${esc(c.nom)} t’a répondu : lire sa lettre →</a>` : `${esc(c.nom)} te répondra ${dans(sortieC(c, L.num + 1))}.`) : 'C’était la dernière lettre… pour l’instant !'}</p>` : ''}`;
       brancherBulle(app);
       $('#ltTrad').onclick = () => $$('.lt-fr').forEach((x) => { x.hidden = !x.hidden; });
       $('#ltEcoute').onclick = () => lireSuite(phrases.map((p) => p.he));
       $$('.lt-opt').forEach((b) => (b.onclick = () => { const q = L.questions[+b.dataset.q]; choix[+b.dataset.q] = q.options.find((o) => o.cle === b.dataset.c); dessiner(); }));
       const envoi = $('#ltEnvoi');
       if (envoi) envoi.onclick = () => {
-        st.rep[L.num] = { r: choix.map((c) => c.cle), d: auj() };
+        st.rep[L.num] = { r: choix.map((x) => x.cle), d: auj() };
         addXP(15); save();
-        toast('📨 Réponse envoyée à Noa · +15 XP');
-        lettres(L.num);
+        toast(`📨 Réponse envoyée à ${c.nom} · +15 XP`);
+        lettresDe(c, L.num);
       };
     };
     dessiner();
+  }
+  // #/lettres : la boîte ; #/lettres/3 : la lettre 3 de Noa (anciens liens) ; #/lettres/yael/2 : la lettre 2 de Yaël
+  function lettres(a, b) {
+    if (!a) return boite();
+    if (/^\d+$/.test(a)) return lettresDe(NOA, a);
+    const c = corrDe(a);
+    if (!c) return boite();
+    return lettresDe(c, b);
   }
   routes.lettres = lettres;
 
@@ -242,8 +279,10 @@
   routes[''] = (...args) => {
     accueilAvant(...args);
     const ep = nouvelEpisode(), lt = nouvelleLettre();
+    const autreC = !lt && tousCorresp().find((c) => c.id !== 'noa' && etatLu(c) && nouvelleLettreC(c)), autreL = autreC && nouvelleLettreC(autreC);
     const bandeaux = [ep ? `<a class="ac-fete hb-neuf" href="#/feuilleton/${ep.num}"><span>📺</span><span><b>${ep.num === 1 && !S.feuilleton ? 'Nouveau : un feuilleton !' : `Nouvel épisode : ${esc(ep.titre)}`}</b> <small>${ep.saison === 2 ? 'La carte du marin' : 'La lettre cachée'} · épisode ${ep.num}</small></span><i>›</i></a>` : '',
-      lt ? `<a class="ac-fete hb-neuf" href="#/lettres/${lt.num}"><span>💌</span><span><b>${lt.num === 1 && !S.lettres ? 'Noa t’écrit !' : 'Nouvelle lettre de Noa'}</b> <small>${esc(lt.titre)}</small></span><i>›</i></a>` : ''].join('');
+      lt ? `<a class="ac-fete hb-neuf" href="#/lettres/${lt.num}"><span>💌</span><span><b>${lt.num === 1 && !S.lettres ? 'Noa t’écrit !' : 'Nouvelle lettre de Noa'}</b> <small>${esc(lt.titre)}</small></span><i>›</i></a>` : '',
+      autreL ? `<a class="ac-fete hb-neuf" href="${lienC(autreC, autreL.num)}"><span>💌</span><span><b>Nouvelle lettre de ${esc(autreC.nom)}</b> <small>${esc(autreL.titre)}</small></span><i>›</i></a>` : ''].join('');
     const ciel = $('.ac-ciel');
     if (bandeaux && ciel) ciel.insertAdjacentHTML('afterend', bandeaux);
   };
@@ -255,7 +294,7 @@
     const h2 = $('#app > h2');
     if (h2) h2.insertAdjacentHTML('beforebegin', `<div class="hb-entrees">
       <a class="card hb-entree" href="#/feuilleton"><span>📺</span><span><b>Le feuilleton</b><small>${nouvelEpisode() ? '▶ un épisode t’attend' : `${Object.keys((S.feuilleton || {}).vus || {}).length}/${FEUILLETON.length} épisodes vus`}</small></span><i>›</i></a>
-      <a class="card hb-entree" href="#/lettres"><span>💌</span><span><b>Les lettres de Noa</b><small>${nouvelleLettre() ? 'une lettre t’attend' : `${Object.keys((S.lettres || {}).rep || {}).length}/${LETTRES_NOA.length} lettres`}</small></span><i>›</i></a></div>`);
+      <a class="card hb-entree" href="#/lettres"><span>💌</span><span><b>Les lettres</b><small>${(() => { const n = tousCorresp().filter((c) => nouvelleLettreC(c)).length; return n ? `${n} lettre${n > 1 ? 's' : ''} t’attend${n > 1 ? 'ent' : ''}` : 'Noa et 4 autres correspondants'; })()}</small></span><i>›</i></a></div>`);
   };
   // Salle de jeux : les nombres en vrai
   const jeuxAvant = routes.jeux;

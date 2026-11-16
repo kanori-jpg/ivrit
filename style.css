@@ -3196,3 +3196,14 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .rc-recap-t small { display: block; color: var(--muted); text-align: left; }
 .re-ingr .gr-plus { width: 28px; height: 28px; font-size: .9rem; }
 .re-deja { color: var(--green); font-weight: 800; font-size: .85rem; }
+
+/* Les lettres : la boîte aux lettres avec tous les correspondants */
+.lt-corresps { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.lt-corresp { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none; border-left: 6px solid var(--c); transition: transform .2s; }
+.lt-corresp:hover { transform: translateY(-2px); }
+.lt-c-em { font-size: 2.2rem; }
+.lt-c-txt { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
+.lt-c-txt small { color: var(--muted); }
+.lt-c-txt .lt-c-etat { color: var(--ink); font-weight: 700; }
+.lt-corresp i { font-style: normal; font-size: 1.4rem; color: var(--muted); }
+.lt-phrase .gr-plus { width: 26px; height: 26px; font-size: .85rem; vertical-align: middle; }
