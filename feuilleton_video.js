@@ -932,7 +932,8 @@ const FEUILLETON_VIDEO = {
         <small class="tr">${esc(l.tr)}</small>
         <div class="fv-actions"><button type="button" class="fv-reecoute" data-he="${esc(l.he)}" title="Réécouter la phrase" aria-label="Réécouter la phrase">🔊 Réécouter</button><button type="button" class="fv-reecoute fv-trad" aria-expanded="${fr}">${fr ? 'Masquer' : 'Traduction'}</button>${typeof plusGram === 'function' ? plusGram(l) : ''}</div>
         <div class="fv-fr" ${fr ? '' : 'hidden'}>${esc(l.fr)}</div>${choixHtml}`;
-      sous.appendChild(bulle); bulle.hidden = true;
+      // La bulle du mot touché : juste sous la phrase, avant les propositions de réponse
+      (sous.querySelector('.fv-fr') || sous.lastElementChild).after(bulle); bulle.hidden = true;
       brancherMotsClic(sous, bulle);
       sous.querySelectorAll('.mot-clic').forEach((b) => b.addEventListener('click', () => mettrePause(true)));
       // Réécouter : on met la vidéo en pause et on joue la phrase à part, sans toucher au déroulement
