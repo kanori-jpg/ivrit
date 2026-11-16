@@ -85,7 +85,7 @@
       <p class="re-intro" data-ligne="intro">👵🏻 ${phraseCliquable(r.intro.he)} ${sayBtn(r.intro.he)}<small>${esc(r.intro.fr)}</small></p>
       <div class="re-cols">
         <section class="card"><h3>Les ingrédients · <span class="he" lang="he" dir="rtl">מִצְרָכִים</span></h3>
-          <ul class="re-ingr">${r.ingredients.map((g, k) => `<li><label><input type="checkbox"> <span class="he" lang="he" dir="rtl">${esc(g[0])}</span></label>${sayBtn(g[0])}<small>${esc(g[3])} · ${esc(g[2])}</small></li>`).join('')}</ul></section>
+          <ul class="re-ingr">${r.ingredients.map((g, k) => `<li><label><input type="checkbox"> <span class="he" lang="he" dir="rtl">${esc(g[0])}</span></label>${sayBtn(g[0])}${typeof plusGram === 'function' ? plusGram({ he: g[0], tr: g[1], fr: g[2] }) || '<span class="re-deja" title="Déjà dans le vocabulaire du site">✓</span>' : ''}<small>${esc(g[3])} · ${esc(g[2])}</small></li>`).join('')}</ul></section>
         <section class="card"><h3>Les étapes · <span class="he" lang="he" dir="rtl">אֹפֶן הַהֲכָנָה</span></h3>
           <ol class="re-etapes">${r.etapes.map((e, k) => `<li data-ligne="e${k}"><div class="re-et-he">${phraseCliquable(e.he)} ${sayBtn(e.he)}</div><small class="tr">${esc(e.tr)}</small><button type="button" class="link re-voir" data-k="${k}">Traduction</button><span class="re-fr" id="reFr${k}" hidden>${esc(e.fr)}</span></li>`).join('')}</ol>
           <p class="re-sod" data-ligne="sod">💡 ${phraseCliquable(r.sod.he)} ${sayBtn(r.sod.he)}<small>${esc(r.sod.fr)}</small></p></section>

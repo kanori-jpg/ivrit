@@ -61,7 +61,7 @@
         $('#rcIndice').onclick = () => { indice = true; speak(p.he); };
         $('#rcEffacer').onclick = () => { pose.length = 0; dessiner(); };
         $('#rcVerif').onclick = () => {
-          verifie = true;
+          verifie = true; p.reussi = juste();
           if (juste()) { justes++; const gain = indice ? 1 : 2; xp += gain; S.ordre = S.ordre || { parties: 0, reussies: 0 }; if (!indice) S.ordre.reussies++; }
           dessiner(); speak(p.he);
         };
@@ -74,6 +74,8 @@
       addXP(xp); save();
       app.innerHTML = `<div class="card center result"><div class="em">🧩</div><h2>${justes} / ${serie.length} phrases</h2>
         <p class="sub">+${xp} XP${justes === serie.length ? ' · un sans-faute !' : ''}</p>
+        <div class="rc-recap"><b>Les phrases de la partie</b><small>Touche ＋ pour ajouter une phrase à tes cartes.</small>
+          ${serie.map((p) => `<div class="rc-recap-l${p.reussi ? ' ok' : ' ko'}"><span class="rc-recap-m">${p.reussi ? '✓' : '✗'}</span><span class="rc-recap-t">${HE(p.he)}<small>${esc(p.fr)}</small></span>${sayBtn(p.he)}${typeof plusGram === 'function' ? plusGram(p) : ''}</div>`).join('')}</div>
         <div class="row" style="justify-content:center"><a class="btn gold" href="#/ordre/${niveau}" id="rcEncore">Rejouer</a><a class="btn ghost" href="#/ordre">Changer de niveau</a></div></div>`;
       $('#rcEncore').onclick = (e) => { e.preventDefault(); ordre(niveau); };
     };
