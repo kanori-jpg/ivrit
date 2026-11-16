@@ -3248,3 +3248,7 @@ a.pc-etape:hover { background: var(--bg); }
 .pc-txt small { color: var(--muted); font-size: .78rem; }
 .pc-txt b { overflow-wrap: anywhere; }
 .pc-etat { color: var(--muted); font-size: .82rem; text-align: right; flex: none; max-width: 40%; }
+.pc-ratees { text-align: left; margin: 14px auto; max-width: 560px; display: flex; flex-direction: column; gap: 8px; }
+.pc-ratee { display: flex; flex-direction: column; gap: 2px; padding: 8px 12px; border-radius: 12px; background: rgba(224, 82, 79, .08); }
+.pc-ratee small { color: var(--muted); }
+.pc-etape.controle-palier .pc-em { filter: saturate(1.3); }
