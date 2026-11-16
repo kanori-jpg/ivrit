@@ -15,8 +15,10 @@ const TRS = (t) => `<span class="tr-x">${esc(t)} · </span>`;
 const sayBtn = (t, label = '🔊') => `<button class="say" data-say="${esc(t)}" title="Écouter">${label}</button>`;
 
 const WORDS = THEMES.flatMap((t) => t.words.map(([he, tr, fr]) => ({ he, tr, fr, theme: t.id })));
-const themeWords = (id) => (id && id !== 'tout' ? WORDS.filter((w) => w.theme === id) : WORDS);
-const themeName = (id) => (THEMES.find((t) => t.id === id) || { name: 'Tous les thèmes' }).name;
+// Mots (et mots composés) ou phrases (et expressions) : le rangement du dictionnaire, sinon « un seul mot = mot »
+const genreCarte = (w) => (typeof dicoCat === 'function' ? (dicoCat(w) === 'mot' ? 'mots' : 'phrases') : /\s/.test(w.he) ? 'phrases' : 'mots');
+const themeWords = (id) => (id === 'tout-mots' || id === 'tout-phrases' ? WORDS.filter((w) => genreCarte(w) === id.slice(5)) : id && id !== 'tout' ? WORDS.filter((w) => w.theme === id) : WORDS);
+const themeName = (id) => ({ 'tout-mots': 'Révision : les mots', 'tout-phrases': 'Révision : phrases et expressions' })[id] || (THEMES.find((t) => t.id === id) || { name: 'Tous les thèmes' }).name;
 
 /* ============ Sauvegarde ============ */
 const KEY = 'ivrit-ludique-v1';
@@ -474,6 +476,10 @@ function cartes(theme) {
       <span class="cm-jour-em">✨</span>
       <span class="cm-jour-txt"><small>Révision du jour</small><b>${aRevoir ? `${aRevoir} carte${aRevoir > 1 ? 's' : ''} à revoir` : 'Rien à revoir'}${nouveaux ? ` · ${nouveaux} nouveaux mots` : ''}</b><span>Une séance : 12 cartes au plus, environ 2 minutes.</span></span>
       <span class="btn gold">C’est parti →</span></a>
+    <div class="cm-jour2">${[['mots', '📗', 'Seulement les mots', 'mots et mots composés'], ['phrases', '💬', 'Seulement les phrases', 'phrases et expressions']].map(([k, em, nom, sous]) => {
+      const ws = themeWords('tout-' + k), r = ws.filter((w) => S.cards[w.he] && isDue(w)).length, nv = ws.filter((w) => !S.cards[w.he] && isDue(w)).length;
+      return `<a class="card cm-genre" href="#/cartes/tout-${k}"><span class="cm-genre-em">${em}</span><span><b>${nom}</b><small>${sous}</small><small class="cm-genre-n">${r ? `${r} à revoir` : 'rien à revoir'}${nv ? ` · ${nv} nouveaux` : ''}</small></span><span class="cm-genre-go">›</span></a>`;
+    }).join('')}</div>
     <div class="card cm-boites">
       <div class="cm-boites-tete"><b>📦 Tes boîtes</b><small>« Bien » fait monter le mot d’une boîte, « super bien » de deux : il revient plus tard. « À revoir » le renvoie dans la boîte 1.</small></div>
       <div class="cm-barres" style="grid-template-columns:repeat(${INTERVALS.length}, 1fr)">${boites.map((n, b) => `<div class="cm-boite" style="--h:${(n / maxB) * 100}%;--c:${COUL[b]}" title="Boîte ${b + 1} : revient ${ECH[b]}"><span class="cm-n">${n}</span><span class="cm-col"><i></i></span><b>${b + 1}</b><small>${ECH[b]}</small></div>`).join('')}</div>
@@ -523,7 +529,7 @@ function cartes(theme) {
     <div class="progress"><i style="width:${(doneCount / total) * 100}%"></i></div>
     <div class="flip" id="flip">
       <div class="flip-in">
-        <div class="face"><span class="big">${HE(w.he)}</span>${sayBtn(w.he)}<span class="hint">${c.due ? 'Boîte ' + (c.box + 1) : 'Nouveau mot'} · touche pour retourner</span></div>
+        <div class="face"><span class="big">${HE(w.he)}</span>${sayBtn(w.he)}<span class="hint">${c.due ? 'Boîte ' + (c.box + 1) : genreCarte(w) === 'phrases' ? 'Nouvelle phrase' : 'Nouveau mot'} · touche pour retourner</span></div>
         <div class="face back"><span class="big">${HE(w.he)}</span><span class="tr">${esc(w.tr)}</span><span class="fr">${esc(w.fr)}</span></div>
       </div>
     </div>

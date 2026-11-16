@@ -3168,3 +3168,14 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .fv-st .gr-plus.on { background: color-mix(in srgb, var(--gold) 45%, #2b2240); color: #fff; }
 .fv-suite { margin: 10px 0 4px; text-align: center; }
 .fe-he .gr-plus { margin-inline-start: 4px; }
+
+/* Cartes mémoire : réviser seulement les mots, ou seulement les phrases */
+.cm-jour2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: -4px 0 14px; }
+.cm-genre { display: flex; align-items: center; gap: 10px; padding: 12px 14px; color: var(--ink); text-decoration: none; transition: transform .2s; }
+.cm-genre:hover { transform: translateY(-2px); }
+.cm-genre-em { font-size: 1.6rem; }
+.cm-genre b { display: block; }
+.cm-genre small { display: block; color: var(--muted); font-size: .78rem; }
+.cm-genre .cm-genre-n { color: var(--ink); font-weight: 700; margin-top: 2px; }
+.cm-genre-go { margin-left: auto; font-size: 1.4rem; color: var(--muted); }
+@media (max-width: 520px) { .cm-jour2 { grid-template-columns: 1fr; } }
