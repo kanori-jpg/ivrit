@@ -6,16 +6,16 @@
   function phrases() {
     if (PHRASES) return PHRASES;
     const c = [], vus = new Set();
-    const ajoute = (he, fr, src) => {
+    const ajoute = (he, fr, src, tr) => {
       if (!he || !fr || /[«»"״]/.test(he) || vus.has(he)) return;
       const mots = he.trim().split(/\s+/);
       if (mots.length < 3 || mots.length > 9) return;
-      vus.add(he); c.push({ he, fr, src, mots });
+      vus.add(he); c.push({ he, fr, src, mots, tr: tr || '' });
     };
-    [...STORIES, ...STORIES_VIE].forEach((s) => s.lines.forEach((l) => { ajoute(l.he, l.fr, 'histoire'); (l.choices || []).filter((x) => x.ok).forEach((x) => ajoute(x.he, x.fr, 'histoire')); }));
+    [...STORIES, ...STORIES_VIE].forEach((s) => s.lines.forEach((l) => { ajoute(l.he, l.fr, 'histoire', l.tr); (l.choices || []).filter((x) => x.ok).forEach((x) => ajoute(x.he, x.fr, 'histoire', x.tr)); }));
     if (typeof PRESSE !== 'undefined') PRESSE.forEach((a) => a.sentences.forEach((s) => ajoute(s.he, s.fr, 'journal')));
-    if (typeof GRAMMAIRE !== 'undefined') GRAMMAIRE.forEach((l) => (l.exemples || []).forEach((e) => ajoute(e.he, e.fr, 'grammaire')));
-    if (typeof EXPRESSIONS !== 'undefined') EXPRESSIONS.forEach((x) => x.ex && ajoute(x.ex.he, x.ex.fr, 'expression'));
+    if (typeof GRAMMAIRE !== 'undefined') GRAMMAIRE.forEach((l) => (l.exemples || []).forEach((e) => ajoute(e.he, e.fr, 'grammaire', e.tr)));
+    if (typeof EXPRESSIONS !== 'undefined') EXPRESSIONS.forEach((x) => x.ex && ajoute(x.ex.he, x.ex.fr, 'expression', x.ex.tr));
     return (PHRASES = c);
   }
   const propre = (m) => NFC(m).replace(/[.,!?:;…]+$/u, '');
@@ -51,7 +51,7 @@
             <p class="rc-fr">« ${esc(p.fr)} »</p>
             <div class="rc-reponse${verifie ? (juste() ? ' ok' : ' ko') : ''}" dir="rtl" lang="he">${pose.length ? pose.map((t, k) => `<button type="button" class="rc-tuile posee${verifie && !juste() ? (propre(t.m) === propre(p.mots[k]) ? ' bien' : ' mal') : ''}" data-p="${k}"${verifie ? ' disabled' : ''}>${esc(t.m)}</button>`).join('') : '<span class="rc-vide">Touche les mots ci-dessous</span>'}</div>
             <div class="rc-tuiles" dir="rtl" lang="he">${tuiles.map((t, k) => (pose.includes(t) ? '' : `<button type="button" class="rc-tuile" data-t="${k}"${verifie ? ' disabled' : ''}>${esc(t.m)}</button>`)).join('')}</div>
-            ${verifie ? `<div class="rc-bilan">${juste() ? '<b>✓ Bravo !</b>' : `<b>Presque !</b> La phrase était :`}<div class="rc-solution">${HE(p.he)}${sayBtn(p.he)}</div></div>
+            ${verifie ? `<div class="rc-bilan">${juste() ? '<b>✓ Bravo !</b>' : `<b>Presque !</b> La phrase était :`}<div class="rc-solution">${HE(p.he)}${sayBtn(p.he)}${typeof plusGram === 'function' ? plusGram(p) : ''}</div>${typeof plusGram === 'function' && plusGram(p) ? '<small class="rc-plus-aide">＋ pour ajouter cette phrase à tes cartes</small>' : ''}</div>
               <p class="center"><button class="btn gold" id="rcSuite">${i + 1 < serie.length ? 'Phrase suivante →' : 'Voir mon score'}</button></p>`
             : `<div class="row rc-boutons"><button class="btn ghost" id="rcIndice">🔊 Indice : écouter</button><button class="btn ghost" id="rcEffacer"${pose.length ? '' : ' disabled'}>↺ Effacer</button><button class="btn gold" id="rcVerif"${pose.length === tuiles.length ? '' : ' disabled'}>Vérifier</button></div>`}
           </div>`;

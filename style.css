@@ -3179,3 +3179,7 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .cm-genre .cm-genre-n { color: var(--ink); font-weight: 700; margin-top: 2px; }
 .cm-genre-go { margin-left: auto; font-size: 1.4rem; color: var(--muted); }
 @media (max-width: 520px) { .cm-jour2 { grid-template-columns: 1fr; } }
+
+/* Reconstruire des phrases : ajouter la phrase à ses cartes */
+.rc-solution .gr-plus { margin-inline-start: 6px; }
+.rc-plus-aide { display: block; color: var(--muted); font-size: .78rem; margin-top: 4px; }
