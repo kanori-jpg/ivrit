@@ -15,17 +15,22 @@ function maquetteAccueil() {
   const nouveaux = aRevoir > 15 ? 0 : Math.min(typeof SEANCE !== 'undefined' ? SEANCE.nouveaux : 10, WORDS.filter((x) => !cardOf(x).due && isDue(x)).length);
   const gram = typeof questionsGramSeance === 'function' && GRAMMAIRE.some((l) => S.grammaire[l.id]);
   const contenu = [aRevoir ? `${Math.min(aRevoir, 8)} carte${Math.min(aRevoir, 8) > 1 ? 's' : ''} à revoir` : null, nouveaux ? `${nouveaux} nouveau${nouveaux > 1 ? 'x' : ''} mot${nouveaux > 1 ? 's' : ''}` : null, '5 questions', gram ? 'un peu de grammaire' : null].filter(Boolean).join(' · ');
+  // Les phrases ajoutées avec ＋ qui sont à revoir
+  const mesPh = themeWords('mes-phrases').filter((x) => isDue(x)).length;
   // La petite liste du jour
   const taches = [
     { ok: faite, nom: 'Faire ma séance', href: '#/seance' },
     { ok: !!S.daily[auj], nom: 'Trouver le mot caché', href: '#/jour' },
     art ? { ok: S.presse.includes(art.id), nom: 'Lire l’article du jour', href: '#/journal/jour' } : null,
     { ok: objectif, nom: `Gagner ${S.goal} XP`, href: '#/progres', sous: `${Math.min(todayXp, S.goal)}/${S.goal}` },
+    mesPh ? { ok: false, nom: 'Revoir mes phrases', href: '#/cartes/mes-phrases', sous: `${mesPh}` } : null,
   ].filter(Boolean);
   // Reprendre là où on en était
   const lecon = typeof GRAMMAIRE !== 'undefined' ? GRAMMAIRE.find((l) => !S.grammaire[l.id]) : null;
   const etape = typeof VOYAGE !== 'undefined' ? VOYAGE.findIndex((v, i) => !(S.voyage || {})[i]) : -1;
+  const pc = typeof etatParcours === 'function' ? etatParcours() : null, pcE = pc && pc.etapes[pc.courante];
   const reprendre = [
+    pcE ? { em: '🧭', titre: `Mon parcours · étape ${pc.courante + 1}`, txt: `${pcE.em} ${pcE.titre}`, href: '#/parcours' } : null,
     lecon ? { em: lecon.em, titre: 'Grammaire', txt: texteGram(lecon.titre), href: `#/grammaire/${lecon.id}` } : null,
     etape >= 0 ? { em: '🧳', titre: 'Mon voyage', txt: `Prochaine étape : ${VOYAGE[etape].lieu}`, href: `#/voyage/${VOYAGE[etape].id}` } : null,
     { em: '🎭', titre: 'Jeux de rôle', txt: 'Une scène de la vie, plusieurs fins', href: '#/roles' },

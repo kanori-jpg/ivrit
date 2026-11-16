@@ -3207,3 +3207,44 @@ body.etoiles .dico-cats button.on small { color: #4a3470; }
 .lt-c-txt .lt-c-etat { color: var(--ink); font-weight: 700; }
 .lt-corresp i { font-style: normal; font-size: 1.4rem; color: var(--muted); }
 .lt-phrase .gr-plus { width: 26px; height: 26px; font-size: .85rem; vertical-align: middle; }
+
+/* ============ Bouton 🐢 : réécouter plus lentement ============ */
+.say.say-lent { background: rgba(47, 174, 107, .2); color: var(--green); animation: sayLent .35s ease; }
+@keyframes sayLent { from { transform: scale(.85); } to { transform: scale(1); } }
+
+/* ============ Mon parcours ============ */
+.pc-hero { position: relative; overflow: hidden; }
+.pc-hero h2 { margin: 2px 0 6px; }
+.pc-hero-he { position: absolute; top: 10px; left: 16px; font-size: 1.7rem; opacity: .14; pointer-events: none; }
+.pc-total { display: flex; align-items: center; gap: 10px; margin: 12px 0 14px; }
+.pc-total small { color: var(--muted); white-space: nowrap; font-weight: 700; }
+.pc-barre { display: block; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; margin-top: 5px; }
+.pc-barre.grande { flex: 1; height: 10px; margin: 0; }
+.pc-barre i { display: block; height: 100%; background: linear-gradient(90deg, #3d8f7a, var(--green)); border-radius: inherit; }
+.pc-suite { display: flex; align-items: center; gap: 14px; padding: 14px; border-radius: 14px; background: rgba(61, 143, 122, .16); color: var(--ink); text-decoration: none; flex-wrap: wrap; }
+.pc-suite > span:nth-child(2) { flex: 1; min-width: 180px; display: flex; flex-direction: column; }
+.pc-suite small { color: var(--green); font-weight: 800; }
+.pc-suite b { font-size: 1.15rem; }
+.pc-suite span span { color: var(--muted); font-size: .9rem; }
+.pc-suite .pc-em { font-size: 2rem; }
+.pc-bravo { font-weight: 800; font-size: 1.1rem; }
+.pc-palier { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); margin: 12px 0; padding: 4px 14px; }
+.pc-palier summary { color: var(--ink); display: flex; justify-content: space-between; align-items: center; padding: 10px 0; cursor: pointer; list-style: none; }
+.pc-palier summary::-webkit-details-marker { display: none; }
+.pc-palier summary::after { content: '▾'; margin-left: 10px; color: var(--muted); }
+.pc-palier[open] summary::after { content: '▴'; }
+.pc-palier summary small { margin-left: auto; color: var(--muted); font-weight: 700; }
+.pc-palier.fini summary small { color: var(--green); }
+.pc-liste { padding-bottom: 8px; }
+.pc-etape { display: flex; align-items: center; gap: 12px; padding: 9px 6px; border-top: 1px solid var(--line); color: var(--ink); text-decoration: none; border-radius: 10px; }
+a.pc-etape:hover { background: var(--bg); }
+.pc-num { width: 28px; height: 28px; flex: none; border-radius: 50%; display: grid; place-items: center; font-size: .8rem; font-weight: 800; background: var(--line); color: var(--muted); }
+.pc-etape.fait .pc-num { background: var(--green); color: #fff; }
+.pc-etape.courante { background: rgba(61, 143, 122, .16); }
+.pc-etape.courante .pc-num { background: #3d8f7a; color: #fff; }
+.pc-etape.fermee { opacity: .5; }
+.pc-em { font-size: 1.35rem; flex: none; }
+.pc-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pc-txt small { color: var(--muted); font-size: .78rem; }
+.pc-txt b { overflow-wrap: anywhere; }
+.pc-etat { color: var(--muted); font-size: .82rem; text-align: right; flex: none; max-width: 40%; }

@@ -17,8 +17,9 @@ const sayBtn = (t, label = '🔊') => `<button class="say" data-say="${esc(t)}" 
 const WORDS = THEMES.flatMap((t) => t.words.map(([he, tr, fr]) => ({ he, tr, fr, theme: t.id })));
 // Mots (et mots composés) ou phrases (et expressions) : le rangement du dictionnaire, sinon « un seul mot = mot »
 const genreCarte = (w) => (typeof dicoCat === 'function' ? (dicoCat(w) === 'mot' ? 'mots' : 'phrases') : /\s/.test(w.he) ? 'phrases' : 'mots');
-const themeWords = (id) => (id === 'tout-mots' || id === 'tout-phrases' ? WORDS.filter((w) => genreCarte(w) === id.slice(5)) : id && id !== 'tout' ? WORDS.filter((w) => w.theme === id) : WORDS);
-const themeName = (id) => ({ 'tout-mots': 'Révision : les mots', 'tout-phrases': 'Révision : phrases et expressions' })[id] || (THEMES.find((t) => t.id === id) || { name: 'Tous les thèmes' }).name;
+// « mes-phrases » : les phrases et expressions que tu as ajoutées toi-même (＋), révisées comme les mots
+const themeWords = (id) => (id === 'mes-phrases' ? WORDS.filter((w) => w.theme === 'mesmots' && genreCarte(w) === 'phrases') : id === 'tout-mots' || id === 'tout-phrases' ? WORDS.filter((w) => genreCarte(w) === id.slice(5)) : id && id !== 'tout' ? WORDS.filter((w) => w.theme === id) : WORDS);
+const themeName = (id) => ({ 'tout-mots': 'Révision : les mots', 'tout-phrases': 'Révision : phrases et expressions', 'mes-phrases': 'Mes phrases' })[id] || (THEMES.find((t) => t.id === id) || { name: 'Tous les thèmes' }).name;
 
 /* ============ Sauvegarde ============ */
 const KEY = 'ivrit-ludique-v1';
@@ -197,10 +198,11 @@ function sourceSon(he) {
   return f ? 'voix de synthèse' + ((window.PK_ECARTES || {})[k] ? ' (Phonikud écartée)' : '') + ecartee : 'voix du navigateur';
 }
 // Lit un texte. La promesse se termine quand la lecture est finie ou interrompue.
-function speak(text) {
+// vitesse < 1 : lecture ralentie (bouton 🐢), sans changer la hauteur de la voix
+function speak(text, vitesse = 1) {
   stopAudio();
   return new Promise((resolve) => {
-    const timer = setTimeout(() => done(), 12000); // sécurité si le navigateur ne signale jamais la fin
+    const timer = setTimeout(() => done(), 12000 / vitesse); // sécurité si le navigateur ne signale jamais la fin
     function done() { clearTimeout(timer); if (endSpeech === done) endSpeech = null; resolve(); }
     endSpeech = done;
     // Une vraie voix signalée comme fausse laisse la place à la voix de synthèse
@@ -211,12 +213,13 @@ function speak(text) {
       loadVoices();
       if (alerter && !heVoice && !warned) { warned = true; toast('Pas de voix hébraïque trouvée : ouvre le site dans Microsoft Edge ou ajoute la voix « Hébreu » dans Windows.'); }
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'he-IL'; if (heVoice) u.voice = heVoice; u.rate = 0.8;
+      u.lang = 'he-IL'; if (heVoice) u.voice = heVoice; u.rate = 0.8 * vitesse;
       u.onend = done; u.onerror = done;
       speechSynthesis.speak(u);
     }
     if (file) {
       player = new Audio('audio/' + file);
+      if (vitesse !== 1) { player.playbackRate = vitesse; player.preservesPitch = true; }
       player.onended = done;
       // Hors connexion, un son pas encore gardé sur l'appareil : on prend la voix de l'appareil
       player.onerror = () => (navigator.onLine ? done() : synthese(false));
@@ -226,7 +229,23 @@ function speak(text) {
     synthese(true);
   });
 }
-document.addEventListener('click', (e) => { const b = e.target.closest('[data-say]'); if (b) { e.stopPropagation(); speak(b.dataset.say); } }, true);
+// Bouton 🔊 : après l'écoute, il devient 🐢 quelques secondes pour réécouter plus lentement
+const LENT = 0.65;
+function boutonLent(b, oui) {
+  clearTimeout(b._lent);
+  if (oui) {
+    if (!b.classList.contains('say-lent')) { b.dataset.lab = b.innerHTML; b.innerHTML = b.dataset.lab.replace('🔊', '🐢').replace('Écouter', 'Plus lentement'); if (!b.innerHTML.includes('🐢')) b.innerHTML = '🐢'; }
+    b.classList.add('say-lent'); b.title = 'Réécouter plus lentement';
+    b._lent = setTimeout(() => boutonLent(b, false), 6000);
+  } else if (b.classList.contains('say-lent')) { b.classList.remove('say-lent'); b.innerHTML = b.dataset.lab; b.title = 'Écouter'; }
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-say]'); if (!b) return;
+  e.stopPropagation();
+  const lent = b.classList.contains('say-lent');
+  if (b.classList.contains('say')) boutonLent(b, false);
+  speak(b.dataset.say, lent ? LENT : 1).then(() => { if (b.isConnected && b.classList.contains('say')) boutonLent(b, true); });
+}, true);
 
 /* Minuteurs & clavier propres à chaque écran */
 let timers = [], keyHandler = null;
@@ -238,6 +257,7 @@ document.addEventListener('keydown', (e) => keyHandler && keyHandler(e));
 /* ============ Navigation ============ */
 const ACTIVITIES = [
   { id: 'seance', em: '🌅', name: 'Séance du jour', desc: 'Révisions, nouveaux mots et exercice en un bouton', color: '#e46a92' },
+  { id: 'parcours', em: '🧭', name: 'Mon parcours', desc: 'Le chemin pas à pas, dans l’ordre', color: '#3d8f7a' },
   { id: 'alphabet', em: '🔤', name: 'Alef-Bet', desc: 'Les 22 lettres et les voyelles', color: '#2f5bd3' },
   { id: 'histoire', em: '📖', name: 'Histoires', desc: 'Dialogue en hébreu et choisis tes réponses', color: '#c9607f' },
   { id: 'scenes', em: '🌳', name: 'Scènes', desc: 'Touche les objets pour découvrir les mots', color: '#2fae6b' },
@@ -252,9 +272,9 @@ const ACTIVITIES = [
   { id: 'progres', em: '🏆', name: 'Mes progrès', desc: 'Niveau, série, badges', color: '#d9822b' },
 ];
 // Le menu « constellation » : chaque page est une petite étoile, avec son nom en hébreu dans la bulle
-const NOMS_HE = { '': 'הַבַּיִת', seance: 'הַשִּׁעוּר שֶׁל הַיּוֹם', alphabet: 'אָלֶף־בֵּית', grammaire: 'דִּקְדּוּק', conjugaison: 'פְּעָלִים', cartes: 'כַּרְטִיסִיּוֹת', dictionnaire: 'מִלּוֹן', jeux: 'מִשְׂחָקִים', histoire: 'סִפּוּרִים', scenes: 'תְּמוּנוֹת', cursive: 'כְּתַב יָד', journal: 'הָעִתּוֹן שֶׁלִּי', chambre: 'הַחֶדֶר שֶׁלִּי', progres: 'הַהִתְקַדְּמוּת שֶׁלִּי' };
+const NOMS_HE = { '': 'הַבַּיִת', seance: 'הַשִּׁעוּר שֶׁל הַיּוֹם', parcours: 'הַדֶּרֶךְ שֶׁלִּי', alphabet: 'אָלֶף־בֵּית', grammaire: 'דִּקְדּוּק', conjugaison: 'פְּעָלִים', cartes: 'כַּרְטִיסִיּוֹת', dictionnaire: 'מִלּוֹן', jeux: 'מִשְׂחָקִים', histoire: 'סִפּוּרִים', scenes: 'תְּמוּנוֹת', cursive: 'כְּתַב יָד', journal: 'הָעִתּוֹן שֶׁלִּי', chambre: 'הַחֶדֶר שֶׁלִּי', progres: 'הַהִתְקַדְּמוּת שֶׁלִּי' };
 const NOMS_RAIL = { cursive: 'Écriture cursive', journal: 'Lire un journal', seance: 'Séance du jour' };
-const RAIL_GROUPES = [['', 'seance'], ['alphabet', 'grammaire', 'conjugaison', 'cartes', 'dictionnaire'], ['jeux', 'histoire', 'scenes', 'cursive'], ['journal', 'chambre', 'progres']];
+const RAIL_GROUPES = [['', 'seance', 'parcours'], ['alphabet', 'grammaire', 'conjugaison', 'cartes', 'dictionnaire'], ['jeux', 'histoire', 'scenes', 'cursive'], ['journal', 'chambre', 'progres']];
 const infoPage = (id) => (id === '' ? { id: '', em: '🏠', name: 'Accueil', desc: 'Ton écran d’accueil et le programme du jour' } : ACTIVITIES.find((x) => x.id === id));
 $('#nav').innerHTML = RAIL_GROUPES.map((g) => g.map(infoPage).filter(Boolean).map((a) => `<a href="#/${a.id}" class="rail-etoile${a.id === 'seance' ? ' seance' : ''}" aria-label="${esc(a.name)}" data-nom="${esc(a.name)}" data-he="${esc(NOMS_HE[a.id] || '')}" data-desc="${esc(a.desc)}"><span class="rail-ic">${a.em}<b class="rail-badge" data-badge="${a.id}"></b></span><span class="rail-txt"><span class="rail-nom">${esc(NOMS_RAIL[a.id] || a.name)}</span>${NOMS_HE[a.id] ? `<span class="rail-he" lang="he" dir="rtl">${esc(NOMS_HE[a.id])}</span>` : ''}</span></a>`).join('')).join('<span class="rail-scintille" aria-hidden="true">✦</span>');
 // La bulle : nom, nom hébreu et description, à côté de l'étoile survolée
@@ -363,7 +383,11 @@ function home() {
   const salut = h < 12 ? ['בֹּקֶר טוֹב', 'Bonjour'] : h < 18 ? ['צָהֳרַיִם טוֹבִים', 'Bon après-midi'] : h < 22 ? ['עֶרֶב טוֹב', 'Bonsoir'] : ['לַיְלָה טוֹב', 'Bonne nuit'];
   const dateFr = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
   const art = typeof PRESSE !== 'undefined' ? presseDuJour() : null;
+  const pc = typeof etatParcours === 'function' ? etatParcours() : null, pcE = pc && pc.etapes[pc.courante];
+  const mesPh = themeWords('mes-phrases').filter((x) => isDue(x)).length;
   const taches = [
+    pcE ? { ok: false, em: '🧭', nom: `Mon parcours · étape ${pc.courante + 1}`, sous: `${pcE.titre} (${pcE.txt})`, href: pcE.href } : null,
+    mesPh ? { ok: false, em: '⭐', nom: 'Mes phrases', sous: `${mesPh} phrase${mesPh > 1 ? 's' : ''} à revoir`, href: '#/cartes/mes-phrases' } : null,
     { ok: S.seance === auj, em: '🌅', nom: 'Séance du jour', sous: 'cartes, nouveaux mots et questions', href: '#/seance' },
     { ok: !!S.daily[auj], em: '🔎', nom: 'Le mot caché', sous: '+30 XP', href: '#/jour' },
     art ? { ok: S.presse.includes(art.id), em: '🗞️', nom: 'L’article du jour', sous: art.uneFr.length > 44 ? art.uneFr.slice(0, 42) + '…' : art.uneFr, href: '#/journal/jour' } : null,
@@ -371,7 +395,7 @@ function home() {
   ].filter(Boolean);
   const faites = taches.filter((t) => t.ok).length;
   const GROUPES = [
-    ['Apprendre', ['alphabet', 'grammaire', 'conjugaison', 'cursive']],
+    ['Apprendre', ['parcours', 'alphabet', 'grammaire', 'conjugaison', 'cursive']],
     ['S’entraîner', ['seance', 'cartes', 'jeux', 'dictionnaire']],
     ['Lire et explorer', ['histoire', 'scenes', 'journal']],
     ['Mon espace', ['chambre', 'progres']],
@@ -494,9 +518,9 @@ function cartes(theme) {
       <span class="cm-jour-em">✨</span>
       <span class="cm-jour-txt"><small>Révision du jour</small><b>${aRevoir ? `${aRevoir} carte${aRevoir > 1 ? 's' : ''} à revoir` : 'Rien à revoir'}${nouveaux ? ` · ${nouveaux} nouveaux mots` : ''}</b><span>Une séance : 12 cartes au plus, environ 2 minutes.</span></span>
       <span class="btn gold">C’est parti →</span></a>
-    <div class="cm-jour2">${[['mots', '📗', 'Seulement les mots', 'mots et mots composés'], ['phrases', '💬', 'Seulement les phrases', 'phrases et expressions']].map(([k, em, nom, sous]) => {
-      const ws = themeWords('tout-' + k), r = ws.filter((w) => S.cards[w.he] && isDue(w)).length, nv = ws.filter((w) => !S.cards[w.he] && isDue(w)).length;
-      return `<a class="card cm-genre" href="#/cartes/tout-${k}"><span class="cm-genre-em">${em}</span><span><b>${nom}</b><small>${sous}</small><small class="cm-genre-n">${r ? `${r} à revoir` : 'rien à revoir'}${nv ? ` · ${nv} nouveaux` : ''}</small></span><span class="cm-genre-go">›</span></a>`;
+    <div class="cm-jour2">${[['tout-mots', '📗', 'Seulement les mots', 'mots et mots composés'], ['tout-phrases', '💬', 'Seulement les phrases', 'phrases et expressions'], ['mes-phrases', '⭐', 'Mes phrases', 'celles que tu as ajoutées avec ＋']].filter(([k]) => k !== 'mes-phrases' || themeWords(k).length).map(([k, em, nom, sous]) => {
+      const ws = themeWords(k), r = ws.filter((w) => S.cards[w.he] && isDue(w)).length, nv = ws.filter((w) => !S.cards[w.he] && isDue(w)).length;
+      return `<a class="card cm-genre" href="#/cartes/${k}"><span class="cm-genre-em">${em}</span><span><b>${nom}</b><small>${sous}</small><small class="cm-genre-n">${r ? `${r} à revoir` : 'rien à revoir'}${nv ? ` · ${nv} nouveaux` : ''}</small></span><span class="cm-genre-go">›</span></a>`;
     }).join('')}</div>
     <div class="card cm-boites">
       <div class="cm-boites-tete"><b>📦 Tes boîtes</b><small>« Bien » fait monter le mot d’une boîte, « super bien » de deux : il revient plus tard. « À revoir » le renvoie dans la boîte 1.</small></div>
