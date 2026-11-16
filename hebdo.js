@@ -33,12 +33,12 @@
       app.innerHTML = `<section class="fe-hero">
           <span class="he fe-hero-he" lang="he" dir="rtl">הַמִּכְתָּב</span>
           <h2>📺 Le feuilleton</h2>
-          <p>Une enquête en deux saisons, un nouvel épisode chaque semaine. Saison 1, « La lettre cachée » : en déménageant des meubles, Shira et toi trouvez une lettre de 1962, jamais ouverte… Saison 2, « La carte du marin » : les secrets que Yossef a cachés le long de la côte.</p>
+          <p>Une enquête en trois saisons, un nouvel épisode chaque semaine. Saison 1, « La lettre cachée » : en déménageant des meubles, Shira et toi trouvez une lettre de 1962, jamais ouverte… Saison 2, « La carte du marin » : les secrets que Yossef a cachés le long de la côte. Saison 3, « La recette perdue » : Tamar cherche la recette de la hallah de sa grand-mère, de Jaffa jusqu’à Akko.</p>
           <div class="fe-persos">${Object.values(FEUILLETON_PERSOS).slice(0, 4).map((p) => `<span title="${esc(p.desc)}">${p.em} <b>${esc(p.nom)}</b><small>${esc(p.desc)}</small></span>`).join('')}</div>
         </section>
         <div class="fe-episodes">${FEUILLETON.map((e, k) => {
           const vu = st.vus[e.num], ok = dispoF(e.num);
-          const titreSaison = !k || (FEUILLETON[k - 1].saison || 1) !== (e.saison || 1) ? `<h3 class="fe-saison">Saison ${e.saison || 1} · ${(e.saison || 1) === 2 ? 'La carte du marin' : 'La lettre cachée'}</h3>` : '';
+          const titreSaison = !k || (FEUILLETON[k - 1].saison || 1) !== (e.saison || 1) ? `<h3 class="fe-saison">Saison ${e.saison || 1} · ${(e.saison || 1) === 3 ? 'La recette perdue' : (e.saison || 1) === 2 ? 'La carte du marin' : 'La lettre cachée'}</h3>` : '';
           const etat = vu ? '✓ Vu' : ok ? '▶ Regarder' : st.vus[e.num - 1] ? `🔒 ${dans(sortieF(e.num))}` : `🔒 après l’épisode ${e.num - 1}`;
           const corps = `<span class="fe-num">${e.num}</span><span class="fe-txt"><b>${e.em} ${esc(e.titre)}</b><small>${ok || vu ? esc(e.lieu) : 'À venir…'}</small></span><span class="fe-etat">${etat}</span>`;
           return titreSaison + (ok || vu ? `<a class="card fe-ep${vu ? ' vu' : ' neuf'}" href="#/feuilleton/${e.num}">${corps}</a>` : `<div class="card fe-ep lock">${corps}</div>`);

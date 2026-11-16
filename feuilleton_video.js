@@ -6,6 +6,12 @@
      persos: { qui: { type: 'perso' (style de ta chambre) | 'pnj' (style des scènes), x, apparence } },
      plans: [gros plan pour chaque réplique], emo: { qui: [humeur à chaque réplique] } } */
 const FV_SHIRA = { type: 'perso', peau: '#eec3a1', cheveux: '#2b2230', coiffure: 'boucles', tenue: 'p-salopette', tenueSinon: 'p-pull' };
+// Les personnages qui reviennent dans la saison 3 (mêmes apparences que dans les saisons 1 et 2)
+const FV_TAMAR = { type: 'perso', peau: '#f1cfb4', cheveux: '#8a4a2a', coiffure: 'queue', tenue: 'p-pois', tenueSinon: 'p-sport' };
+const FV_MOKHER = { type: 'pnj', peau: '#c98e6a', cheveux: '#e6e1d8', coiffure: 'casquette', casquette: '#5b4a3a', haut: '#e2cfa6', bas: '#4a4038', tablier: '#7a5a3a', moustache: true, yeux: '#3a2a1a' };
+const FV_DALIA = { type: 'perso', peau: '#d9a57c', cheveux: '#ece8f2', coiffure: 'carre', tenue: 'p-pull', tenueSinon: 'p-ecoliere', yeux: 'p-lunettes', cou: 'p-echarpe' };
+const FV_SHIMON = { type: 'pnj', peau: '#c98e6a', cheveux: '#2c211d', coiffure: 'court', haut: '#3f7ab0', bas: '#3a3f4a', tablier: '#e8b44a', moustache: true, yeux: '#3f5a3a' };
+const FV_COHEN = { type: 'perso', peau: '#f3d6c0', cheveux: '#d9d4de', coiffure: 'chignon', tenue: 'p-pull', tenueSinon: 'p-robe', yeux: 'p-lunettes', cou: 'p-collier' };
 const FEUILLETON_VIDEO = {
   1: {
     decor: 'appart', echelle: 1.2, moi: 590,
@@ -111,6 +117,21 @@ const FEUILLETON_VIDEO = {
       shira: { ...FV_SHIRA, x: 160 },
     } },
   },
+  // Saison 3, « La recette perdue » : les décors des saisons 1 et 2, sans gros plans
+  17: { decor: 'boulangerie', echelle: 1.05, moi: 640, persos: { tamar: { ...FV_TAMAR, x: 210 }, shira: { ...FV_SHIRA, x: 455 } }, plans: [],
+    emo: { tamar: ['desole', 'neutre', 'content', 'desole', 'neutre'] } },
+  18: { decor: 'jaffa', echelle: 1.05, moi: 630, persos: { mokher: { ...FV_MOKHER, x: 190 }, shira: { ...FV_SHIRA, x: 440 } }, plans: [],
+    emo: { mokher: ['ravi', 'content', 'surpris', 'desole', 'neutre'] } },
+  19: { decor: 'bibliotheque', echelle: 1.05, moi: 635, persos: { dalia: { ...FV_DALIA, x: 210 }, shira: { ...FV_SHIRA, x: 450 } }, plans: [],
+    emo: { dalia: ['content', 'surpris', 'ravi', 'content', 'surpris', 'neutre'] } },
+  20: { decor: 'train', echelle: 1.05, moi: 630, persos: { tamar: { ...FV_TAMAR, x: 215 }, shira: { ...FV_SHIRA, x: 450 } }, plans: [] },
+  21: { decor: 'akko', echelle: 1.05, moi: 630, persos: { shimon: { ...FV_SHIMON, x: 215 }, tamar: { ...FV_TAMAR, x: 450 } }, plans: [],
+    emo: { shimon: ['ravi', 'surpris', 'content', 'neutre', 'content'] } },
+  22: { decor: 'salon', echelle: 1.05, moi: 640, persos: { rachel: { type: 'perso', x: 215, peau: '#d9a57c', cheveux: '#e8e4ee', coiffure: 'chignon', tenue: 'p-robe', tenueSinon: 'p-pull', yeux: 'p-lunettes' }, tamar: { ...FV_TAMAR, x: 455 } }, plans: [] },
+  23: { decor: 'boulangerie', echelle: 1.05, moi: 640, persos: { tamar: { ...FV_TAMAR, x: 210 }, shira: { ...FV_SHIRA, x: 455 } }, plans: [],
+    emo: { tamar: ['content', 'neutre', 'neutre', null, 'ravi'] } },
+  24: { decor: 'fete', echelle: 1, moi: 625, persos: { cohen: { ...FV_COHEN, x: 200 }, tamar: { ...FV_TAMAR, x: 340 }, shira: { ...FV_SHIRA, x: 480 } }, plans: [],
+    emo: { cohen: ['ravi', null, 'surpris', 'ravi'] } },
 };
 
 (() => {

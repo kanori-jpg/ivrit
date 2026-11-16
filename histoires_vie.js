@@ -482,6 +482,42 @@ const HISTOIRES_VIE = [
     ['אַל תִּפְתְּחִי אֶת הַמְּקָרֵר, וְהַכֹּל יִשָּׁאֵר קַר.', 'al tiftekhi et hamekarer, vehakol yishaer kar.', 'N’ouvre pas le frigo, et tout restera froid.', 'רַעְיוֹן טוֹב. אֲנִי מַדְלִיקָה נֵרוֹת', 'raayon tov. ani madlika nerot', 'Bonne idée. J’allume des bougies'],
     ['עֶרֶב נָעִים לְאוֹר הַנֵּרוֹת!', 'erev naïm leor hanerot !', 'Bonne soirée à la lumière des bougies !'],
   ], mots: [['הַפְסָקַת חַשְׁמַל', 'hafsakat khashmal', 'coupure de courant'], ['סְעָרָה', 'seara', 'orage, tempête'], ['אֵזוֹר', 'ezor', 'zone, région'], ['טֶכְנַאי', 'tekhnaï', 'technicien'], ['נֵר', 'ner', 'bougie']], formes: { 'הַסְּעָרָה': 'סְעָרָה', 'הָאֵזוֹר': 'אֵזוֹר', 'הַטֶּכְנָאִים': 'טֶכְנַאי', 'נֵרוֹת': 'נֵר', 'הַנֵּרוֹת': 'נֵר' } },
+  // Chapitre 18 : Zikhron Ya'akov, les fêtes et les traditions
+  { id: 'soufganiyot', cat: 'Fêtes et traditions', em: '🍩', title: 'Des beignets pour Hanoukka', who: 'Le pâtissier', lignes: [
+    ['חַג שָׂמֵחַ! מָה תִּרְצִי?', 'khag saméakh ! ma tirtsi ?', 'Joyeuse fête ! Que désirez-vous ?', 'שֵׁשׁ סֻפְגָּנִיּוֹת, בְּבַקָּשָׁה', 'shesh soufganiyot, bevakasha', 'Six beignets, s’il vous plaît'],
+    ['עִם רִבָּה אוֹ עִם שׁוֹקוֹלָד?', 'im riba o im shokolad ?', 'À la confiture ou au chocolat ?', 'שָׁלוֹשׁ מִכָּל סוּג', 'shalosh mikol soug', 'Trois de chaque sorte'],
+    ['רוֹצָה גַּם לְבִיבוֹת? הֵן חַמּוֹת עַכְשָׁיו.', 'rotsa gam levivot ? hen khamot akhshav.', 'Vous voulez aussi des latkes ? Ils sont chauds maintenant.', 'לֹא, תּוֹדָה. זֶה מַסְפִּיק', 'lo, toda. zé maspik', 'Non, merci. Ça suffit'],
+    ['זֶה שְׁלוֹשִׁים שְׁקָלִים.', 'zé shloshim shkalim.', 'Ça fait trente shekels.', 'הִנֵּה. אֶפְשָׁר קֻפְסָה?', 'hiné. efshar koufsa ?', 'Voilà. Je peux avoir une boîte ?'],
+    ['בֶּטַח. וְהַדְלִיקִי נֵרוֹת הָעֶרֶב!', 'betakh. vehadliki nerot haérev !', 'Bien sûr. Et allumez les bougies ce soir !'],
+  ], mots: [['סֻפְגָּנִיָּה', 'soufganiya', 'beignet (de Hanoukka)'], ['רִבָּה', 'riba', 'confiture'], ['לְבִיבָה', 'leviva', 'latke, galette de pommes de terre'], ['סוּג', 'soug', 'sorte, genre'], ['לְהַדְלִיק', 'lehadlik', 'allumer']], formes: {} },
+  { id: 'invitationseder', cat: 'Fêtes et traditions', em: '🍷', title: 'Invitée au séder', who: 'Ta voisine Orit', lignes: [
+    ['שָׁלוֹם! רָצִיתִי לְהַזְמִין אוֹתָךְ לַסֵּדֶר אֶצְלֵנוּ.', 'shalom ! ratsiti lehazmin otakh laséder etslenou.', 'Bonjour ! Je voulais t’inviter au séder chez nous.', 'אֵיזֶה כֵּיף! תּוֹדָה רַבָּה', 'eizé kef ! toda raba', 'Super ! Merci beaucoup'],
+    ['נַתְחִיל בְּשָׁעָה שֶׁבַע וָחֵצִי. זֶה אָרֹךְ, אֲבָל שָׂמֵחַ.', 'natkhil beshaa sheva vakhetsi. zé arokh, aval saméakh.', 'On commencera à sept heures et demie. C’est long, mais joyeux.', 'מָה לְהָבִיא?', 'ma lehavi ?', 'Qu’est-ce que j’apporte ?'],
+    ['אִם אַתְּ רוֹצָה, בַּקְבּוּק יַיִן. אֲבָל בְּלִי לֶחֶם!', 'im at rotsa, bakbouk yayin. aval bli lékhem !', 'Si tu veux, une bouteille de vin. Mais pas de pain !', 'נָכוֹן, בְּחַג הַפֶּסַח אוֹכְלִים מַצּוֹת', 'nakhon, bekhag haPessakh okhlim matsot', 'C’est vrai, à Pessah on mange des matsot'],
+    ['בְּדִיּוּק. וְהַיְּלָדִים יְחַפְּשׂוּ אֶת הָאֲפִיקוֹמָן.', 'bediyouk. vehayeladim yekhapsou et haafikoman.', 'Exactement. Et les enfants chercheront l’afikoman.', 'אֲנִי יְכוֹלָה לְחַפֵּשׂ אִתָּם?', 'ani yekhola lekhapes itam ?', 'Je peux chercher avec eux ?'],
+    ['כַּמּוּבָן! מִי שֶׁמּוֹצֵא מְקַבֵּל מַתָּנָה.', 'kamouvan ! mi shemotsé mekabel matana.', 'Bien sûr ! Celui qui le trouve reçoit un cadeau.'],
+  ], mots: [['לְהַזְמִין', 'lehazmin', 'inviter ; commander'], ['מַצָּה', 'matsa', 'matsa (pain azyme)'], ['לְהַתְחִיל', 'lehatkhil', 'commencer'], ['אֲפִיקוֹמָן', 'afikoman', 'afikoman (morceau de matsa caché)'], ['פֶּסַח', 'Pessakh', 'Pessah (la Pâque juive)']], formes: {} },
+  { id: 'pourim', cat: 'Fêtes et traditions', em: '🎭', title: 'Le déguisement de Pourim', who: 'La vendeuse', lignes: [
+    ['שָׁלוֹם! מְחַפֶּשֶׂת תַּחְפֹּשֶׂת לְחַג פּוּרִים?', 'shalom ! mekhapéset takhposet lekhag Pourim ?', 'Bonjour ! Vous cherchez un déguisement pour Pourim ?', 'כֵּן, בִּשְׁבִיל יַלְדָּה בַּת שֶׁבַע', 'kèn, bishvil yalda bat sheva', 'Oui, pour une fillette de sept ans'],
+    ['יֵשׁ לָנוּ מַלְכָּה, פַּרְפַּר וְרוֹפְאָה. מָה הִיא אוֹהֶבֶת?', 'yesh lanou malka, parpar verofa. ma hi ohévet ?', 'Nous avons une reine, un papillon et une docteure. Qu’est-ce qu’elle aime ?', 'הִיא מְאוֹד אוֹהֶבֶת חַיּוֹת', 'hi meod ohévet khayot', 'Elle aime beaucoup les animaux'],
+    ['אָז אוּלַי חֲתוּלָה? יֵשׁ גַּם אָזְנַיִם וְזָנָב.', 'az oulaï khatoula ? yesh gam oznayim vezanav.', 'Alors peut-être une chatte ? Il y a aussi des oreilles et une queue.', 'מֻשְׁלָם! כַּמָּה זֶה עוֹלֶה?', 'mouslam ! kama zé olé ?', 'Parfait ! Combien ça coûte ?'],
+    ['שִׁבְעִים שְׁקָלִים. וְרַעֲשָׁן בְּמַתָּנָה!', 'shivim shkalim. veraashan bematana !', 'Soixante-dix shekels. Et une crécelle en cadeau !', 'רַעֲשָׁן? בִּשְׁבִיל מָה?', 'raashan ? bishvil ma ?', 'Une crécelle ? Pour quoi faire ?'],
+    ['כְּשֶׁשּׁוֹמְעִים אֶת הַשֵּׁם הָמָן בַּמְּגִלָּה, עוֹשִׂים רַעַשׁ!', 'keshéshomim et hashem Haman bameguila, osim raash !', 'Quand on entend le nom d’Haman dans la Méguila, on fait du bruit !'],
+  ], mots: [['תַּחְפֹּשֶׂת', 'takhposet', 'déguisement'], ['מַלְכָּה', 'malka', 'reine'], ['זָנָב', 'zanav', 'queue (d’animal)'], ['רַעֲשָׁן', 'raashan', 'crécelle'], ['מְגִלָּה', 'meguila', 'rouleau ; la Méguila (d’Esther)']], formes: {} },
+  { id: 'construiresoukka', cat: 'Fêtes et traditions', em: '🌿', title: 'Construire la soukka', who: 'Le voisin, Eli', lignes: [
+    ['בֹּקֶר טוֹב! אַתְּ יְכוֹלָה לַעֲזֹר לִי עִם הַסֻּכָּה?', 'boker tov ! at yekhola laazor li im hasoukka ?', 'Bonjour ! Tu peux m’aider avec la soukka ?', 'בְּשִׂמְחָה! מָה לַעֲשׂוֹת?', 'besimkha ! ma laasot ?', 'Avec plaisir ! Qu’est-ce que je fais ?'],
+    ['תַּחְזִיקִי אֶת הַקִּיר הַזֶּה, וַאֲנִי אֶקְשֹׁר אוֹתוֹ.', 'takhziki et hakir hazé, vaani ekshor oto.', 'Tiens ce mur, et moi je l’attache.', 'כָּכָה טוֹב?', 'kakha tov ?', 'Comme ça, c’est bien ?'],
+    ['מְצֻיָּן. עַכְשָׁיו שָׂמִים אֶת הַסְּכָךְ לְמַעְלָה.', 'metsouyan. akhshav samim et haskhakh lemala.', 'Excellent. Maintenant, on met le toit de branches en haut.', 'צָרִיךְ לִרְאוֹת אֶת הַכּוֹכָבִים, נָכוֹן?', 'tsarikh lirot et hakokhavim, nakhon ?', 'Il faut voir les étoiles, c’est ça ?'],
+    ['נָכוֹן! וְהַיְּלָדִים יִתְלוּ קִשּׁוּטִים.', 'nakhon ! vehayeladim yitlou kishoutim.', 'C’est ça ! Et les enfants accrocheront des décorations.', 'הַסֻּכָּה יוֹצֵאת יָפָה מְאוֹד', 'hasoukka yotset yafa meod', 'La soukka est très réussie'],
+    ['תּוֹדָה! בּוֹאִי לֶאֱכֹל אִתָּנוּ בַּסֻּכָּה בָּעֶרֶב.', 'toda ! boï leekhol itanou basoukka baérev.', 'Merci ! Viens manger avec nous dans la soukka ce soir.'],
+  ], mots: [['לְהַחְזִיק', 'lehakhzik', 'tenir'], ['קִיר', 'kir', 'mur'], ['לִקְשֹׁר', 'likshor', 'attacher, nouer'], ['לִתְלוֹת', 'litlot', 'accrocher, suspendre'], ['לְמַעְלָה', 'lemala', 'en haut']], formes: {} },
+  { id: 'shanatova', cat: 'Fêtes et traditions', em: '🍎', title: 'Bonne année, mamie !', who: 'Ta grand-mère, au téléphone', lignes: [
+    ['שָׁנָה טוֹבָה, מֹתֶק! מָה שְׁלוֹמֵךְ?', 'shana tova, motek ! ma shlomekh ?', 'Bonne année, ma chérie ! Comment vas-tu ?', 'שָׁנָה טוֹבָה, סָבְתָא! הַכֹּל בְּסֵדֶר', 'shana tova, savta ! hakol beséder', 'Bonne année, mamie ! Tout va bien'],
+    ['אָכַלְתְּ תַּפּוּחַ בִּדְבַשׁ?', 'akhalt tapouakh bidvash ?', 'Tu as mangé une pomme au miel ?', 'כֵּן, וְגַם רִמּוֹן', 'kèn, vegam rimon', 'Oui, et aussi une grenade'],
+    ['יָפֶה. אֲנִי מְאַחֶלֶת לָךְ שָׁנָה מְתוּקָה וּבְרִיאָה.', 'yafé. ani meakhélet lakh shana metouka oubria.', 'Bien. Je te souhaite une année douce et en bonne santé.', 'גַּם לָךְ, סָבְתָא. וְהַרְבֵּה שִׂמְחָה', 'gam lakh, savta. veharbé simkha', 'À toi aussi, mamie. Et beaucoup de joie'],
+    ['שָׁמַעְתְּ אֶת הַשּׁוֹפָר בְּבֵית הַכְּנֶסֶת?', 'shamat et hashofar bevet hakneset ?', 'Tu as entendu le shofar à la synagogue ?', 'כֵּן! הוּא הָיָה חָזָק מְאוֹד', 'kèn ! hou haya khazak meod', 'Oui ! Il était très fort'],
+    ['אֲנִי מְחַכָּה לָךְ בְּסֻכּוֹת. נְשִׁיקוֹת!', 'ani mekhaka lakh beSoukkot. neshikot !', 'Je t’attends pour Soukkot. Bisous !'],
+  ], mots: [['מֹתֶק', 'motek', 'chéri(e), mon cœur'], ['לְאַחֵל', 'leakhel', 'souhaiter'], ['מָתוֹק', 'matok', 'doux, sucré'], ['שׁוֹפָר', 'shofar', 'shofar (corne de bélier)'], ['בֵּית כְּנֶסֶת', 'beit kneset', 'synagogue']], formes: {} },
 ];
 
 // Réponses fausses : tirées d'autres histoires, sans les réponses passe-partout
