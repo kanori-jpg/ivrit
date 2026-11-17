@@ -71,9 +71,15 @@
     if (!r.ok) throw new Error(`GitHub a répondu ${r.status}.`);
     return r.status === 204 ? null : r.json();
   }
+  /* Un fichier par remise à zéro : ivrit-progression-<date>.json. On lit toujours le plus récent.
+     Un appareil resté sur une ancienne version du site n'écrit que dans ivrit-progression.json :
+     il ne peut donc plus ramener l'ancienne progression après une remise à zéro. */
+  const nomFichier = (p) => (p && p.remiseAZero ? `ivrit-progression-${p.remiseAZero}.json` : FICHIER);
+  const numero = (nom) => { const m = /^ivrit-progression(?:-(\d+))?\.json$/.exec(nom); return m ? +(m[1] || 0) : -1; };
   async function lireDistant() {
     const g = await gh('/gists/' + conf.gistId);
-    const f = g.files && g.files[FICHIER];
+    const noms = Object.keys(g.files || {}).filter((n) => numero(n) >= 0).sort((a, b) => numero(b) - numero(a));
+    const f = noms.length && g.files[noms[0]];
     if (!f) return null;
     const texte = f.truncated ? await (await fetch(f.raw_url, { cache: 'no-store' })).text() : f.content;
     try { return JSON.parse(texte); } catch { return null; }
@@ -84,6 +90,7 @@
   function appliquer(p) {
     const avant = new Set(S.mesMots.map((m) => NFC(m[0])));
     Object.keys(p).forEach((k) => { S[k] = p[k]; });
+    if (typeof noterRemise === 'function') noterRemise(S.remiseAZero || 0); // une remise à zéro faite sur un autre appareil
     setItemOrig.call(localStorage, KEY, JSON.stringify(S));
     S.mesMots.filter((m) => !avant.has(NFC(m[0]))).forEach((m) => { if (typeof inscrireMot === 'function') inscrireMot(m); });
     if (typeof header === 'function') header();
@@ -111,7 +118,7 @@
         }
         if (!distant || !distant.progression || canon(resultat) !== canon(distant.progression)) {
           const savedAt = Date.now();
-          await gh('/gists/' + conf.gistId, { method: 'PATCH', body: JSON.stringify({ files: { [FICHIER]: { content: contenu(resultat, savedAt) } } }) });
+          await gh('/gists/' + conf.gistId, { method: 'PATCH', body: JSON.stringify({ files: { [nomFichier(resultat)]: { content: contenu(resultat, savedAt) } } }) });
           conf.remoteAt = savedAt;
         } else conf.remoteAt = distant.savedAt;
         conf.dernier = Date.now(); conf.erreur = null; conf.jetonInvalide = false;

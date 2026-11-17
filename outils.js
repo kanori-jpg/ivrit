@@ -1429,11 +1429,12 @@ function sauvegardeUI(apercu) {
     $('#saveNo').onclick = () => sauvegardeUI();
     $('#saveYes').onclick = () => {
       localStorage.setItem(KEY_AVANT, JSON.stringify(S));
-      localStorage.setItem(KEY, JSON.stringify(Object.assign(defaults(), apercu.progression, { shInit: true, remiseAZero: Date.now() }))); // la synchro ne la mélange pas avec l'ancienne
+      const quand = Date.now(); noterRemise(quand);
+      localStorage.setItem(KEY, JSON.stringify(Object.assign(defaults(), apercu.progression, { shInit: true, remiseAZero: quand }))); // la synchro ne la mélange pas avec l'ancienne
       location.reload();
     };
   }
-  if (avant) $('#saveUndo').onclick = () => { localStorage.setItem(KEY, JSON.stringify(Object.assign(JSON.parse(avant), { remiseAZero: Date.now() }))); localStorage.removeItem(KEY_AVANT); location.reload(); };
+  if (avant) $('#saveUndo').onclick = () => { const quand = Date.now(); noterRemise(quand); localStorage.setItem(KEY, JSON.stringify(Object.assign(JSON.parse(avant), { remiseAZero: quand }))); localStorage.removeItem(KEY_AVANT); location.reload(); };
   zoneRemiseAZero(zone);
 }
 
@@ -1443,13 +1444,15 @@ function sauvegardeUI(apercu) {
    - on garde ce qui est à toi et tes réglages (Mes mots, sons signalés, options, personnage) ;
    - remiseAZero (date) dit à la synchronisation de ne pas ramener l'ancienne progression des autres appareils. */
 const KEY_ZERO = 'ivrit-ludique-avant-remise-a-zero';
-const GARDES_REMISE = ['mesMots', 'sonsAvis', 'sonsRefaitVu', 'dicoCat', 'goal', 'night', 'sansVoyelles', 'sansTranslit', 'chronoMuet', 'voyProg', 'styleScenes', 'videoFr', 'micro', 'relecture', 'rolesTrad', 'perso', 'lastExport'];
+// GARDES_REMISE : dans app.js (ce qu'on garde lors d'une remise à zéro)
 function remettreAZero() {
   exporterProgression(); // un fichier de la progression d'avant, en plus de la copie gardée ici
   localStorage.setItem(KEY_ZERO, JSON.stringify({ date: new Date().toISOString(), progression: S }));
-  const neuf = Object.assign(defaults(), { shInit: true, remiseAZero: Date.now() });
+  const quand = Date.now();
+  const neuf = Object.assign(defaults(), { shInit: true, remiseAZero: quand });
   GARDES_REMISE.forEach((k) => { if (S[k] !== undefined) neuf[k] = JSON.parse(JSON.stringify(S[k])); });
   localStorage.setItem(KEY, JSON.stringify(neuf));
+  noterRemise(quand); // dès maintenant, cette page et les autres onglets ne peuvent plus réécrire l'ancienne progression
   setTimeout(() => { location.hash = '#/'; location.reload(); }, 600); // le temps que le fichier parte
 }
 function zoneRemiseAZero(zone) {
@@ -1472,7 +1475,8 @@ function zoneRemiseAZero(zone) {
   if (ancienne) $('#zeroUndo').onclick = () => {
     if (!confirm('Revenir à ta progression d’avant la remise à zéro ? Ce que tu as fait depuis sera remplacé (une copie est gardée pour revenir en arrière).')) return;
     localStorage.setItem(KEY_AVANT, JSON.stringify(S));
-    localStorage.setItem(KEY, JSON.stringify(Object.assign(defaults(), ancienne.progression, { shInit: true, remiseAZero: Date.now() })));
+    const quand = Date.now(); noterRemise(quand);
+    localStorage.setItem(KEY, JSON.stringify(Object.assign(defaults(), ancienne.progression, { shInit: true, remiseAZero: quand })));
     location.reload();
   };
 }

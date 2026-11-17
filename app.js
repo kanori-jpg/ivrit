@@ -28,7 +28,27 @@ let S;
 try { S = Object.assign(defaults(), JSON.parse(localStorage.getItem(KEY) || '{}')); } catch { S = defaults(); }
 S.best = Object.assign(defaults().best, S.best);
 S.stats = Object.assign(defaults().stats, S.stats);
-const save = () => localStorage.setItem(KEY, JSON.stringify(S));
+/* Remise à zéro (ou restauration) : sa date est aussi gardée à part, dans KEY_REMISE.
+   Une page restée ouverte avec l'ancienne progression (autre onglet, appli du téléphone laissée en arrière-plan)
+   ne doit pas pouvoir la réécrire : elle se recharge au lieu d'enregistrer. */
+const KEY_REMISE = 'ivrit-remise';
+const GARDES_REMISE = ['mesMots', 'sonsAvis', 'sonsRefaitVu', 'dicoCat', 'goal', 'night', 'sansVoyelles', 'sansTranslit', 'chronoMuet', 'voyProg', 'styleScenes', 'videoFr', 'micro', 'relecture', 'rolesTrad', 'perso', 'lastExport'];
+const remiseConnue = () => { try { return +(localStorage.getItem(KEY_REMISE) || 0); } catch { return 0; } };
+const noterRemise = (t) => { try { if (t > remiseConnue()) localStorage.setItem(KEY_REMISE, String(t)); } catch { /* tant pis */ } };
+// L'ancienne progression a été réécrite par-dessus la remise à zéro : on refait la remise à zéro (on garde Mes mots et les réglages)
+if (remiseConnue() > (S.remiseAZero || 0)) {
+  const neuf = Object.assign(defaults(), { shInit: true, remiseAZero: remiseConnue() });
+  GARDES_REMISE.forEach((k) => { if (S[k] !== undefined) neuf[k] = S[k]; });
+  S = neuf; localStorage.setItem(KEY, JSON.stringify(S));
+}
+noterRemise(S.remiseAZero || 0);
+let rechargement = false;
+const save = () => {
+  if (remiseConnue() > (S.remiseAZero || 0)) { if (!rechargement) { rechargement = true; location.reload(); } return; }
+  localStorage.setItem(KEY, JSON.stringify(S));
+};
+// Un autre onglet vient de remettre à zéro ou de restaurer : on recharge celui-ci
+window.addEventListener('storage', (e) => { if (e.key === KEY_REMISE && remiseConnue() > (S.remiseAZero || 0) && !rechargement) { rechargement = true; location.reload(); } });
 // Orthographes corrigées après vérification : la progression déjà acquise suit le mot
 const MOTS_CORRIGES = [['מָסָךְ', 'מָסַךְ'], ['מָה נִשְׁמָע?', 'מַה נִּשְׁמָע?'], ['מַה נִּשְׁמַע?', 'מַה נִּשְׁמָע?'], ['מָה קוֹרֶה מָחָר?', 'מַה קּוֹרֶה מָחָר?'], ['סַבְתָּא', 'סָבְתָא'], ['פָּנָס', 'פַּנָּס'], ['פְּסִיפָס', 'פְּסֵיפָס'], ['תֻּרְמוֹס', 'צִבְעוֹנִי'], ['תֻּרְמוּס', 'צִבְעוֹנִי']];
 MOTS_CORRIGES.forEach(([ancien, nouveau]) => {
