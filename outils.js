@@ -13,6 +13,16 @@ setInterval(() => { if (!document.hidden) { S.stats.sec += 15; save(); } }, 1500
 save();
 const BASE_MISSION = ['noa', 'shouk', 'gueshem']; // les 3 chapitres de la feuille de route
 const storyDone = () => BASE_MISSION.filter((id) => S.story[id]).length;
+// Fin d'histoire : toutes les phrases (répliques et bonnes réponses), à dérouler, chacune avec ＋ pour l'ajouter à « Mes mots »
+function phrasesFin(st) {
+  const vues = new Set(), phrases = [];
+  st.lines.forEach((l) => [l, ...(l.choices || []).filter((c) => c.ok)].forEach((x) => {
+    if (!x || !x.he || vues.has(NFC(x.he))) return;
+    vues.add(NFC(x.he)); phrases.push({ he: x.he, tr: x.tr || '', fr: x.fr || '' });
+  }));
+  return `<details class="hist-phrases"><summary>📜 Toutes les phrases de l’histoire (${phrases.length}) · ＋ pour les ajouter à tes mots</summary>
+    ${phrases.map((x) => `<div class="hist-phrase"><div class="hist-phrase-txt">${HE(x.he)}<small>${TRS(x.tr)}${esc(x.fr)}</small></div>${sayBtn(x.he)}${plusGram(x) || '<span class="re-deja" title="Déjà dans le vocabulaire du site">✓</span>'}</div>`).join('')}</details>`;
+}
 function histoire(id, mode) {
   const k = STORIES.findIndex((s) => s.id === id);
   const vie = STORIES_VIE.find((s) => s.id === id);
@@ -82,10 +92,11 @@ function histoire(id, mode) {
           save();
           if (premiere) addXP(20);
           confetti();
-          const nv = motsDeTextes(st.lines.flatMap((x) => [x.he, ...(x.choices || []).map((c) => c.he)])).filter((m) => m.nouveau); nv.forEach((m) => { if (!estDansMesMots(m.he)) ajouterMesMots([m.he, m.tr, m.fr]); m.nouveau = false; m.perso = true; }); if (nv.length) toast(`⭐ ${nv.length} mot${nv.length > 1 ? 's' : ''} ajouté${nv.length > 1 ? 's' : ''} à tes cartes`);
+          const nv = motsDeTextes(st.lines.flatMap((x) => [x.he, ...(x.choices || []).filter((c) => c.ok).map((c) => c.he)])).filter((m) => m.nouveau); nv.forEach((m) => { if (!estDansMesMots(m.he)) ajouterMesMots([m.he, m.tr, m.fr]); m.nouveau = false; m.perso = true; }); if (nv.length) toast(`⭐ ${nv.length} mot${nv.length > 1 ? 's' : ''} ajouté${nv.length > 1 ? 's' : ''} à tes cartes`);
           app.innerHTML = `<div class="card center result"><div class="em">${st.emoji}</div><h2>${nouvelleCarte ? 'Nouvelle carte postale !' : 'Histoire terminée !'}</h2><p class="sub">${premiere ? '+20 XP' : 'Déjà terminée, bravo pour la révision !'}${nouvelleCarte ? ` · Souvenir : ${esc(CARTES_VIE[st.id] ? CARTES_VIE[st.id].lieu : st.title)}` : ''}</p>
           <div class="pcs one">${petiteCarteVie(st)}</div>
           ${nv.length ? `<div class="hist-mots hist-fin" id="motsFin"><div class="cap">⭐ Ajoutés à tes mots à apprendre</div><p class="hint">Ils arrivent dans tes cartes mémoire (thème « Mes mots ») et dans ta séance du jour. Tu peux en retirer un si tu le connais déjà.</p>${nv.map(ligneMot).join('')}<p class="center" hidden><button class="btn ghost" id="toutAjouter" type="button"></button></p></div>` : ''}
+          ${phrasesFin(st)}
           <div class="row mt" style="justify-content:center">${suite ? `<a class="btn" href="#/histoire/${suite.id}/jouer">Histoire suivante : ${esc(suite.title)}</a>` : ''}<a class="btn ghost" href="#/histoire/${ville ? ville.id : ''}">${ville ? `Retour à ${esc(ville.lieu)}` : 'Toutes les histoires'}</a></div></div>`;
           const zone = $('#motsFin');
           if (zone) {
@@ -107,9 +118,10 @@ function histoire(id, mode) {
         app.innerHTML = `<div class="card center result"><div class="em">💌</div><h2>${first ? 'Nouvelle carte postale !' : 'Chapitre terminé'}</h2><p class="sub">${first ? `+40 XP · Souvenir de ${esc(CHAPITRES[st.id].lieu)}` : 'Déjà terminé : pas de nouvelle récompense.'}</p>
         <div class="pcs one">${petiteCarte(st)}</div>
         ${(() => {
-          const nv = motsDeTextes(st.lines.flatMap((x) => [x.he, ...(x.choices || []).map((c) => c.he)])).filter((m) => m.nouveau); nv.forEach((m) => { if (!estDansMesMots(m.he)) ajouterMesMots([m.he, m.tr, m.fr]); m.nouveau = false; m.perso = true; }); if (nv.length) toast(`⭐ ${nv.length} mot${nv.length > 1 ? 's' : ''} ajouté${nv.length > 1 ? 's' : ''} à tes cartes`);
+          const nv = motsDeTextes(st.lines.flatMap((x) => [x.he, ...(x.choices || []).filter((c) => c.ok).map((c) => c.he)])).filter((m) => m.nouveau); nv.forEach((m) => { if (!estDansMesMots(m.he)) ajouterMesMots([m.he, m.tr, m.fr]); m.nouveau = false; m.perso = true; }); if (nv.length) toast(`⭐ ${nv.length} mot${nv.length > 1 ? 's' : ''} ajouté${nv.length > 1 ? 's' : ''} à tes cartes`);
           return nv.length ? `<div class="hist-mots hist-fin" id="motsFin"><div class="cap">⭐ Ajoutés à tes mots à apprendre</div><p class="hint">Ils arrivent dans tes cartes mémoire (thème « Mes mots ») et dans ta séance du jour. Tu peux en retirer un si tu le connais déjà.</p>${nv.map(ligneMot).join('')}<p class="center" hidden><button class="btn ghost" id="toutAjouter" type="button"></button></p></div>` : '';
         })()}
+        ${phrasesFin(st)}
         <div class="row mt" style="justify-content:center">${next ? `<a class="btn" href="#/histoire/${next.id}">Chapitre suivant : ${esc(CHAPITRES[next.id].lieu)}</a>` : ''}<a class="btn ghost" href="#/histoire">Tous les chapitres</a></div></div>`;
         const motsFin = $('#motsFin');
         if (motsFin) {
