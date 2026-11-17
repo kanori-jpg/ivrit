@@ -12,6 +12,8 @@ const SERVEUR_SONS = location.protocol.startsWith('http') && ['localhost', '127.
 (() => {
   if (!S.sonsRefaitVu) S.sonsRefaitVu = {};
   let change = false;
+  // 17/11/2026 : tous les sons signalés jusqu'ici ont été remplacés ; on efface une fois pour toutes les 🚩 restés en mémoire
+  if ((S.sonsAvisRemis || 0) < 1) { Object.keys(S.sonsAvis).forEach((k) => { if (S.sonsAvis[k] === 'faux') delete S.sonsAvis[k]; }); S.sonsAvisRemis = 1; change = true; }
   Object.entries(SONS_REFAITS).forEach(([k, n]) => {
     if (S.sonsRefaitVu[k] === n) return;
     if (S.sonsAvis[k] === 'faux') delete S.sonsAvis[k];
@@ -48,7 +50,7 @@ let serveurSonsOk = null;
     if (!r.ok) throw new Error();
     const recus = await r.json();
     serveurSonsOk = true;
-    for (const [k, a] of Object.entries(S.sonsAvis)) if (a === 'faux' && !(recus[k] && recus[k].etat === 'a_refaire')) await envoyerAvis(k, 'faux');
+    for (const [k, a] of Object.entries(S.sonsAvis)) if (a === 'faux' && !recus[k]) await envoyerAvis(k, 'faux'); // seulement ceux que le serveur n'a jamais reçus (un son déjà refait n'est pas renvoyé)
   } catch (e) { serveurSonsOk = false; }
   if (typeof majTransmission === 'function') majTransmission();
 })();
