@@ -32,7 +32,7 @@ S.stats = Object.assign(defaults().stats, S.stats);
    Une page restée ouverte avec l'ancienne progression (autre onglet, appli du téléphone laissée en arrière-plan)
    ne doit pas pouvoir la réécrire : elle se recharge au lieu d'enregistrer. */
 const KEY_REMISE = 'ivrit-remise';
-const GARDES_REMISE = ['mesMots', 'sonsAvis', 'sonsRefaitVu', 'dicoCat', 'goal', 'night', 'sansVoyelles', 'sansTranslit', 'chronoMuet', 'voyProg', 'styleScenes', 'videoFr', 'micro', 'relecture', 'rolesTrad', 'perso', 'lastExport'];
+const GARDES_REMISE = ['mesMots', 'mesMotsAjouts', 'mesMotsRetires', 'sonsAvis', 'sonsRefaitVu', 'dicoCat', 'goal', 'night', 'sansVoyelles', 'sansTranslit', 'chronoMuet', 'voyProg', 'styleScenes', 'videoFr', 'micro', 'relecture', 'rolesTrad', 'perso', 'lastExport'];
 const remiseConnue = () => { try { return +(localStorage.getItem(KEY_REMISE) || 0); } catch { return 0; } };
 const noterRemise = (t) => { try { if (t > remiseConnue()) localStorage.setItem(KEY_REMISE, String(t)); } catch { /* tant pis */ } };
 // L'ancienne progression a été réécrite par-dessus la remise à zéro : on refait la remise à zéro (on garde Mes mots et les réglages)
@@ -70,17 +70,24 @@ function inscrireMot(m) {
 }
 S.mesMots.forEach(inscrireMot);
 const estDansMesMots = (he) => S.mesMots.some((m) => m[0].normalize('NFC') === he.normalize('NFC'));
+// Les dates d'ajout et de retrait servent à la synchronisation : un mot retiré ne revient pas depuis un autre appareil
 function ajouterMesMots(m) {
   if (estDansMesMots(m[0])) return;
+  (S.mesMotsAjouts = S.mesMotsAjouts || {})[m[0].normalize('NFC')] = Date.now();
   S.mesMots.push(m); inscrireMot(m); save();
 }
-function retirerMesMots(he) {
-  const n = he.normalize('NFC');
-  S.mesMots = S.mesMots.filter((m) => m[0].normalize('NFC') !== n);
+// Enlève un mot de la liste des cartes (sans rien enregistrer)
+function oublierMotLocal(n) {
   const i = WORDS.findIndex((w) => w.theme === 'mesmots' && w.he.normalize('NFC') === n);
   if (i >= 0) WORDS.splice(i, 1);
   const t = THEMES.find((x) => x.id === 'mesmots');
   if (t) { t.words = t.words.filter((m) => m[0].normalize('NFC') !== n); if (!t.words.length) THEMES.splice(THEMES.indexOf(t), 1); }
+}
+function retirerMesMots(he) {
+  const n = he.normalize('NFC');
+  S.mesMots = S.mesMots.filter((m) => m[0].normalize('NFC') !== n);
+  (S.mesMotsRetires = S.mesMotsRetires || {})[n] = Date.now();
+  oublierMotLocal(n);
   save();
 }
 

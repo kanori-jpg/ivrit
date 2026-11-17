@@ -49,12 +49,16 @@
         case 'best': case 'stats': Object.entries(b || {}).forEach(([kk, x]) => { if (typeof x === 'number') a[kk] = Math.max(a[kk] || 0, x); }); return;
         case 'lastDay': case 'seance': case 'lastExport': if ((b || '') > (a || '')) r[k] = b; return;
         case 'mesMots': { const vus = new Set(a.map((m) => NFC(m[0]))); (b || []).forEach((m) => { if (!vus.has(NFC(m[0]))) a.push(m); }); return; }
+        // Dates d'ajout et de retrait des mots : la plus récente des deux appareils
+        case 'mesMotsAjouts': case 'mesMotsRetires': Object.entries(b || {}).forEach(([w, d]) => { a[w] = Math.max(a[w] || 0, d || 0); }); return;
         default:
           if (Array.isArray(a) && Array.isArray(b)) { const vus = new Set(a.map(canon)); b.forEach((x) => { if (!vus.has(canon(x))) a.push(x); }); }
           else if (estObj(a) && estObj(b) && !REGLAGES_OBJETS.includes(k)) Object.entries(b).forEach(([kk, x]) => { if (!(kk in a)) a[kk] = x; });
           // nombres (shekels, jokers…) et réglages : ceux de l'appareil le plus récent
       }
     });
+    // Mes mots : un mot retiré (après son dernier ajout) ne revient pas
+    if (Array.isArray(r.mesMots)) { const ret = r.mesMotsRetires || {}, aj = r.mesMotsAjouts || {}; r.mesMots = r.mesMots.filter((m) => { const w = NFC(m[0]); return !ret[w] || (aj[w] || 0) > ret[w]; }); }
     // La série de jours : celle de l'appareil qui a joué le plus récemment
     if ((autre.lastDay || '') > (base.lastDay || '')) r.streak = autre.streak;
     return r;
@@ -90,6 +94,9 @@
   function appliquer(p) {
     const avant = new Set(S.mesMots.map((m) => NFC(m[0])));
     Object.keys(p).forEach((k) => { S[k] = p[k]; });
+    // Les mots retirés sur un autre appareil quittent aussi les cartes ici
+    const apres = new Set(S.mesMots.map((m) => NFC(m[0])));
+    if (typeof oublierMotLocal === 'function') avant.forEach((w) => { if (!apres.has(w)) oublierMotLocal(w); });
     if (typeof noterRemise === 'function') noterRemise(S.remiseAZero || 0); // une remise à zéro faite sur un autre appareil
     setItemOrig.call(localStorage, KEY, JSON.stringify(S));
     S.mesMots.filter((m) => !avant.has(NFC(m[0]))).forEach((m) => { if (typeof inscrireMot === 'function') inscrireMot(m); });
