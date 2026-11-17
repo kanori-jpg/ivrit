@@ -4,6 +4,7 @@
    phrases : [hébreu, transcription, français] ; quiz : 3 questions, 2 bonnes réponses pour ouvrir le chapitre suivant. */
 const ROMAN = {
   titre: 'Les étoiles de Jaffa', titreHe: 'הַכּוֹכָבִים שֶׁל יָפוֹ',
+  em: '🗝️', accroche: 'Une clé, une photo de 1965 et une peintre disparue : une enquête à Jaffa.',
   resume: 'Léa, une traductrice française, vient d’emménager à Tel-Aviv. Dans un vieux placard, elle trouve une clé et une photo de 1965 : une femme peintre, devant la tour de l’horloge de Jaffa. Qui était-elle ? Et où est passé son plus beau tableau ?',
   chapitres: [
     { num: 1, titre: 'La boîte en fer', titreHe: 'קֻפְסַת הַבַּרְזֶל', phrases: [

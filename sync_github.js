@@ -26,6 +26,13 @@
     const garder = (p) => { const g = {}; (typeof GARDES_REMISE !== 'undefined' ? GARDES_REMISE : ['mesMots', 'sonsAvis']).forEach((k) => { if (p[k] !== undefined) g[k] = p[k]; }); return g; };
     return ra > rd ? [local, garder(distant)] : [garder(local), distant];
   }
+  function fusRoman(a, b) {
+    if (!estObj(a) || !estObj(b)) return;
+    a.quiz = a.quiz || {}; Object.entries(b.quiz || {}).forEach(([n, x]) => { a.quiz[n] = Math.max(a.quiz[n] || 0, x || 0); });
+    a.lus = { ...(b.lus || {}), ...(a.lus || {}) };
+    if (!a.choix && b.choix) a.choix = b.choix;
+    if (!a.marque && b.marque) a.marque = b.marque;
+  }
   function fusionner(local0, distant0, localPlusRecent) {
     const [local, distant] = apresRemise(local0, distant0);
     // « base » : l'appareil le plus récent (ses réglages l'emportent) ; une progression vide ne l'emporte jamais
@@ -50,6 +57,9 @@
         case 'lastDay': case 'seance': case 'lastExport': if ((b || '') > (a || '')) r[k] = b; return;
         case 'mesMots': { const vus = new Set(a.map((m) => NFC(m[0]))); (b || []).forEach((m) => { if (!vus.has(NFC(m[0]))) a.push(m); }); return; }
         // Dates d'ajout et de retrait des mots : la plus récente des deux appareils
+        // Les romans : le meilleur quiz de chaque chapitre, les chapitres lus des deux côtés, le coupable désigné le premier
+        case 'roman': fusRoman(a, b); return;
+        case 'romans': Object.entries(b || {}).forEach(([id, lb]) => { if (!a[id]) a[id] = lb; else fusRoman(a[id], lb); }); return;
         case 'mesMotsAjouts': case 'mesMotsRetires': Object.entries(b || {}).forEach(([w, d]) => { a[w] = Math.max(a[w] || 0, d || 0); }); return;
         default:
           if (Array.isArray(a) && Array.isArray(b)) { const vus = new Set(a.map(canon)); b.forEach((x) => { if (!vus.has(canon(x))) a.push(x); }); }

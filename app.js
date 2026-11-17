@@ -311,7 +311,7 @@ document.addEventListener('keydown', (e) => keyHandler && keyHandler(e));
 const ACTIVITIES = [
   { id: 'seance', em: '🌅', name: 'Séance du jour', desc: 'Révisions, nouveaux mots et exercice en un bouton', color: '#e46a92' },
   { id: 'parcours', em: '🧭', name: 'Mon parcours', desc: 'Le chemin pas à pas, dans l’ordre', color: '#3d8f7a' },
-  { id: 'roman', em: '📚', name: 'Le roman', desc: 'Une enquête à Jaffa, chapitre par chapitre', color: '#7a4f8a' },
+  { id: 'roman', em: '📚', name: 'Les romans', desc: 'Deux enquêtes, à Jaffa et à Tel-Aviv', color: '#7a4f8a' },
   { id: 'alphabet', em: '🔤', name: 'Alef-Bet', desc: 'Les 22 lettres et les voyelles', color: '#2f5bd3' },
   { id: 'histoire', em: '📖', name: 'Histoires', desc: 'Dialogue en hébreu et choisis tes réponses', color: '#c9607f' },
   { id: 'scenes', em: '🌳', name: 'Scènes', desc: 'Touche les objets pour découvrir les mots', color: '#2fae6b' },

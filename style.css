@@ -1994,7 +1994,7 @@ body.night .bulle-son-btn.on { background: #e46a6a; color: #fff; }
 .vy-scene-deco { position: absolute; bottom: 10px; left: 0; right: 0; text-align: center; font-size: 1.4rem; letter-spacing: .6em; z-index: 1; }
 .vy-etape { position: absolute; top: 10px; left: 12px; padding: 3px 10px; border-radius: 999px; background: rgba(255, 255, 255, .8); color: #3b3350; font-size: .8rem; font-weight: 700; }
 .vy-ville.fermee .vy-scene { filter: grayscale(.75) brightness(.95); }
-.vy-mots { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin: 8px 0 12px; }
+.vy-mots { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin: 8px 0 12px; }
 .vy-mot { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 12px; background: color-mix(in srgb, var(--blue-soft) 70%, transparent); }
 .vy-mot .he { font-size: 1.2rem; }
 .vy-mot small { flex: 1; color: var(--muted); }
@@ -2189,7 +2189,7 @@ body.night .bulle-son-btn.on { background: #e46a6a; color: #fff; }
 .rlx-barre-et i { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #ffd68c, #f2a12e); }
 .rlx-jouer { align-self: stretch; text-align: center; margin-top: auto; background: linear-gradient(135deg, var(--c1), var(--c2)); color: #fff; border: 0; }
 .rlx-aide h3 { margin-top: 0; }
-.rlx-etapes { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.rlx-etapes { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
 .rlx-etapes div { display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; border-radius: 16px; background: var(--blue-soft); }
 .rlx-etapes span { font-size: 1.6rem; }
 .rlx-etapes small { color: var(--muted); }
@@ -3314,3 +3314,40 @@ a.rm-ch:hover { transform: translateY(-1px); }
 .rm-fin .sub { width: 100%; margin: 0; }
 @media (max-width: 600px) { .rm-page { padding: 18px 14px 22px; } .rm-para { font-size: 1.3rem; line-height: 2; } }
 .rm-trad[hidden], .rm-bulle[hidden] { display: none; }
+/* Bibliothèque des romans, carnet d'enquête, choix du coupable */
+.rm-biblio { display: grid; gap: 12px; margin-top: 14px; }
+.rm-livre { display: flex; gap: 16px; align-items: flex-start; padding: 18px; border-radius: var(--radius); background: var(--card); box-shadow: var(--shadow); color: var(--ink); text-decoration: none; transition: transform .15s; }
+.rm-livre:hover { transform: translateY(-2px); }
+.rm-livre-em { font-size: 2.4rem; line-height: 1; flex: none; }
+.rm-livre-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.rm-livre-txt b { font-size: 1.15rem; }
+.rm-livre-txt .he { color: var(--muted); font-size: 1.1rem; }
+.rm-livre-txt small { color: var(--muted); }
+.rm-couverture .row { display: flex; flex-wrap: wrap; gap: 10px; }
+.rm-ch-cpb { border: 2px dashed var(--gold); }
+.rm-carnet { max-width: 760px; margin: 0 auto; background: #fbf6e9; color: #2f2a22; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 26px 28px; background-image: repeating-linear-gradient(#fbf6e9 0 31px, #e4dcc6 31px 32px); }
+.rm-carnet header { text-align: center; margin-bottom: 10px; }
+.rm-carnet h2, .rm-carnet h3, .rm-carnet b, body.etoiles .rm-carnet h2, body.etoiles .rm-carnet h3 { color: #2f2a22; }
+.rm-carnet .sub { color: #6d6452; }
+.rm-carnet h3 { margin: 22px 0 8px; font-size: 1.05rem; }
+.rm-carnet h3 span { display: inline-block; font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; color: #8a7f68; margin-right: 6px; }
+.rm-carnet ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.rm-note { background: rgba(255, 255, 255, .75); border-left: 4px solid #b9ab88; border-radius: 6px; padding: 8px 12px; line-height: 1.45; }
+.rm-note-type { display: block; font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #8a7f68; margin-bottom: 2px; }
+.rm-note.t-indice { border-color: #3d7ea0; } .rm-note.t-mobile { border-color: #c27a1e; } .rm-note.t-mensonge, .rm-note.t-étrange { border-color: #b8433a; }
+.rm-note.t-alibi { border-color: #5a8f4e; } .rm-note.t-question { border-color: #7a4f8a; } .rm-note.t-solution { border-color: #2f2a22; background: #fff; }
+.rm-suspects { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin: 10px 0; }
+.rm-suspect { display: flex; flex-direction: column; gap: 2px; text-align: left; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, .8); border: 2px solid #e0d6bd; color: #2f2a22; font: inherit; }
+.rm-suspect .he { color: #6d6452; font-size: 1.05rem; text-align: left; }
+.rm-suspect small { color: #6d6452; }
+.rm-suspect.choisi { border-color: var(--gold); background: #fff4cf; }
+.rm-suspect.coupable { border-color: #b8433a; }
+.rm-coupable .rm-suspects.choix { margin: 16px 0; }
+.rm-coupable button.rm-suspect { cursor: pointer; background: var(--card); color: var(--ink); border-color: var(--line); }
+.rm-coupable button.rm-suspect:not(:disabled):hover { border-color: var(--gold); }
+.rm-coupable button.rm-suspect.choisi { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 22%, var(--card)); }
+.rm-coupable .rm-suspect .he, .rm-coupable .rm-suspect small { color: var(--muted); }
+.rm-choix-note { text-align: center; margin: 6px 0; }
+.rm-verdict { width: 100%; padding: 12px 14px; border-radius: 12px; background: color-mix(in srgb, var(--blue) 14%, var(--card)); line-height: 1.5; }
+.rm-verdict.bon { background: color-mix(in srgb, var(--green) 20%, var(--card)); }
+@media (max-width: 600px) { .rm-carnet { padding: 18px 14px 22px; } .rm-livre { padding: 14px; } }
