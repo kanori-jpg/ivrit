@@ -193,3 +193,49 @@ function controlePalier(n) {
 
 routes.parcours = parcours;
 if (/^#\/parcours/.test(location.hash) && typeof route === 'function') route();
+
+/* ============ Suivre le parcours depuis les pages d'étape ============
+   Quand on ouvre une étape depuis le parcours (ou l'accueil), un petit bandeau reste en bas de l'écran :
+   il montre l'avancée de l'étape, puis, dès qu'elle est acquise, propose de passer à la suivante. */
+const PC_SUIVI = 'ivrit-parcours-suivi';
+const pcHrefNu = (h) => (h || '').replace(/^.*#/, '#');
+document.addEventListener('click', (e) => {
+  const a = e.target.closest && e.target.closest('a[href^="#/"]');
+  if (!a) return;
+  const href = pcHrefNu(a.getAttribute('href'));
+  if (href === '#/parcours' || href.startsWith('#/parcours/')) return;
+  const { etapes, courante } = etatParcours();
+  // L'étape en cours (ou une étape déjà ouverte) : on la suit
+  const i = etapes.findIndex((x, k) => x.href === href && (k === courante || !x.fait));
+  try { if (i >= 0) sessionStorage.setItem(PC_SUIVI, String(i)); } catch { /* tant pis */ }
+}, true);
+
+function bandeauParcours() {
+  let b = document.getElementById('pcBandeau');
+  let i = null;
+  try { i = sessionStorage.getItem(PC_SUIVI); } catch { i = null; }
+  const ici = location.hash.replace(/^#\/?/, '');
+  const enlever = () => { if (b) b.remove(); document.body.classList.remove('avec-pc-bandeau'); };
+  if (i === null || ici === '' || ici.startsWith('parcours')) return enlever();
+  const etapes = etapesParcours(), e = etapes[+i];
+  if (!e) return enlever();
+  const st = etatEtape(e);
+  // On n'affiche le bandeau que sur la page de l'étape suivie (et ses sous-pages)
+  if (!st.fait && !location.hash.startsWith(e.href)) return enlever();
+  let ferme = null; try { ferme = sessionStorage.getItem(PC_SUIVI + '-ferme'); } catch { ferme = null; }
+  if (ferme === `${i}-${st.fait}`) return enlever();
+  if (!b) { b = document.createElement('div'); b.id = 'pcBandeau'; b.className = 'pc-bandeau'; document.body.appendChild(b); }
+  const k = etapes.findIndex((x, n) => n > +i && !etatEtape(x).fait), suite = etapes[k];
+  const html = st.fait
+    ? `<span class="pc-b-ok">✓</span><span class="pc-b-txt"><b>Étape acquise : ${esc(e.titre)}</b>${suite ? `<small>Ensuite : ${suite.em} ${esc(suite.titre)}</small>` : '<small>Tu as fini le parcours !</small>'}</span>${suite ? `<a class="btn gold pc-b-go" href="${suite.href}" data-pc="${k}">Continuer →</a>` : '<a class="btn gold pc-b-go" href="#/parcours">Mon parcours</a>'}`
+    : `<span class="pc-b-em">🧭</span><span class="pc-b-txt"><b>Mon parcours · ${esc(e.titre)}</b><small>${esc(st.txt)}${e.type === 'theme' ? ' — encore une séance de cartes si besoin' : ''}</small></span><a class="pc-b-lien" href="#/parcours">Voir le parcours</a>`;
+  const avecX = html + `<button type="button" class="pc-b-x" aria-label="Fermer" title="Fermer">✕</button>`;
+  if (b.dataset.html !== avecX) { b.innerHTML = avecX; b.dataset.html = avecX; b.classList.toggle('fait', st.fait); }
+  document.body.classList.add('avec-pc-bandeau');
+  b.querySelector('.pc-b-x').onclick = () => { try { sessionStorage.setItem(PC_SUIVI + '-ferme', `${i}-${st.fait}`); } catch { /* tant pis */ } enlever(); };
+  const go = b.querySelector('[data-pc]');
+  if (go) go.onclick = () => { try { sessionStorage.setItem(PC_SUIVI, go.dataset.pc); } catch { /* tant pis */ } };
+}
+window.addEventListener('hashchange', () => setTimeout(bandeauParcours, 50));
+setInterval(() => { if (!document.hidden) bandeauParcours(); }, 1500);
+setTimeout(bandeauParcours, 300);
