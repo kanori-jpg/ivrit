@@ -1060,17 +1060,21 @@ function listeSons(choix) {
   const t = THEMES.find((x) => x.id === choix);
   return t ? t.words.map(([he, tr, fr]) => ligne(he, tr, fr)) : [];
 }
-function pageSons(choix = 'priorite') {
+function pageSons(choix = 'priorite', voirTout = false) {
   const avis = () => Object.values(S.sonsAvis);
   const nbFaux = () => avis().filter((a) => a === 'faux').length;
   const options = [['priorite', '⭐ À écouter en priorité'], ['refaits', '🔧 Sons corrigés récemment'], ['faux', '🚩 Mes sons signalés'], ['verbes', '📝 Conjugaisons'], ['grammaire', '📐 Exemples de grammaire'], ['histoires', '📖 Histoires'], ...THEMES.map((t) => [t.id, `${t.emoji} ${t.name}`])];
-  const liste = listeSons(choix);
+  // Les listes « à écouter » ne gardent que ce qui attend encore ton oreille : un son validé ✓ (ou signalé 🚩, qui part chez Claude) en sort
+  const aTrier = choix === 'priorite' || choix === 'refaits';
+  const complete = listeSons(choix);
+  const liste = aTrier && !voirTout ? complete.filter((l) => !S.sonsAvis[NFC(l.he)]) : complete;
+  const masques = complete.length - liste.length;
   app.innerHTML = `<div class="q-head"><a href="#/progres">← Mes progrès</a></div><h2>Écouter et signaler les sons</h2>
   <p class="sub">Ces sons n’ont pas été vérifiés à l’oreille : la tienne est le vrai contrôle. Marque chaque son ✓ s’il te semble juste, 🚩 s’il est faux. Une vraie voix signalée passe aussitôt à la voix de synthèse ; un son de synthèse signalé est refait par Claude avec une autre voix. Partout ailleurs sur le site, la bulle « 🚩 Mal prononcé ? » qui suit chaque son fait la même chose.</p>
   <p class="row"><label>Liste : <select class="select" id="sonListe">${options.map(([v, n]) => `<option value="${esc(v)}" ${v === choix ? 'selected' : ''}>${esc(n)}</option>`).join('')}</select></label>
   <button class="btn ghost" id="sonTout" type="button">▶ Tout écouter</button></p>
-  <p class="hint" id="sonBilan"></p>
-  <div class="card son-liste">${liste.length ? liste.map((l, i) => `<div class="son-ligne" data-i="${i}">${HE(l.he)}<small>${l.tr ? TRS(l.tr) : ''}${esc(l.fr)}<em class="hint"> · ${sourceSon(l.he)}</em></small><span class="son-actions">${sayBtn(l.he)}<button type="button" class="say son-ok" title="Le son est juste">✓</button><button type="button" class="say son-faux" title="Le son est faux">🚩</button></span></div>`).join('') : '<p class="sub" style="margin:0">Rien dans cette liste pour l’instant.</p>'}</div>
+  <p class="hint" id="sonBilan"></p>${aTrier && (masques || voirTout) ? `<p class="hint">${voirTout ? 'Toute la liste est affichée, y compris les sons déjà jugés.' : `${masques} son${masques > 1 ? 's' : ''} déjà jugé${masques > 1 ? 's' : ''} (✓ ou 🚩) ne ${masques > 1 ? 'sont' : 'est'} plus affiché${masques > 1 ? 's' : ''}.`} <button type="button" class="btn ghost" id="sonVoirTout" style="padding:4px 10px">${voirTout ? 'Cacher les sons jugés' : 'Tout afficher'}</button></p>` : ''}
+  <div class="card son-liste">${liste.length ? liste.map((l, i) => `<div class="son-ligne" data-i="${i}">${HE(l.he)}<small>${l.tr ? TRS(l.tr) : ''}${esc(l.fr)}<em class="hint"> · ${sourceSon(l.he)}</em></small><span class="son-actions">${sayBtn(l.he)}<button type="button" class="say son-ok" title="Le son est juste">✓</button><button type="button" class="say son-faux" title="Le son est faux">🚩</button></span></div>`).join('') : `<p class="sub" style="margin:0">${aTrier && masques ? '🎉 Tu as écouté tous les sons de cette liste.' : 'Rien dans cette liste pour l’instant.'}</p>`}</div>
   <div class="section"><h3>Me transmettre tes signalements</h3><div class="card"><p id="sonNb" style="margin:0 0 10px"></p><button class="btn" id="sonCopie" type="button">📋 Copier la liste</button><textarea class="select son-texte" id="sonTexte" readonly hidden></textarea><p class="hint" id="sonTransmis">Colle ensuite cette liste dans ta conversation avec Claude pour les faire corriger.</p></div></div>`;
   const majBilan = () => {
     const faits = liste.filter((l) => S.sonsAvis[NFC(l.he)]).length;
@@ -1092,6 +1096,7 @@ function pageSons(choix = 'priorite') {
     majLigne(d);
   });
   $('#sonListe').onchange = (e) => { stopAudio(); pageSons(e.target.value); };
+  if ($('#sonVoirTout')) $('#sonVoirTout').onclick = () => { stopAudio(); pageSons(choix, !voirTout); };
   // Lecture à la suite, interrompue si on relance ou si on quitte la page
   let lecture = 0;
   $('#sonTout').onclick = async (e) => {
