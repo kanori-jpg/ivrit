@@ -195,7 +195,7 @@ const SOUNDS = window.SONS || {};
 let player = null;
 let endSpeech = null; // termine la lecture en cours (fin normale ou interruption)
 function stopAudio() {
-  if (player) { player.pause(); player = null; }
+  if (player) { player.pause(); player.onended = null; player.onerror = null; player = null; }
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   if (endSpeech) { endSpeech(); endSpeech = null; }
 }
@@ -224,6 +224,28 @@ function sourceSon(he) {
   if (f.startsWith('pk/')) return 'voix de synthèse Phonikud' + ecartee;
   return f ? 'voix de synthèse' + ((window.PK_ECARTES || {})[k] ? ' (Phonikud écartée)' : '') + ecartee : 'voix du navigateur';
 }
+/* Un seul lecteur audio pour tout le site, « débloqué » au premier toucher :
+   les navigateurs (surtout Safari sur iPhone) refusent qu'un son démarre tout seul,
+   sauf sur un lecteur qui a déjà joué après un geste de l'utilisateur. */
+const LECTEUR = new Audio();
+LECTEUR.preload = 'auto';
+const SILENCE = 'data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YSADAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgA==';
+let lecteurDebloque = false;
+function debloquerLecteur() {
+  if (lecteurDebloque) return;
+  lecteurDebloque = true;
+  if (!LECTEUR.src || LECTEUR.paused) { LECTEUR.src = SILENCE; LECTEUR.play().catch(() => { lecteurDebloque = false; }); }
+  if ('speechSynthesis' in window) { try { speechSynthesis.resume(); } catch (e) { /* rien */ } }
+}
+['pointerdown', 'touchend', 'keydown'].forEach((ev) => document.addEventListener(ev, debloquerLecteur, { capture: true, passive: true }));
+// Son refusé par le navigateur : un bouton pour l'écouter d'un toucher
+function proposerEcoute(text, vitesse) {
+  let b = document.getElementById('ecouteBloquee');
+  if (!b) { b = document.createElement('button'); b.id = 'ecouteBloquee'; b.type = 'button'; b.className = 'ecoute-bloquee'; document.body.appendChild(b); }
+  b.textContent = '🔊 Touche pour écouter';
+  b.onclick = () => { b.remove(); speak(text, vitesse); };
+  clearTimeout(b._t); b._t = setTimeout(() => b.remove(), 8000);
+}
 // Lit un texte. La promesse se termine quand la lecture est finie ou interrompue.
 // vitesse < 1 : lecture ralentie (bouton 🐢), sans changer la hauteur de la voix
 function speak(text, vitesse = 1) {
@@ -245,12 +267,16 @@ function speak(text, vitesse = 1) {
       speechSynthesis.speak(u);
     }
     if (file) {
-      player = new Audio('audio/' + file);
-      if (vitesse !== 1) { player.playbackRate = vitesse; player.preservesPitch = true; }
+      player = LECTEUR;
       player.onended = done;
       // Hors connexion, un son pas encore gardé sur l'appareil : on prend la voix de l'appareil
       player.onerror = () => (navigator.onLine ? done() : synthese(false));
-      player.play().catch((err) => { if (navigator.onLine || (err && err.name === 'NotAllowedError')) done(); }); // lecture bloquée sans geste de l'utilisateur : on continue
+      player.src = 'audio/' + file;
+      player.playbackRate = vitesse; player.preservesPitch = true;
+      player.play().then(() => { const x = document.getElementById('ecouteBloquee'); if (x) x.remove(); }).catch((err) => {
+        // Lecture refusée sans geste de l'utilisateur : on propose un bouton, et l'exercice continue
+        if (err && err.name === 'NotAllowedError') { proposerEcoute(text, vitesse); done(); } else if (navigator.onLine) done();
+      });
       return;
     }
     synthese(true);

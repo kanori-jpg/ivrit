@@ -3268,3 +3268,6 @@ a.pc-etape:hover { background: var(--bg); }
 .pc-b-x { flex: none; background: none; border: 0; color: var(--muted); font-size: .9rem; cursor: pointer; padding: 4px; }
 body.avec-pc-bandeau #app { padding-bottom: 96px; }
 @media (max-width: 860px) { body.avec-pc-bandeau #app { padding-bottom: 170px; } }
+
+/* Son bloqué par le navigateur : bouton pour l'écouter */
+.ecoute-bloquee { position: fixed; top: 74px; left: 50%; transform: translateX(-50%); z-index: 70; padding: 10px 18px; border-radius: 99px; border: 0; background: var(--blue); color: #fff; font: inherit; font-weight: 800; box-shadow: 0 8px 24px rgba(20, 30, 80, .3); cursor: pointer; animation: pcBandeau .3s ease; }
