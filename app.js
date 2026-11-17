@@ -311,6 +311,7 @@ document.addEventListener('keydown', (e) => keyHandler && keyHandler(e));
 const ACTIVITIES = [
   { id: 'seance', em: '🌅', name: 'Séance du jour', desc: 'Révisions, nouveaux mots et exercice en un bouton', color: '#e46a92' },
   { id: 'parcours', em: '🧭', name: 'Mon parcours', desc: 'Le chemin pas à pas, dans l’ordre', color: '#3d8f7a' },
+  { id: 'roman', em: '📚', name: 'Le roman', desc: 'Une enquête à Jaffa, chapitre par chapitre', color: '#7a4f8a' },
   { id: 'alphabet', em: '🔤', name: 'Alef-Bet', desc: 'Les 22 lettres et les voyelles', color: '#2f5bd3' },
   { id: 'histoire', em: '📖', name: 'Histoires', desc: 'Dialogue en hébreu et choisis tes réponses', color: '#c9607f' },
   { id: 'scenes', em: '🌳', name: 'Scènes', desc: 'Touche les objets pour découvrir les mots', color: '#2fae6b' },
@@ -325,9 +326,9 @@ const ACTIVITIES = [
   { id: 'progres', em: '🏆', name: 'Mes progrès', desc: 'Niveau, série, badges', color: '#d9822b' },
 ];
 // Le menu « constellation » : chaque page est une petite étoile, avec son nom en hébreu dans la bulle
-const NOMS_HE = { '': 'הַבַּיִת', seance: 'הַשִּׁעוּר שֶׁל הַיּוֹם', parcours: 'הַדֶּרֶךְ שֶׁלִּי', alphabet: 'אָלֶף־בֵּית', grammaire: 'דִּקְדּוּק', conjugaison: 'פְּעָלִים', cartes: 'כַּרְטִיסִיּוֹת', dictionnaire: 'מִלּוֹן', jeux: 'מִשְׂחָקִים', histoire: 'סִפּוּרִים', scenes: 'תְּמוּנוֹת', cursive: 'כְּתַב יָד', journal: 'הָעִתּוֹן שֶׁלִּי', chambre: 'הַחֶדֶר שֶׁלִּי', progres: 'הַהִתְקַדְּמוּת שֶׁלִּי' };
+const NOMS_HE = { '': 'הַבַּיִת', seance: 'הַשִּׁעוּר שֶׁל הַיּוֹם', parcours: 'הַדֶּרֶךְ שֶׁלִּי', roman: 'הָרוֹמָן', alphabet: 'אָלֶף־בֵּית', grammaire: 'דִּקְדּוּק', conjugaison: 'פְּעָלִים', cartes: 'כַּרְטִיסִיּוֹת', dictionnaire: 'מִלּוֹן', jeux: 'מִשְׂחָקִים', histoire: 'סִפּוּרִים', scenes: 'תְּמוּנוֹת', cursive: 'כְּתַב יָד', journal: 'הָעִתּוֹן שֶׁלִּי', chambre: 'הַחֶדֶר שֶׁלִּי', progres: 'הַהִתְקַדְּמוּת שֶׁלִּי' };
 const NOMS_RAIL = { cursive: 'Écriture cursive', journal: 'Lire un journal', seance: 'Séance du jour' };
-const RAIL_GROUPES = [['', 'seance', 'parcours'], ['alphabet', 'grammaire', 'conjugaison', 'cartes', 'dictionnaire'], ['jeux', 'histoire', 'scenes', 'cursive'], ['journal', 'chambre', 'progres']];
+const RAIL_GROUPES = [['', 'seance', 'parcours'], ['alphabet', 'grammaire', 'conjugaison', 'cartes', 'dictionnaire'], ['jeux', 'histoire', 'scenes', 'cursive'], ['journal', 'roman', 'chambre', 'progres']];
 const infoPage = (id) => (id === '' ? { id: '', em: '🏠', name: 'Accueil', desc: 'Ton écran d’accueil et le programme du jour' } : ACTIVITIES.find((x) => x.id === id));
 $('#nav').innerHTML = RAIL_GROUPES.map((g) => g.map(infoPage).filter(Boolean).map((a) => `<a href="#/${a.id}" class="rail-etoile${a.id === 'seance' ? ' seance' : ''}" aria-label="${esc(a.name)}" data-nom="${esc(a.name)}" data-he="${esc(NOMS_HE[a.id] || '')}" data-desc="${esc(a.desc)}"><span class="rail-ic">${a.em}<b class="rail-badge" data-badge="${a.id}"></b></span><span class="rail-txt"><span class="rail-nom">${esc(NOMS_RAIL[a.id] || a.name)}</span>${NOMS_HE[a.id] ? `<span class="rail-he" lang="he" dir="rtl">${esc(NOMS_HE[a.id])}</span>` : ''}</span></a>`).join('')).join('<span class="rail-scintille" aria-hidden="true">✦</span>');
 // La bulle : nom, nom hébreu et description, à côté de l'étoile survolée
@@ -450,7 +451,7 @@ function home() {
   const GROUPES = [
     ['Apprendre', ['parcours', 'alphabet', 'grammaire', 'conjugaison', 'cursive']],
     ['S’entraîner', ['seance', 'cartes', 'jeux', 'dictionnaire']],
-    ['Lire et explorer', ['histoire', 'scenes', 'journal']],
+    ['Lire et explorer', ['histoire', 'roman', 'scenes', 'journal']],
     ['Mon espace', ['chambre', 'progres']],
   ];
   const ranges = new Set(GROUPES.flatMap((g) => g[1]));
