@@ -12,8 +12,8 @@ const SERVEUR_SONS = location.protocol.startsWith('http') && ['localhost', '127.
 (() => {
   if (!S.sonsRefaitVu) S.sonsRefaitVu = {};
   let change = false;
-  // 17/11/2026 : tous les sons signalés jusqu'ici ont été remplacés ; on efface une fois pour toutes les 🚩 restés en mémoire
-  if ((S.sonsAvisRemis || 0) < 1) { Object.keys(S.sonsAvis).forEach((k) => { if (S.sonsAvis[k] === 'faux') delete S.sonsAvis[k]; }); S.sonsAvisRemis = 1; change = true; }
+  // 17/11/2026 (2e fois) : tous les signalements sont traités ; on efface tous les 🚩 restés en mémoire
+  if ((S.sonsAvisRemis || 0) < 2) { Object.keys(S.sonsAvis).forEach((k) => { if (S.sonsAvis[k] === 'faux') delete S.sonsAvis[k]; }); S.sonsAvisRemis = 2; change = true; }
   Object.entries(SONS_REFAITS).forEach(([k, n]) => {
     if (S.sonsRefaitVu[k] === n) return;
     if (S.sonsAvis[k] === 'faux') delete S.sonsAvis[k];

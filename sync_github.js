@@ -52,7 +52,7 @@
         case 'correspondances': Object.entries(b || {}).forEach(([id, cb]) => { const ca = a[id]; if (!ca) { a[id] = cb; return; } if (cb.debut && (!ca.debut || cb.debut < ca.debut)) ca.debut = cb.debut; ca.rep = { ...(cb.rep || {}), ...(ca.rep || {}) }; }); return;
         case 'quizIsrael': a.best = Math.max(a.best || 0, b.best || 0); a.parties = Math.max(a.parties || 0, b.parties || 0); return;
         case 'rates': Object.entries(b || {}).forEach(([w, rb]) => { const ra = a[w]; if (!ra || (rb.n || 0) > (ra.n || 0)) a[w] = rb; }); return;
-        case 'xp': case 'written': case 'perfect': case 'remiseAZero': r[k] = Math.max(a || 0, b || 0); return;
+        case 'xp': case 'written': case 'perfect': case 'remiseAZero': case 'sonsAvisRemis': r[k] = Math.max(a || 0, b || 0); return;
         case 'best': case 'stats': Object.entries(b || {}).forEach(([kk, x]) => { if (typeof x === 'number') a[kk] = Math.max(a[kk] || 0, x); }); return;
         case 'lastDay': case 'seance': case 'lastExport': if ((b || '') > (a || '')) r[k] = b; return;
         case 'mesMots': { const vus = new Set(a.map((m) => NFC(m[0]))); (b || []).forEach((m) => { if (!vus.has(NFC(m[0]))) a.push(m); }); return; }
@@ -60,6 +60,13 @@
         // Les romans : le meilleur quiz de chaque chapitre, les chapitres lus des deux côtés, le coupable désigné le premier
         case 'roman': fusRoman(a, b); return;
         case 'romans': Object.entries(b || {}).forEach(([id, lb]) => { if (!a[id]) a[id] = lb; else fusRoman(a[id], lb); }); return;
+        // Avis sur les sons : un 🚩 déjà traité (son refait, ou effacé lors d'une remise des signalements) ne revient pas par l'autre appareil
+        case 'sonsAvis': {
+          const na = base.sonsAvisRemis || 0, nb = autre.sonsAvisRemis || 0, refaits = window.SONS_REFAITS || {};
+          if (nb > na) Object.keys(a).forEach((w) => { if (a[w] === 'faux' && !(w in (b || {}))) delete a[w]; });
+          Object.entries(b || {}).forEach(([w, x]) => { if (w in a) return; if (x === 'faux' && (nb < na || refaits[w])) return; a[w] = x; });
+          return;
+        }
         case 'mesMotsAjouts': case 'mesMotsRetires': Object.entries(b || {}).forEach(([w, d]) => { a[w] = Math.max(a[w] || 0, d || 0); }); return;
         default:
           if (Array.isArray(a) && Array.isArray(b)) { const vus = new Set(a.map(canon)); b.forEach((x) => { if (!vus.has(canon(x))) a.push(x); }); }
