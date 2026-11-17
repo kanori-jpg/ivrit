@@ -753,7 +753,7 @@ function traceurCursive(toile, c) {
 
 function cursiveLire(onglets) {
   const types = shuffle(['lettre', 'lettre', 'lettre', 'imprimee', 'imprimee', 'imprimee', 'mot', 'mot', 'mot', 'mot']);
-  const pool = WORDS.filter((w) => !/\s|־/.test(w.he) && lettresMot(w.he).length >= 2 && lettresMot(w.he).length <= 6 && (w.theme !== 'dehors' || S.found.includes(w.he.normalize('NFC'))));
+  const pool = WORDS.filter((w) => !/\s|־/.test(w.he) && lettresMot(w.he).length >= 2 && lettresMot(w.he).length <= 6 && !motCache(w));
   const fr = [...new Set(WORDS.map((w) => w.fr))];
   const questions = types.map((type) => {
     if (type === 'mot') { const w = pick(pool, 1)[0]; return { type, w, opts: options(w.fr, fr) }; }
@@ -1255,7 +1255,7 @@ function seance() {
   };
 
   // Exercice : d'abord les mots de la séance, complétés si besoin par des mots déjà rencontrés
-  const disponible = (w) => w.theme !== 'dehors' || S.found.includes(w.he.normalize('NFC'));
+  const disponible = (w) => !motCache(w);
   const preparerQuestions = () => {
     keyHandler = null;
     const dejaLa = new Set(vus.map((w) => w.he));

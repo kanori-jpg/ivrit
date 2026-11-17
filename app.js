@@ -547,7 +547,14 @@ const noterRate = (he) => { const k = he.normalize('NFC'); if (!S.rates) S.rates
 const noterErreur = (he) => { noterRate(he); S.erreurs[he] = 2; S.cards[he] = { box: 0, due: dayKey() }; };
 const noterReussite = (he) => { if (S.erreurs[he]) { S.erreurs[he]--; if (!S.erreurs[he]) delete S.erreurs[he]; } };
 const motsEnErreur = () => WORDS.filter((w, i) => S.erreurs[w.he] && WORDS.findIndex((x) => x.he === w.he) === i);
-const isDue = (w) => { if (w.theme === 'dehors' && !S.found.includes(w.he.normalize('NFC'))) return false; const c = cardOf(w); return !c.due || c.due <= dayKey(); };
+// Un mot « Dehors » reste caché tant qu'il n'a pas été trouvé dans une scène (sauf s'il n'est dans aucune scène)
+let MOTS_EN_SCENE = null;
+const motCache = (w) => {
+  if (w.theme !== 'dehors' || S.found.includes(w.he.normalize('NFC'))) return false;
+  if (!MOTS_EN_SCENE && typeof SCENES !== 'undefined') MOTS_EN_SCENE = new Set(SCENES.flatMap((s) => s.objects.map((o) => o[0].normalize('NFC'))));
+  return !MOTS_EN_SCENE || MOTS_EN_SCENE.has(w.he.normalize('NFC'));
+};
+const isDue = (w) => { if (motCache(w)) return false; const c = cardOf(w); return !c.due || c.due <= dayKey(); };
 
 function cartes(theme) {
   if (!theme) {
@@ -602,6 +609,17 @@ function cartes(theme) {
   // Les cartes à revoir d'abord, puis les nouveaux mots pour compléter la séance
   const dus = themeWords(theme).filter(isDue);
   let queue = [...shuffle(dus.filter((w) => S.cards[w.he])), ...shuffle(dus.filter((w) => !S.cards[w.he]))].slice(0, 12);
+  // Les mots « Dehors » se découvrent d'abord dans les scènes : s'il en reste à trouver, on y envoie
+  const caches = themeWords(theme).filter(motCache);
+  if (!queue.length && caches.length && typeof SCENES !== 'undefined') {
+    const k = new Set(caches.map((w) => w.he.normalize('NFC')));
+    const sc = SCENES.map((s) => ({ s, n: s.objects.filter((o) => k.has(o[0].normalize('NFC'))).length })).filter((x) => x.n).sort((x, y) => y.n - x.n);
+    const tous = themeWords(theme).filter((w) => w.theme === 'dehors').length;
+    app.innerHTML = `<div class="card center result"><div class="em">🌦️</div><h2>Ces mots se découvrent dehors !</h2>
+      <p class="sub">Les mots de ce thème apparaissent dans les cartes une fois que tu les as trouvés dans les scènes : touche les objets qui brillent. Il t’en reste ${caches.length} à trouver sur ${tous}.</p>
+      <div class="row" style="justify-content:center">${sc.length ? sc.slice(0, 3).map((x, i) => `<a class="btn${i ? ' ghost' : ' gold'}" href="#/scenes/${x.s.id}">🔎 ${esc(x.s.name)} · ${x.n} mot${x.n > 1 ? 's' : ''} à trouver</a>`).join('') : '<a class="btn gold" href="#/scenes">Aller aux scènes</a>'}<a class="btn ghost" href="#/cartes">Autres thèmes</a></div></div>`;
+    return;
+  }
   if (!queue.length) {
     app.innerHTML = `<div class="card center result"><div class="em">😌</div><h2>Rien à réviser ici aujourd’hui !</h2><p class="sub">Tes cartes reviendront au bon moment.</p><div class="row" style="justify-content:center"><a class="btn" href="#/cartes">Autres thèmes</a><a class="btn ghost" href="#/quiz">Faire un quiz</a></div></div>`;
     return;

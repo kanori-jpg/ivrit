@@ -228,7 +228,7 @@ function bandeauParcours() {
   const k = etapes.findIndex((x, n) => n > +i && !etatEtape(x).fait), suite = etapes[k];
   const html = st.fait
     ? `<span class="pc-b-ok">✓</span><span class="pc-b-txt"><b>Étape acquise : ${esc(e.titre)}</b>${suite ? `<small>Ensuite : ${suite.em} ${esc(suite.titre)}</small>` : '<small>Tu as fini le parcours !</small>'}</span>${suite ? `<a class="btn gold pc-b-go" href="${suite.href}" data-pc="${k}">Continuer →</a>` : '<a class="btn gold pc-b-go" href="#/parcours">Mon parcours</a>'}`
-    : `<span class="pc-b-em">🧭</span><span class="pc-b-txt"><b>Mon parcours · ${esc(e.titre)}</b><small>${esc(st.txt)}${e.type === 'theme' ? ' — encore une séance de cartes si besoin' : ''}</small></span><a class="pc-b-lien" href="#/parcours">Voir le parcours</a>`;
+    : `<span class="pc-b-em">🧭</span><span class="pc-b-txt"><b>Mon parcours · ${esc(e.titre)}</b><small>${esc(st.txt)}${e.type === 'theme' ? (themeWords(e.id).some(motCache) ? ' — trouve les autres mots dans les scènes (onglet Scènes)' : ' — encore une séance de cartes si besoin') : ''}</small></span><a class="pc-b-lien" href="#/parcours">Voir le parcours</a>`;
   const avecX = html + `<button type="button" class="pc-b-x" aria-label="Fermer" title="Fermer">✕</button>`;
   if (b.dataset.html !== avecX) { b.innerHTML = avecX; b.dataset.html = avecX; b.classList.toggle('fait', st.fait); }
   document.body.classList.add('avec-pc-bandeau');
