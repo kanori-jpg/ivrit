@@ -194,6 +194,8 @@ function chCheveux(p) {
     'p-co-tresse': { arriere: forme(CH_CALOTTE), devant: forme('M38-206Q42-186 36-168L29-172Q33-188 31-204Z') + chTresse(32, -164, 22, -110, 6, ch) + chFrangeCote(forme, traits, clair) },
     courts: { arriere: forme('M0-236Q-45-236-45-192Q-46-174-40-164Q-34-170-32-176L32-176Q34-170 40-164Q46-174 45-192Q45-236 0-236Z'), devant: forme('M-39-190Q-42-236 0-237Q38-236 40-200Q32-222 12-224Q-12-222-28-208Q-36-200-39-190Z') + traits(['M10-234Q-10-230-26-214', 'M20-232Q32-226 36-210', 'M-2-234Q-18-228-32-206']) + traits(['M-16-230Q-26-224-30-216'], clair, 2.200) },
   };
+  // Les coiffures ajoutées plus tard (chambre_art2.js)
+  if (window.CH_COIFFURES_PLUS && CH_COIFFURES_PLUS[p.coiffure]) return CH_COIFFURES_PLUS[p.coiffure]({ ch, sombre, clair, forme, traits, frange, meches, longs: styles.longs });
   return styles[p.coiffure] || styles.longs;
 }
 
@@ -333,6 +335,9 @@ function chSolSvg(s) {
   } else if (s.type === 'moquette') {
     lignes = 'M0 0';
     extra = [...Array(160).keys()].map((n) => `<circle cx="${(n * 97) % CH_LARGE}" cy="${CH_SOL + 6 + ((n * 53) % 184)}" r="1.200" fill="${s.ligne}" opacity=".3"/>`).join('');
+  } else if (s.type === 'terrazzo') {
+    lignes = 'M0 0';
+    extra = [...Array(170).keys()].map((n) => { const x = (n * 89) % CH_LARGE, y = CH_SOL + 6 + ((n * 47) % 184), r = 1.2 + (n % 4) * .7; return `<ellipse cx="${x}" cy="${y}" rx="${r * 1.4}" ry="${r * .8}" fill="${s.points[n % s.points.length]}" opacity=".85"/>`; }).join('');
   } else if (s.type === 'marbre') {
     extra = `<path d="${[[60, 350], [250, 372], [470, 345], [640, 380], [130, 430], [380, 470], [600, 455], [40, 500], [720, 505]].map(([x, y]) => `M${x} ${y}q30-9 62 3t54-7`).join('')}" stroke="${s.ligne}" stroke-width=".9" fill="none" opacity=".35"/>`;
   }
