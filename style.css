@@ -3351,3 +3351,30 @@ a.rm-ch:hover { transform: translateY(-1px); }
 .rm-verdict { width: 100%; padding: 12px 14px; border-radius: 12px; background: color-mix(in srgb, var(--blue) 14%, var(--card)); line-height: 1.5; }
 .rm-verdict.bon { background: color-mix(in srgb, var(--green) 20%, var(--card)); }
 @media (max-width: 600px) { .rm-carnet { padding: 18px 14px 22px; } .rm-livre { padding: 14px; } }
+
+/* -- Bulle « Une question ? » (aide_ia.js) -- */
+.aide-ia-btn { position: fixed; right: 18px; bottom: 18px; z-index: 850; width: 52px; height: 52px; border-radius: 50%; border: 0; cursor: pointer; background: linear-gradient(135deg, var(--blue), #9a6cf0); color: #fff; font: 800 1.6rem/1 Poppins, sans-serif; box-shadow: 0 8px 22px rgba(60, 40, 140, .35); transition: transform .2s, bottom .25s; }
+.aide-ia-btn:hover { transform: scale(1.07); }
+.aide-ia-btn.ouvert span { display: inline-block; transform: rotate(180deg); }
+body:has(.bulle-son.vu) .aide-ia-btn { bottom: 84px; }
+body.avec-pc-bandeau .aide-ia-btn { bottom: 96px; }
+.aide-ia { position: fixed; right: 18px; bottom: 82px; z-index: 860; width: min(360px, calc(100vw - 32px)); display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px; border-radius: 20px; background: var(--card); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 18px 44px rgba(20, 16, 60, .3); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); animation: pcBandeau .25s ease; }
+.aide-ia[hidden] { display: none; }
+body.avec-pc-bandeau .aide-ia { bottom: 160px; }
+body.etoiles .aide-ia { background: #24225c; }
+.aide-ia-tete { display: flex; align-items: center; justify-content: space-between; font-size: 1.05rem; }
+.aide-ia-fermer { border: 0; background: none; color: var(--muted); font-size: 1rem; cursor: pointer; padding: 4px; }
+.aide-ia-info { margin: 0; font-size: .85rem; color: var(--muted); }
+.aide-ia-sel { font-size: .85rem; padding: 6px 10px; border-radius: 10px; background: var(--blue-soft); }
+.aide-ia textarea { width: 100%; box-sizing: border-box; resize: vertical; min-height: 70px; padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); font: inherit; font-size: .95rem; }
+.aide-ia textarea:focus { outline: none; border-color: var(--blue); }
+.aide-ia-ex { display: flex; flex-wrap: wrap; gap: 6px; }
+.aide-ia-ex button { border: 1px solid var(--line); background: var(--blue-soft); color: var(--ink); border-radius: 999px; padding: 4px 10px; font: inherit; font-size: .78rem; cursor: pointer; }
+.aide-ia-ctx { font-size: .82rem; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.aide-ia-go { align-self: stretch; text-align: center; }
+@media (max-width: 860px) {
+  .aide-ia-btn { right: 14px; bottom: calc(84px + env(safe-area-inset-bottom)); width: 46px; height: 46px; font-size: 1.4rem; }
+  body:has(.bulle-son.vu) .aide-ia-btn { bottom: calc(146px + env(safe-area-inset-bottom)); }
+  body.avec-pc-bandeau .aide-ia-btn { bottom: calc(170px + env(safe-area-inset-bottom)); }
+  .aide-ia, body.avec-pc-bandeau .aide-ia { right: 16px; left: 16px; width: auto; bottom: calc(140px + env(safe-area-inset-bottom)); max-height: calc(100vh - 200px); overflow-y: auto; }
+}
