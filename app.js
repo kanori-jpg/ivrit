@@ -636,6 +636,16 @@ function cartes(theme) {
       pile[pile.length - 1].gains = avantGain;
       $('.result').insertAdjacentHTML('beforeend', '<p class="center mt"><button class="btn ghost" id="precedente" type="button">← Revenir à la dernière carte</button></p>');
       $('#precedente').onclick = revenir;
+      // Il reste des cartes à revoir (ou des nouveaux mots) dans ce thème : on peut enchaîner une autre séance
+      const restent = themeWords(theme).filter(isDue), aRevoir = restent.filter((x) => S.cards[x.he]).length, nouveaux = restent.length - aRevoir;
+      if (restent.length) {
+        const detail = [aRevoir ? `${aRevoir} à revoir` : '', nouveaux ? `${nouveaux} nouveau${nouveaux > 1 ? 'x' : ''}` : ''].filter(Boolean).join(' · ');
+        $$('.result .row .btn').forEach((b) => b.classList.replace('gold', 'ghost'));
+        $('.result .row').insertAdjacentHTML('afterbegin', `<button class="btn gold" id="continuer" type="button">Continuer à réviser →</button>`);
+        $('.result .row').insertAdjacentHTML('afterend', `<p class="hint center" style="margin:6px 0 0">Il reste ${restent.length} carte${restent.length > 1 ? 's' : ''} dans ce thème (${detail}).</p>`);
+        $('#continuer').onclick = () => { window.scrollTo(0, 0); cartes(theme); };
+        keyHandler = (e) => { if (e.key === 'Enter' && $('#continuer')) $('#continuer').click(); };
+      }
       return;
     }
     const w = queue[0]; const c = cardOf(w);
