@@ -123,3 +123,4 @@ function pageTranscriptions() {
   };
 }
 routes.transcriptions = pageTranscriptions;
+if (/^#\/transcriptions/.test(location.hash) && typeof route === 'function') route();
