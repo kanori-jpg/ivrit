@@ -6,6 +6,9 @@
    avec les mêmes habitudes que le reste du site : kh, sh, ou, ts, gu devant e/i, ss entre deux voyelles. */
 const TR_EXCEPTIONS = { 'כָּל': 'kol', 'כֹּל': 'kol', 'כָּל־': 'kol', 'צָהֳרַיִם': 'tsohorayim', 'תָּכְנִית': 'tokhnit', 'חָכְמָה': 'khokhma', 'אָזְנַיִם': 'oznayim', 'אֳנִיָּה': 'oniya', 'יְרוּשָׁלַיִם': 'Yeroushalayim', 'יִשְׂרָאֵל': 'Israël', 'מֹשֶׁה': 'Moshé' };
 
+// Transcriptions vérifiées sur Pealim (21/11/2026) pour des mots de « Mes mots » : elles passent avant la lecture automatique
+Object.assign(TR_EXCEPTIONS, { 'אַלּוּף': 'alouf', 'רְעִילִים': 'reïlim', 'זַמֶּרֶת': 'zaméret', 'מְפֻרְסֶמֶת': 'mefoursémet', 'חוֹזֶרֶת': 'khozéret' });
+
 function trAuto(texte) {
   const NIQ = { PATAH: 'ַ', KAMATZ: 'ָ', SEGOL: 'ֶ', TSERE: 'ֵ', HIRIK: 'ִ', HOLAM: 'ֹ', HOLAM_V: 'ֺ', KUBUTS: 'ֻ', SHVA: 'ְ', HPATAH: 'ֲ', HSEGOL: 'ֱ', HKAMATZ: 'ֳ', DAGESH: 'ּ', SHIN: 'ׁ', SIN: 'ׂ' };
   const mot = (m) => {
