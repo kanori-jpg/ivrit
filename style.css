@@ -3378,3 +3378,24 @@ body.etoiles .aide-ia { background: #24225c; }
   body.avec-pc-bandeau .aide-ia-btn { bottom: calc(170px + env(safe-area-inset-bottom)); }
   .aide-ia, body.avec-pc-bandeau .aide-ia { right: 16px; left: 16px; width: auto; bottom: calc(140px + env(safe-area-inset-bottom)); max-height: calc(100vh - 200px); overflow-y: auto; }
 }
+
+/* -- Ma voix : enregistrer soi-même un son (ma_voix.js) -- */
+.mv-carte { width: min(440px, 100%) !important; overflow-x: hidden !important; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
+.mv-mot { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.mv-mot .he { font-size: 2.2rem; }
+.mv-mot small { color: var(--muted); }
+.mv-carte .hint { margin: 0; text-align: center; }
+.mv-ligne { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.mv-lab { font-size: .85rem; color: var(--muted); }
+.mv-enreg { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 6px 0; }
+.mv-rec { width: 72px; height: 72px; border-radius: 50%; border: 4px solid color-mix(in srgb, #e45a6a 35%, var(--line)); background: var(--card); cursor: pointer; display: grid; place-items: center; transition: transform .15s; }
+.mv-rec:hover { transform: scale(1.05); }
+.mv-rec span { width: 34px; height: 34px; border-radius: 50%; background: #e45a6a; transition: border-radius .2s, width .2s, height .2s; }
+.mv-rec.en-cours { animation: mvPulse 1.1s ease-in-out infinite; }
+.mv-rec.en-cours span { width: 26px; height: 26px; border-radius: 6px; }
+@keyframes mvPulse { 50% { box-shadow: 0 0 0 10px rgba(228, 90, 106, .18); } }
+.mv-etat { font-size: .9rem; text-align: center; min-height: 1.3em; }
+.mv-actions, .mv-bas { justify-content: center; flex-wrap: wrap; }
+.mv-bas { border-top: 1px solid var(--line); padding-top: 10px; }
+.son-micro.on { background: color-mix(in srgb, #e45a6a 22%, var(--blue-soft)); }
+body.etoiles .mv-carte { background: #24225c; }

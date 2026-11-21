@@ -88,7 +88,8 @@ function montrerBulleSon(texte) {
   const dessiner = () => {
     const faux = S.sonsAvis[k] === 'faux';
     bulleSon.innerHTML = `<span class="he" lang="he" dir="rtl">${esc(k.length > 40 ? k.slice(0, 40) + '…' : k)}</span>
-      <button type="button" class="bulle-son-btn${faux ? ' on' : ''}">${faux ? '🚩 Signalé · annuler' : '🚩 Mal prononcé ?'}</button>`;
+      <button type="button" class="bulle-son-btn${faux ? ' on' : ''}">${faux ? '🚩 Signalé · annuler' : '🚩 Mal prononcé ?'}</button>
+      <button type="button" class="bulle-son-btn" data-ma-voix="${esc(k)}" title="Enregistrer ma voix pour ce mot">🎙️</button>`;
     bulleSon.querySelector('button').onclick = (e) => { e.stopPropagation(); signalerSon(k, S.sonsAvis[k] !== 'faux'); dessiner(); garder(); };
   };
   const garder = () => { clearTimeout(minuteurBulle); minuteurBulle = setTimeout(() => bulleSon.classList.remove('vu'), 6000); };

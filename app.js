@@ -209,6 +209,7 @@ const PK = window.SONS_PK || {};
 // Le fichier à jouer pour un texte : vraie voix > Phonikud > ancienne voix de synthèse
 function fichierAudio(texte) {
   const k = texte.normalize('NFC');
+  if (window.MA_VOIX && MA_VOIX[k]) return MA_VOIX[k]; // ta propre voix (ma_voix.js) passe avant tout
   const pk = PK[k] && !(window.PK_ECARTES || {})[k];
   const autre = pk || SOUNDS[k];
   if (HUMAN[k] && !((S.sonsAvis[k] === 'faux' || (window.SONS_REFAITS || {})[k]) && autre)) return 'humain/' + HUMAN[k].fichier; // une vraie voix signalée puis refaite reste écartée
@@ -219,6 +220,7 @@ function fichierAudio(texte) {
 function sourceSon(he) {
   const f = fichierAudio(he) || '';
   const k = he.normalize('NFC');
+  if (f.startsWith('blob:')) return 'ma voix';
   if (f.startsWith('humain/')) return 'vraie voix';
   const ecartee = HUMAN[k] ? ' (vraie voix écartée)' : '';
   if (f.startsWith('pk/')) return 'voix de synthèse Phonikud' + ecartee;
@@ -271,7 +273,7 @@ function speak(text, vitesse = 1) {
       player.onended = done;
       // Hors connexion, un son pas encore gardé sur l'appareil : on prend la voix de l'appareil
       player.onerror = () => (navigator.onLine ? done() : synthese(false));
-      player.src = 'audio/' + file;
+      player.src = file.startsWith('blob:') ? file : 'audio/' + file;
       player.playbackRate = vitesse; player.preservesPitch = true;
       player.play().then(() => { const x = document.getElementById('ecouteBloquee'); if (x) x.remove(); }).catch((err) => {
         // Lecture refusée sans geste de l'utilisateur : on propose un bouton, et l'exercice continue

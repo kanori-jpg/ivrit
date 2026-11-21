@@ -924,7 +924,7 @@ const FEUILLETON_VIDEO = {
       const done = () => { if (fini) return; fini = true; if (endSpeech === done) endSpeech = null; res(); };
       endSpeech = done; player = lecteur;
       lecteur.onended = done; lecteur.onerror = done;
-      lecteur.src = 'audio/' + f;
+      lecteur.src = f.startsWith('blob:') ? f : 'audio/' + f;
       lecteur.playbackRate = lent ? 0.75 : 1;
       lecteur.play().catch(() => { if (!pause) done(); });
     });
