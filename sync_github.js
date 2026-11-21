@@ -67,7 +67,9 @@
           Object.entries(b || {}).forEach(([w, x]) => { if (w in a) return; if (x === 'faux' && (nb < na || refaits[w])) return; a[w] = x; });
           return;
         }
-        case 'mesMotsAjouts': case 'mesMotsRetires': Object.entries(b || {}).forEach(([w, d]) => { a[w] = Math.max(a[w] || 0, d || 0); }); return;
+        // Mes enregistrements (ma_voix.js) : pour chaque mot, l'enregistrement le plus récent
+        case 'mesVoix': Object.entries(b || {}).forEach(([w, x]) => { if (x && (!a[w] || (x.t || 0) > (a[w].t || 0))) a[w] = x; }); return;
+        case 'mesMotsAjouts': case 'mesMotsRetires': case 'mesVoixSuppr': Object.entries(b || {}).forEach(([w, d]) => { a[w] = Math.max(a[w] || 0, d || 0); }); return;
         default:
           if (Array.isArray(a) && Array.isArray(b)) { const vus = new Set(a.map(canon)); b.forEach((x) => { if (!vus.has(canon(x))) a.push(x); }); }
           else if (estObj(a) && estObj(b) && !REGLAGES_OBJETS.includes(k)) Object.entries(b).forEach(([kk, x]) => { if (!(kk in a)) a[kk] = x; });
@@ -76,6 +78,8 @@
     });
     // Mes mots : un mot retiré (après son dernier ajout) ne revient pas
     if (Array.isArray(r.mesMots)) { const ret = r.mesMotsRetires || {}, aj = r.mesMotsAjouts || {}; r.mesMots = r.mesMots.filter((m) => { const w = NFC(m[0]); return !ret[w] || (aj[w] || 0) > ret[w]; }); }
+    // Un enregistrement supprimé (après sa création) ne revient pas
+    if (estObj(r.mesVoix)) { const sup = r.mesVoixSuppr || {}; Object.keys(r.mesVoix).forEach((w) => { if ((sup[w] || 0) >= (r.mesVoix[w].t || 0)) delete r.mesVoix[w]; }); }
     // La série de jours : celle de l'appareil qui a joué le plus récemment
     if ((autre.lastDay || '') > (base.lastDay || '')) r.streak = autre.streak;
     return r;

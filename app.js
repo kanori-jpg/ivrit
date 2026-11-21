@@ -32,7 +32,7 @@ S.stats = Object.assign(defaults().stats, S.stats);
    Une page restée ouverte avec l'ancienne progression (autre onglet, appli du téléphone laissée en arrière-plan)
    ne doit pas pouvoir la réécrire : elle se recharge au lieu d'enregistrer. */
 const KEY_REMISE = 'ivrit-remise';
-const GARDES_REMISE = ['mesMots', 'mesMotsAjouts', 'mesMotsRetires', 'sonsAvis', 'sonsRefaitVu', 'dicoCat', 'goal', 'night', 'sansVoyelles', 'sansTranslit', 'chronoMuet', 'voyProg', 'styleScenes', 'videoFr', 'micro', 'relecture', 'rolesTrad', 'perso', 'lastExport'];
+const GARDES_REMISE = ['mesMots', 'mesMotsAjouts', 'mesMotsRetires', 'sonsAvis', 'sonsRefaitVu', 'dicoCat', 'goal', 'night', 'sansVoyelles', 'sansTranslit', 'chronoMuet', 'voyProg', 'styleScenes', 'videoFr', 'micro', 'relecture', 'rolesTrad', 'perso', 'lastExport', 'mesVoix', 'mesVoixSuppr', 'mesVoixGist'];
 const remiseConnue = () => { try { return +(localStorage.getItem(KEY_REMISE) || 0); } catch { return 0; } };
 const noterRemise = (t) => { try { if (t > remiseConnue()) localStorage.setItem(KEY_REMISE, String(t)); } catch { /* tant pis */ } };
 // L'ancienne progression a été réécrite par-dessus la remise à zéro : on refait la remise à zéro (on garde Mes mots et les réglages)
