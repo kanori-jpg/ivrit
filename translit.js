@@ -105,3 +105,21 @@ function trouverTr(he) {
   if (typeof THEMES !== 'undefined') THEMES.forEach((t) => t.words.forEach((w) => { if (!w[1]) w[1] = trouverTr(w[0]); }));
   if (typeof WORDS !== 'undefined') WORDS.forEach((w) => { if (!w.tr) w.tr = trouverTr(w.he); });
 })();
+
+/* Page #/transcriptions : tes mots dont la transcription a été lue automatiquement (pas encore vérifiée),
+   avec un bouton pour copier la liste et la donner à Claude, qui les vérifie sur Pealim et le Wiktionnaire. */
+function pageTranscriptions() {
+  trouverTr('א');
+  const liste = S.mesMots.filter((m) => !m[1] && !INDEX_TR.has(NFC(m[0])) && !TR_EXCEPTIONS[NFC(m[0])]).map((m) => ({ he: NFC(m[0]), tr: trAuto(m[0]), fr: m[2] }));
+  app.innerHTML = `<div class="q-head"><a href="#/progres">← Mes progrès</a></div><h2>Transcriptions à vérifier</h2>
+    <p class="sub">Les mots de « Mes mots » dont la transcription a été lue automatiquement à partir des voyelles. Copie la liste et colle-la dans ta conversation avec Claude : il les vérifiera sur Pealim et le Wiktionnaire.</p>
+    <p class="row"><button class="btn gold" id="trCopie" type="button" ${liste.length ? '' : 'disabled'}>📋 Copier la liste (${liste.length} mot${liste.length > 1 ? 's' : ''})</button></p>
+    <textarea class="input" id="trTexte" rows="6" hidden style="width:100%"></textarea>
+    <div class="card son-liste">${liste.length ? liste.map((l) => `<div class="son-ligne">${HE(l.he)}<small>${esc(l.tr)} · ${esc(l.fr)}</small></div>`).join('') : '<p class="sub" style="margin:0">🎉 Toutes tes transcriptions sont vérifiées.</p>'}</div>`;
+  $('#trCopie').onclick = async () => {
+    const texte = `Transcriptions à vérifier :\n${liste.map((l) => `${l.he} | ${l.tr} | ${l.fr}`).join('\n')}`;
+    try { await navigator.clipboard.writeText(texte); toast('📋 Liste copiée'); }
+    catch { const z = $('#trTexte'); z.hidden = false; z.value = texte; z.select(); toast('Copie la liste affichée ci-dessous'); }
+  };
+}
+routes.transcriptions = pageTranscriptions;
