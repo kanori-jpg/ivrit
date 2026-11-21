@@ -50,11 +50,11 @@ function brancherMotsClic(zone, bulle) {
     if (!g) { bulle.innerHTML = `<span class="he" lang="he" dir="rtl">${esc(mot)}</span><span class="bulle-fr">Nom propre ou mot pas encore dans le dictionnaire</span>`; bulle.hidden = false; return; }
     const vu = WORDS.find((w) => NFC(w.he) === NFC(g.base || g.he)), appris = vu && S.cards[vu.he];
     bulle.innerHTML = `<span class="he" lang="he" dir="rtl">${esc(mot)}</span>
-      <span class="bulle-fr">${g.prefixe ? `<small>${esc(g.prefixe)} + </small>` : ''}<b>${esc(g.fr)}</b>${g.tr ? `<small> · ${esc(g.tr)}</small>` : ''}</span>
+      <span class="bulle-fr">${g.prefixe ? `<small>${esc(g.prefixe)} + </small>` : ''}<b>${esc(g.fr)}</b><small> · ${esc(g.tr || trouverTr(g.jeton || g.he))}</small></span>
       ${g.prefixe ? `<span class="bulle-base">mot de base : <span class="he" lang="he" dir="rtl">${esc(g.he)}</span></span>` : ''}
       <span class="bulle-plus-zone"></span>`;
     // Le + : ajouter le mot (sa forme de base) à « Mes mots » ; ⭐ = déjà ajouté, toucher pour retirer
-    const entree = [NFC(g.he), g.tr || '', g.fr], zonePlus = bulle.querySelector('.bulle-plus-zone');
+    const entree = [NFC(g.he), g.tr || trouverTr(g.he), g.fr], zonePlus = bulle.querySelector('.bulle-plus-zone');
     const etatPlus = () => {
       if (vu && vu.theme !== 'mesmots') { zonePlus.innerHTML = appris ? '<span class="bulle-etat">✓ dans tes cartes</span>' : '<span class="bulle-etat">✓ dans le vocabulaire du site</span>'; return; }
       const dedans = estDansMesMots(entree[0]);
@@ -83,7 +83,7 @@ function gloseArticle(b, zone) {
     else etat = '<button type="button" class="gl-plus" aria-label="Ajouter ce mot à mes mots à apprendre">＋</button>';
     zone.innerHTML = `<span class="gl-fr">${esc(fr)}</span>${etat}`;
     const plus = zone.querySelector('.gl-plus'), annuler = zone.querySelector('.gl-annuler');
-    if (plus) plus.onclick = () => { ajouterMesMots([he, g && NFC(g.he) === he ? g.tr || '' : '', fr]); toast('⭐ Mot ajouté à tes cartes (thème « Mes mots »)'); dessiner(); };
+    if (plus) plus.onclick = () => { ajouterMesMots([he, (g && NFC(g.he) === he && g.tr) || trouverTr(he), fr]); toast('⭐ Mot ajouté à tes cartes (thème « Mes mots »)'); dessiner(); };
     if (annuler) annuler.onclick = () => { retirerMesMots(he); dessiner(); };
   };
   dessiner();

@@ -65,8 +65,10 @@ if (!S.shInit) { S.sh += Math.floor(S.xp / 5); S.shInit = true; save(); }
 function inscrireMot(m) {
   let t = THEMES.find((x) => x.id === 'mesmots');
   if (!t) { t = { id: 'mesmots', name: 'Mes mots', emoji: '⭐', words: [] }; THEMES.unshift(t); }
-  t.words.push(m);
-  WORDS.push({ he: m[0], tr: m[1], fr: m[2], theme: 'mesmots' });
+  // un mot sans transcription (ajouté depuis un article, la presse…) : on la retrouve (translit.js)
+  const tr = m[1] || (typeof trouverTr === 'function' ? trouverTr(m[0]) : '');
+  t.words.push([m[0], tr, m[2]]);
+  WORDS.push({ he: m[0], tr, fr: m[2], theme: 'mesmots' });
 }
 S.mesMots.forEach(inscrireMot);
 const estDansMesMots = (he) => S.mesMots.some((m) => m[0].normalize('NFC') === he.normalize('NFC'));
